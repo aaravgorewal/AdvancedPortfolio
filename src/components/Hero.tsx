@@ -96,7 +96,7 @@ export const Hero = () => {
 
           {/* Portrait Image Panel */}
           <div className="md:col-span-5 w-full flex justify-center md:justify-end z-0">
-            <div className="relative w-[280px] h-[340px] sm:w-[320px] sm:h-[400px] md:w-[380px] md:h-[480px] bg-surface border border-border-custom p-3 overflow-hidden shadow-2xl">
+            <div className="relative w-[260px] h-[320px] sm:w-[320px] sm:h-[400px] md:w-[380px] md:h-[480px] bg-surface border border-border-custom p-3 overflow-hidden shadow-2xl">
               <motion.div
                 style={{ scale: scalePortrait, x: xPortrait }}
                 className="relative w-full h-full"
