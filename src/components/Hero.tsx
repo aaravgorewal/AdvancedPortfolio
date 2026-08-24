@@ -73,7 +73,7 @@ export const Hero = () => {
             </span>
 
             {/* Title */}
-            <h1 className="font-serif-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-foreground mb-6 uppercase">
+            <h1 className="font-serif-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] text-foreground mb-6 uppercase">
               Aarav Saini
             </h1>
 
@@ -96,7 +96,7 @@ export const Hero = () => {
 
           {/* Portrait Image Panel */}
           <div className="md:col-span-5 w-full flex justify-center md:justify-end z-0">
-            <div className="relative w-[260px] h-[320px] sm:w-[320px] sm:h-[400px] md:w-[380px] md:h-[480px] bg-surface border border-border-custom p-3 overflow-hidden shadow-2xl">
+            <div className="relative w-full max-w-[260px] sm:max-w-[320px] md:max-w-[380px] aspect-[19/24] bg-surface border border-border-custom p-3 overflow-hidden shadow-2xl">
               <motion.div
                 style={{ scale: scalePortrait, x: xPortrait }}
                 className="relative w-full h-full"

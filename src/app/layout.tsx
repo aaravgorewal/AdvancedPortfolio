@@ -17,7 +17,24 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Aarav Saini — Portfolio",
-  description: "AI/ML Student and Full-Stack Developer",
+  description: "AI/ML student and full-stack developer building modern, scalable, and user-focused digital products.",
+  openGraph: {
+    title: "Aarav Saini — Portfolio",
+    description: "AI/ML student and full-stack developer building modern, scalable, and user-focused digital products.",
+    url: "https://aaravsaini.dev",
+    siteName: "Aarav Saini Portfolio",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Aarav Saini — Portfolio",
+    description: "AI/ML student and full-stack developer building modern, scalable, and user-focused digital products.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
