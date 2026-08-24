@@ -48,8 +48,8 @@ export const Hero = () => {
       ref={containerRef}
       className="relative md:h-[180vh] w-full bg-background"
     >
-      {/* Sticky viewports wrapper */}
-      <div className="md:sticky md:top-0 h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] w-full overflow-hidden flex flex-col justify-between">
+      {/* Sticky viewports wrapper - fluid on mobile, sticky on desktop */}
+      <div className="relative md:sticky md:top-0 h-auto md:h-[calc(100vh-5rem)] w-full overflow-visible md:overflow-hidden flex flex-col justify-between py-12 md:py-0">
         
         {/* Subtle grid line overlays for editorial layout feeling (desktop only) */}
         <div className="absolute inset-0 pointer-events-none hidden md:grid grid-cols-12 max-w-[1200px] mx-auto px-16 w-full">
@@ -117,7 +117,7 @@ export const Hero = () => {
         {/* Scroll down indicator */}
         <motion.div
           style={{ opacity: opacityScroll }}
-          className="w-full flex justify-center pb-6 md:pb-8 pointer-events-none"
+          className="w-full hidden md:flex justify-center pb-8 pointer-events-none"
         >
           <div className="flex flex-col items-center gap-2">
             <span className="font-sans-body text-[9px] uppercase tracking-widest text-secondary/60">

@@ -17,9 +17,19 @@ export const Navigation = () => {
   const toggleMenu = () => setIsOpen((prev) => !prev);
 
   useEffect(() => {
+    const sectionToNavMap: { [key: string]: string } = {
+      work: "#work",
+      about: "#about",
+      capabilities: "#about",
+      experience: "#experience",
+      achievements: "#experience",
+      education: "#experience",
+      contact: "#contact",
+    };
+
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 120; // threshold for activation
-      const sections = NAV_ITEMS.map((item) => item.href.substring(1));
+      const scrollPosition = window.scrollY + 160;
+      const sections = ["work", "about", "capabilities", "experience", "achievements", "education", "contact"];
 
       for (const sectionId of sections) {
         const el = document.getElementById(sectionId);
@@ -27,7 +37,7 @@ export const Navigation = () => {
           const top = el.offsetTop;
           const height = el.offsetHeight;
           if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(`#${sectionId}`);
+            setActiveSection(sectionToNavMap[sectionId] || "");
             return;
           }
         }

@@ -26,7 +26,7 @@ export const Contact = () => {
         {/* Left Column: Index/Header */}
         <div className="md:col-span-4 flex flex-col items-start text-left">
           <span className="font-sans-body text-xs font-semibold uppercase tracking-wider text-secondary/60 mb-2">
-            06 / CONTACT
+            07 / CONTACT
           </span>
           <h2 className="font-serif-display text-3xl md:text-5xl uppercase tracking-tight text-foreground">
             Connect
