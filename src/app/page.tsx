@@ -4,6 +4,9 @@ import { About } from "@/components/About";
 import { Capabilities } from "@/components/Capabilities";
 import { Experience } from "@/components/Experience";
 import { Achievements } from "@/components/Achievements";
+import { Education } from "@/components/Education";
+import { Contact } from "@/components/Contact";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -26,17 +29,14 @@ export default function Home() {
       {/* Achievements Section */}
       <Achievements />
 
-      <section
-        id="contact"
-        className="min-h-screen w-full bg-background border-t border-border-custom flex items-center justify-center px-5 md:px-16"
-      >
-        <div className="max-w-[1200px] mx-auto w-full text-center">
-          <h2 className="font-serif-display text-3xl md:text-5xl uppercase tracking-tight text-secondary">
-            Contact
-          </h2>
-          <p className="mt-4 text-secondary/60">Coming soon.</p>
-        </div>
-      </section>
+      {/* Education Section */}
+      <Education />
+
+      {/* Contact Section */}
+      <Contact />
+
+      {/* Footer Section */}
+      <Footer />
     </div>
   );
 }
