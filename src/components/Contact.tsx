@@ -64,7 +64,7 @@ export const Contact = () => {
               aria-label="Visit Aarav Saini's LinkedIn Profile"
             >
               <div className="flex items-center gap-4">
-                <Linkedin className="w-4 h-4 text-accent" />
+                <LinkedinIcon className="w-4 h-4 text-accent" />
                 <span className="text-sm sm:text-base font-semibold text-foreground">
                   linkedin.com/in/aaravgorewal
                 </span>
