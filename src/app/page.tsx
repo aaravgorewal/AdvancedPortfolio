@@ -1,41 +1,29 @@
 import { Hero } from "@/components/Hero";
-import { Projects } from "@/components/Projects";
 import { About } from "@/components/About";
-import { Capabilities } from "@/components/Capabilities";
-import { Experience } from "@/components/Experience";
-import { Achievements } from "@/components/Achievements";
-import { Education } from "@/components/Education";
-import { Contact } from "@/components/Contact";
+import { Projects } from "@/components/Projects";
+import { Roster } from "@/components/Roster";
+import { Dates } from "@/components/Dates";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
     <div className="flex flex-col w-full">
-      {/* Hero Section */}
+      {/* 1. Hero Portal stage */}
       <Hero />
 
-      {/* Selected Work Section */}
-      <Projects />
-
-      {/* About Section */}
+      {/* 2. Philosophy statement fold */}
       <About />
 
-      {/* Capabilities Section */}
-      <Capabilities />
+      {/* 3. Catalogue deck */}
+      <Projects />
 
-      {/* Experience Section */}
-      <Experience />
+      {/* 4. Core artists roster list */}
+      <Roster />
 
-      {/* Achievements Section */}
-      <Achievements />
+      {/* 5. Live circuits schedules */}
+      <Dates />
 
-      {/* Education Section */}
-      <Education />
-
-      {/* Contact Section */}
-      <Contact />
-
-      {/* Footer Section */}
+      {/* 6. Curated footer fold */}
       <Footer />
     </div>
   );

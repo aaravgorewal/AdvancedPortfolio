@@ -1,262 +1,317 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
-import { ExternalLink, Code2 } from "lucide-react";
+import React, { useState, useEffect, useCallback } from "react";
+import { motion, useMotionValue, useTransform, useReducedMotion } from "framer-motion";
 import { Section } from "./ui/SectionGrid";
-import { Button } from "./ui/Button";
-import { PROJECTS, Project } from "@/data/projects";
+import Image from "next/image";
 
-const GithubIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
-  <svg
-    className={className}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-    <path d="M9 18c-4.51 2-5-2-7-2" />
-  </svg>
-);
+interface CardItem {
+  index: number;
+  catalog: string;
+  title: string;
+  date: string;
+  image: string;
+  category: string;
+  year: string;
+  problem: string;
+  whatIBuilt: string;
+  features: string;
+  tech: string;
+  contribution: string;
+  type: string;
+}
 
-// Helper for Visual Rendering
-const renderVisual = (project: Project) => {
-  if (project.image) {
-    return (
-      <div className="relative w-full aspect-[4/3] bg-surface border border-border-custom overflow-hidden p-3 shadow-lg transition-colors group-hover:border-accent duration-500">
-        <div className="relative w-full h-full overflow-hidden">
-          <Image
-            src={project.image}
-            alt={`${project.title} Visual`}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover grayscale brightness-90 contrast-105 transition-transform duration-700 ease-out group-hover:scale-105"
-          />
-        </div>
-      </div>
-    );
-  }
-
-  // Render mock visual / code blocks for projects without screenshot images
-  if (project.number === "02") {
-    return (
-      <div className="w-full aspect-[4/3] bg-surface border border-border-custom p-6 font-mono text-[10px] sm:text-xs text-secondary/80 flex flex-col justify-between overflow-hidden shadow-lg transition-colors group-hover:border-accent duration-500">
-        <div className="flex items-center justify-between border-b border-border-custom/50 pb-3 mb-4">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500/40" />
-            <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/40" />
-            <span className="w-2.5 h-2.5 rounded-full bg-green-500/40" />
-          </div>
-          <span className="text-[9px] uppercase tracking-widest text-secondary/40 font-sans-body font-semibold">
-            voice_relay.py
-          </span>
-        </div>
-        <pre className="flex-1 text-left leading-relaxed text-secondary/60 select-none">
-          <code>
-            {`import serial\nimport speech_recognition as sr\n\n# Initialize hardware interface\narduino = serial.Serial('/dev/ttyACM0', 9600)\n\ndef trigger_hardware(command):\n    if "turn on" in command:\n        arduino.write(b'H')\n        print("[SYS] Relay state: HIGH")\n    elif "turn off" in command:\n        arduino.write(b'L')\n        print("[SYS] Relay state: LOW")`}
-          </code>
-        </pre>
-        <div className="border-t border-border-custom/50 pt-3 mt-4 flex items-center justify-between text-[9px] tracking-wider text-accent font-semibold uppercase">
-          <span>&bull; status: connection established</span>
-          <span>lat: ~120ms</span>
-        </div>
-      </div>
-    );
-  }
-
-  // Render grid/wireframe structure for project 03
-  return (
-    <div className="w-full aspect-[4/3] bg-surface border border-border-custom flex flex-col justify-between overflow-hidden shadow-lg transition-colors group-hover:border-accent duration-500 p-6 relative">
-      <div className="absolute inset-0 grid grid-cols-6 grid-rows-4 pointer-events-none opacity-20">
-        {Array.from({ length: 24 }).map((_, i) => (
-          <div key={i} className="border border-border-custom" />
-        ))}
-      </div>
-      <div className="flex justify-between items-center z-10">
-        <div className="flex items-center gap-1.5 font-mono text-[9px] text-accent font-semibold uppercase">
-          <Code2 className="w-3.5 h-3.5" />
-          <span>dashboard_layout.json</span>
-        </div>
-        <span className="text-[9px] font-mono text-secondary/40">v1.2.0</span>
-      </div>
-      <div className="my-auto flex flex-col gap-3 z-10 text-left select-none">
-        <div className="w-3/4 h-2 bg-secondary/20" />
-        <div className="w-1/2 h-2 bg-secondary/15" />
-        <div className="w-5/6 h-2 bg-secondary/10" />
-        <div className="w-2/3 h-2 bg-secondary/20" />
-      </div>
-      <div className="flex justify-between items-end z-10">
-        <span className="text-[10px] font-sans-body text-secondary/60 uppercase tracking-widest font-semibold">
-          SYSTEM_METRIC
-        </span>
-        <div className="h-6 w-16 border border-border-custom flex items-center justify-center font-mono text-[8px] text-secondary/40">
-          MAX_PACING
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Helper for Content Rendering
-const renderContent = (project: Project) => {
-  return (
-    <div className="text-left">
-      {/* Project Meta Info */}
-      <div className="flex items-center gap-3 mb-4 flex-wrap">
-        <span className="font-mono text-base font-semibold text-accent leading-none">
-          {project.number}
-        </span>
-        <span className="text-border-custom select-none">|</span>
-        <span
-          className="font-sans-body text-[10px] font-semibold uppercase tracking-wider text-secondary/80"
-          dangerouslySetInnerHTML={{ __html: project.tag }}
-        />
-      </div>
-
-      {/* Project Title */}
-      <h3 className="font-serif-display text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-4 group-hover:text-accent transition-colors duration-300">
-        {project.title}
-      </h3>
-
-      {/* Description */}
-      <p className="font-sans-body text-sm sm:text-base text-secondary leading-relaxed mb-6">
-        {project.description}
-      </p>
-
-      {/* Problem & Solution block */}
-      <div className="bg-surface/50 border-l border-accent p-4 mb-6">
-        <p className="font-sans-body text-xs sm:text-sm text-secondary/90 leading-relaxed italic">
-          {project.problemSolution}
-        </p>
-      </div>
-
-      {/* Key highlights checklist */}
-      <ul className="space-y-2 mb-8 font-sans-body text-xs sm:text-sm text-secondary/80">
-        {project.highlights.map((highlight, index) => (
-          <li key={index} className="flex items-start gap-2.5">
-            <span className="text-accent select-none mt-0.5">&bull;</span>
-            <span>{highlight}</span>
-          </li>
-        ))}
-      </ul>
-
-      {/* Role / Tech & Action Row */}
-      <div className="flex flex-col gap-6 pt-4 border-t border-border-custom/50">
-        {/* Technical stack / role info */}
-        <div className="flex flex-col gap-2">
-          <div className="text-[10px] font-sans-body font-semibold text-secondary/50 uppercase tracking-widest">
-            Role: <span className="text-secondary/80 normal-case">{project.role}</span>
-          </div>
-          {project.outcome && (
-            <div className="text-[10px] font-sans-body font-semibold text-secondary/50 uppercase tracking-widest">
-              Outcome: <span className="text-secondary/80 normal-case">{project.outcome}</span>
-            </div>
-          )}
-          <div className="flex flex-wrap gap-2 mt-1">
-            {project.tech.map((techItem) => (
-              <span
-                key={techItem}
-                className="text-[9px] sm:text-[10px] font-mono px-2 py-0.5 border border-border-custom/80 text-secondary bg-surface/30 select-none"
-              >
-                {techItem}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* CTAs */}
-        <div className="flex items-center gap-4">
-          {project.github ? (
-            <Button href={project.github} variant="secondary" className="px-4 py-2 h-9 text-[10px]">
-              <GithubIcon className="w-3.5 h-3.5 mr-2" />
-              Source Code
-            </Button>
-          ) : (
-            <span className="text-[10px] font-sans-body font-semibold text-secondary/40 uppercase tracking-wider select-none">
-              Source: Confidential
-            </span>
-          )}
-
-          {project.live ? (
-            <Button href={project.live} variant="primary" className="px-4 py-2 h-9 text-[10px]">
-              <ExternalLink className="w-3.5 h-3.5 mr-2" />
-              Live Demo
-            </Button>
-          ) : (
-            project.github && (
-              <span className="text-[10px] font-sans-body font-semibold text-secondary/40 uppercase tracking-wider select-none">
-                Demo: N/A
-              </span>
-            )
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
+const CARDS: CardItem[] = [
+  {
+    index: 0,
+    catalog: "PROJECT-01",
+    title: "MINDSETX",
+    date: "AI Wellness Vault adapts to mood trends.",
+    image: "/Minee.png",
+    category: "AI/ML · FULL-STACK",
+    year: "2026",
+    problem: "Standard wellness apps lack deep personalization and compromise user data privacy.",
+    whatIBuilt: "A secure mood-tracking portal leveraging local client-side AI analysis to recommend wellness tips.",
+    features: "Zero-knowledge Bio Vault, client-side model processing, mood analytics dashboard.",
+    tech: "React, Node.js, AI Logic, MongoDB, Tailwind CSS",
+    contribution: "Lead Full-Stack Developer",
+    type: "Personal Project",
+  },
+  {
+    index: 1,
+    catalog: "PROJECT-02",
+    title: "ASSETFLOW",
+    date: "AI-powered asset management platform.",
+    image: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&q=80&w=800",
+    category: "FULL-STACK · SYSTEM",
+    year: "2026",
+    problem: "Manual inventory audits cause inconsistent logs and asset verification overhead.",
+    whatIBuilt: "A tracking system incorporating barcode queries and predictive demand estimations.",
+    features: "Dynamic scanning system, live status tables, structured demand calculations.",
+    tech: "React, Next.js, Express, MongoDB, Node.js",
+    contribution: "Lead Developer",
+    type: "Freelance Project",
+  },
+  {
+    index: 2,
+    catalog: "PROJECT-03",
+    title: "TRAVELVERSE AI",
+    date: "Intelligent itinerary trip builder.",
+    image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=800",
+    category: "AI/ML · NEXT.JS",
+    year: "2026",
+    problem: "Travel planning involves manual search lookups and tedious schedule sequencing.",
+    whatIBuilt: "An itinerary planner querying multiple destination APIs to map trip schedules.",
+    features: "API connectors, automatic route sequencing, customizable travel tags.",
+    tech: "Next.js, Python, OpenAI API, Tailwind CSS",
+    contribution: "Creator",
+    type: "Hackathon Project",
+  },
+  {
+    index: 3,
+    catalog: "PROJECT-04",
+    title: "EDULEARN PLATFORM",
+    date: "Smart structured learning platform.",
+    image: "https://images.unsplash.com/photo-1514525253361-b840b1e92842?auto=format&fit=crop&q=80&w=800",
+    category: "NEXT.JS · NODE.JS",
+    year: "2025",
+    problem: "Students experience cognitive fatigue due to disjointed study tools.",
+    whatIBuilt: "A keyboard-traversable learning workspace organizing resources and automations.",
+    features: "Central calendar pacing algorithm, workspace layouts, optimized load times under 1 second.",
+    tech: "Next.js, Node.js, Express, Tailwind CSS",
+    contribution: "Frontend Developer",
+    type: "Personal Project",
+  },
+  {
+    index: 4,
+    catalog: "PROJECT-05",
+    title: "AI RELAY BRIDGE",
+    date: "WebSocket gateway voice controller.",
+    image: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=800",
+    category: "HARDWARE · WEB LLM",
+    year: "2025",
+    problem: "Software models lack direct interaction loops with physical hardware devices.",
+    whatIBuilt: "A WebSocket gateway connecting conversational inputs to Arduino microcontroller triggers.",
+    features: "Arduino hardware interfaces, real-time command sockets, latency optimization under 150ms.",
+    tech: "React, Python, Arduino C++, WebSockets",
+    contribution: "Embedded & Full-Stack Developer",
+    type: "Hackathon Project",
+  },
+];
 
 export const Projects = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [thrown, setThrown] = useState<{ [key: number]: "left" | "right" | null }>({});
+  const shouldReduceMotion = useReducedMotion();
+
+  // Motion value tracking for top card horizontal drag
+  const dragX = useMotionValue(0);
+  const rotateDrag = useTransform(dragX, [-150, 150], [-12, 12]);
+  const scaleDrag = useTransform(dragX, [-150, 0, 150], [1.03, 1, 1.03]);
+
+  // Handle manual deck throw
+  const executeThrow = useCallback((direction: "left" | "right") => {
+    setThrown((prev) => ({ ...prev, [currentIndex]: direction }));
+    const nextIndex = (currentIndex + 1) % CARDS.length;
+    setCurrentIndex(nextIndex);
+
+    // If cycled back to start, clear thrown states after exit animation completes
+    if (nextIndex === 0) {
+      setTimeout(() => {
+        setThrown({});
+      }, 600);
+    }
+  }, [currentIndex]);
+
+  // Keyboard navigation listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (shouldReduceMotion) return;
+      if (e.key === "ArrowLeft") {
+        executeThrow("left");
+      } else if (e.key === "ArrowRight") {
+        executeThrow("right");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [shouldReduceMotion, executeThrow]);
+
+  // Calculated progress bar width matching index
+  const progressPercent = ((currentIndex + 1) / CARDS.length) * 100;
+  const activeCard = CARDS[currentIndex];
+
   return (
-    <Section id="work" className="border-b border-border-custom">
-      {/* Section Header */}
-      <div className="mb-16 md:mb-24 flex flex-col items-start">
-        <span className="font-sans-body text-xs font-semibold uppercase tracking-wider text-secondary/60 mb-2">
-          01 / SELECTED WORK
-        </span>
-        <h2 className="font-serif-display text-3xl md:text-5xl uppercase tracking-tight text-foreground">
-          Proof of Capability
-        </h2>
-      </div>
-
-      {/* Projects List */}
-      <div className="space-y-24 md:space-y-36">
-        {PROJECTS.map((project) => {
-          return (
-            <div
-              key={project.number}
-              className="group grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start border-b border-border-custom/50 pb-16 md:pb-24 last:border-b-0 last:pb-0"
-            >
-              {/* Layout: Split Left (Visual on left, Content on right) */}
-              {project.layout === "split-left" && (
-                <>
-                  <div className="md:col-span-6 w-full">
-                    {renderVisual(project)}
-                  </div>
-                  <div className="md:col-span-6 flex flex-col justify-center">
-                    {renderContent(project)}
-                  </div>
-                </>
-              )}
-
-              {/* Layout: Split Right (Content on left, Visual on right) */}
-              {project.layout === "split-right" && (
-                <>
-                  <div className="md:col-span-6 order-2 md:order-1 flex flex-col justify-center">
-                    {renderContent(project)}
-                  </div>
-                  <div className="md:col-span-6 order-1 md:order-2 w-full">
-                    {renderVisual(project)}
-                  </div>
-                </>
-              )}
-
-              {/* Layout: Full Card */}
-              {project.layout === "full-card" && (
-                <div className="col-span-1 md:col-span-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start w-full">
-                  <div className="md:col-span-7 flex flex-col justify-center">
-                    {renderContent(project)}
-                  </div>
-                  <div className="md:col-span-5 w-full">
-                    {renderVisual(project)}
-                  </div>
-                </div>
-              )}
+    <Section id="catalogue" className="px-6 md:px-24 py-32 bg-[#101317] border-b border-border-custom">
+      <div className="grid lg:grid-cols-2 gap-24 items-center">
+        
+        {/* Left Column: Catalogue Metadata (Dynamic to selected card) */}
+        <div className="text-left flex flex-col justify-center min-h-[520px]">
+          <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#E8913C] mb-4">
+            [ {activeCard.type} ]
+          </div>
+          <span className="text-[10px] font-mono text-[#2E6B72] uppercase tracking-widest font-semibold block mb-2">
+            {activeCard.catalog}{" // "}{activeCard.year}
+          </span>
+          <h2 className="font-syne text-4xl md:text-5xl font-bold mb-8 text-[#EDE7DC] uppercase tracking-tighter">
+            {activeCard.title}
+          </h2>
+          
+          <div className="space-y-6 font-sans-body mb-8">
+            <div>
+              <span className="text-[10px] uppercase text-[#6C7378] tracking-widest font-bold block mb-1">
+                The Problem
+              </span>
+              <p className="text-[#9EA5A8] text-sm leading-relaxed max-w-lg">
+                {activeCard.problem}
+              </p>
             </div>
-          );
-        })}
+            
+            <div>
+              <span className="text-[10px] uppercase text-[#6C7378] tracking-widest font-bold block mb-1">
+                What I Built
+              </span>
+              <p className="text-[#9EA5A8] text-sm leading-relaxed max-w-lg">
+                {activeCard.whatIBuilt}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 max-w-lg border-t border-[#EDE7DC]/13 pt-6">
+              <div>
+                <span className="text-[10px] uppercase text-[#6C7378] tracking-widest font-bold block mb-1">
+                  My Contribution
+                </span>
+                <p className="text-[#EDE7DC] text-xs font-semibold uppercase tracking-wider">
+                  {activeCard.contribution}
+                </p>
+              </div>
+              <div>
+                <span className="text-[10px] uppercase text-[#6C7378] tracking-widest font-bold block mb-1">
+                  Technologies
+                </span>
+                <p className="text-[#EDE7DC] text-xs font-semibold uppercase tracking-wider">
+                  {activeCard.tech}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <button className="px-6 py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
+              View GitHub
+            </button>
+            <button className="px-6 py-3 bg-[#EDE7DC]/5 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC]/10 transition-colors focus-ring">
+              Live Demo
+            </button>
+          </div>
+        </div>
+
+        {/* Right Column: Throwable Cards Deck */}
+        <div className="relative flex flex-col items-center">
+          <div
+            tabIndex={0}
+            className="deck-container relative w-[320px] h-[360px] md:w-[400px] md:h-[440px] focus-ring rounded-lg outline-none touch-pan-y"
+            aria-label="Aarav Saini Project Sleeves Stack. Use Left and Right arrow keys to swipe."
+          >
+            {CARDS.map((card) => {
+              const isTop = card.index === currentIndex;
+              const cardThrown = thrown[card.index];
+              const relativeIndex = (card.index - currentIndex + CARDS.length) % CARDS.length;
+
+              // Card stack physical offset positions
+              let positionClass = "z-10 translate-x-4 translate-y-4 rotate-3";
+              if (relativeIndex === 0) {
+                positionClass = "z-50 translate-x-0 translate-y-0 rotate-0";
+              } else if (relativeIndex === 1) {
+                positionClass = "z-45 translate-x-2 -translate-y-2 -rotate-2";
+              } else if (relativeIndex === 2) {
+                positionClass = "z-30 translate-x-4 translate-y-2 rotate-3";
+              } else if (relativeIndex === 3) {
+                positionClass = "z-20 -translate-x-2 translate-y-4 -rotate-1";
+              } else if (relativeIndex === 4) {
+                positionClass = "z-10 translate-x-3 -translate-y-3 rotate-4";
+              }
+
+              // Apply thrown styles
+              let transformStyle = {};
+              if (cardThrown === "left") {
+                transformStyle = { transform: "translate(-200%, -30%) rotate(-60deg)", opacity: 0, pointerEvents: "none" };
+              } else if (cardThrown === "right") {
+                transformStyle = { transform: "translate(200%, -30%) rotate(60deg)", opacity: 0, pointerEvents: "none" };
+              }
+
+              return (
+                <motion.div
+                  key={card.index}
+                  drag={isTop && !shouldReduceMotion ? "x" : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.4}
+                  onDragEnd={(event, info) => {
+                    if (isTop && Math.abs(info.offset.x) > 60) {
+                      executeThrow(info.offset.x > 0 ? "right" : "left");
+                    } else if (isTop) {
+                      dragX.set(0);
+                    }
+                  }}
+                  style={
+                    cardThrown
+                      ? transformStyle
+                      : isTop
+                      ? {
+                          x: dragX,
+                          rotate: rotateDrag,
+                          scale: scaleDrag,
+                        }
+                      : {}
+                  }
+                  className={`card absolute inset-0 bg-[#0A0C0E] border border-[#EDE7DC]/10 p-5 shadow-2xl transition-all duration-500 ease-out select-none flex flex-col justify-between ${
+                    cardThrown ? "" : positionClass
+                  }`}
+                >
+                  <div className="w-full aspect-square overflow-hidden mb-4 relative">
+                    <Image
+                      src={card.image}
+                      alt={card.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 400px"
+                      className="object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-col text-left text-[#EDE7DC] font-sans-body">
+                    <div className="flex justify-between items-start text-[8px] uppercase tracking-wider opacity-50 font-bold mb-1">
+                      <span>{card.catalog}</span>
+                      <span>{card.year}</span>
+                    </div>
+                    <div className="font-syne font-bold text-base uppercase leading-tight mb-1">
+                      {card.title}
+                    </div>
+                    <div className="text-[10px] text-[#9EA5A8] leading-tight mb-2">
+                      {card.date}
+                    </div>
+                    <div className="text-[8px] uppercase tracking-widest text-[#E8913C] font-semibold">
+                      {card.category}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Deck progress indicator */}
+          <div className="mt-12 flex flex-col items-center gap-4">
+            <div className="w-32 h-[1px] bg-[#EDE7DC]/20 relative">
+              <div
+                style={{ width: `${progressPercent}%` }}
+                className="absolute top-0 left-0 h-full bg-[#E8913C] transition-all duration-300"
+              />
+            </div>
+            <div className="text-[9px] uppercase tracking-widest opacity-30 font-sans-body font-semibold">
+              Grab and swipe or use arrow keys
+            </div>
+          </div>
+        </div>
+
       </div>
     </Section>
   );

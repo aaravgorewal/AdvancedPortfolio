@@ -2,12 +2,13 @@
 
 :root {
   --background: #0A0C0E;
-  --foreground: #F5F5F5;
-  --surface: #121519;
-  --secondary: #8E98A0;
-  --border-custom: rgba(255, 255, 255, 0.12);
+  --foreground: #EDE7DC;
+  --surface: #101317;
+  --secondary: #9EA5A8;
+  --muted: #6C7378;
   --accent: #E8913C;
   --accent-teal: #2E6B72;
+  --border-custom: rgba(237, 231, 220, 0.13);
 }
 
 @theme {
@@ -15,14 +16,26 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
   --color-border-custom: var(--border-custom);
   --color-accent: var(--accent);
   --color-accent-teal: var(--accent-teal);
 
   --font-serif-display: var(--font-syne), sans-serif;
   --font-sans-body: var(--font-sora), sans-serif;
-  
-  --breakpoint-xs: 375px;
+}
+
+/* Custom fonts utility helpers matching reference HTML */
+.font-syne {
+  font-family: var(--font-syne), sans-serif;
+}
+
+.tracking-tighter-custom {
+  letter-spacing: -0.03em;
+}
+
+.tracking-widest-custom {
+  letter-spacing: 0.15em;
 }
 
 /* Base resets & overrides */
@@ -34,9 +47,10 @@ html {
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sora), sans-serif;
+  font-family: var(--font-sans-body), sans-serif;
   min-height: 100vh;
   margin: 0;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -56,7 +70,20 @@ body {
   color: var(--background);
 }
 
-/* Reduced Motion Override */
+/* SVG rotating spin loader animation */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
+}
+
+/* Reduced Motion Override matching reference HTML */
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,
