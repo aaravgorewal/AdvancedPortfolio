@@ -34,12 +34,6 @@ export const Footer = () => {
             >
               LinkedIn
             </a>
-            <a
-              href="#"
-              className="px-8 py-4 border border-[#EDE7DC]/20 font-bold uppercase tracking-widest text-[10px] text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors duration-300 focus-ring text-center flex-1 sm:flex-none"
-            >
-              GitHub
-            </a>
           </div>
 
         </div>

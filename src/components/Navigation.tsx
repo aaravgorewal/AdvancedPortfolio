@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
+import Link from "next/link";
+
 const NAV_ITEMS = [
   { label: "Catalogue", href: "#catalogue" },
   { label: "Identity", href: "#about" },
@@ -59,13 +61,13 @@ export const Navigation = () => {
       {/* 58px Fixed Header */}
       <header className="fixed top-0 left-0 w-full h-[58px] z-50 bg-[#0A0C0E]/80 backdrop-blur-xl border-b border-[#EDE7DC]/13 flex items-center">
         <div className="w-full max-w-[1200px] mx-auto px-6 md:px-12 flex items-center justify-between">
-          <a
-            href="#"
+          <Link
+            href="/"
             className="font-syne text-[15px] font-bold tracking-tight uppercase text-[#EDE7DC] hover:opacity-85 transition-opacity focus-ring"
             aria-label="Aarav Saini Home"
           >
             AARAV<span className="text-[#E8913C]">.</span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-10" aria-label="Desktop Navigation">
