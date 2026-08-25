@@ -1,13 +1,34 @@
+# Theme Summary
+
+**Colors:**
+- `background`: `#080808`
+- `foreground`: `#F5F5F5`
+- `surface`: `#111111`
+- `secondary`: `#929292`
+- `border-custom`: `rgba(255, 255, 255, 0.12)`
+- `accent`: `#c29a53`
+
+**Fonts:**
+- Serif Display: `var(--font-playfair), Georgia, serif`
+- Sans Body: `var(--font-inter), sans-serif`
+
+**Breakpoints:**
+- `xs`: `375px`
+
+---
+# Raw Source Dumps
+
+## src/app/globals.css
+```css
 @import "tailwindcss";
 
 :root {
-  --background: #0A0C0E;
+  --background: #080808;
   --foreground: #F5F5F5;
-  --surface: #121519;
-  --secondary: #8E98A0;
+  --surface: #111111;
+  --secondary: #929292;
   --border-custom: rgba(255, 255, 255, 0.12);
-  --accent: #E8913C;
-  --accent-teal: #2E6B72;
+  --accent: #c29a53;
 }
 
 @theme {
@@ -17,10 +38,9 @@
   --color-secondary: var(--secondary);
   --color-border-custom: var(--border-custom);
   --color-accent: var(--accent);
-  --color-accent-teal: var(--accent-teal);
 
-  --font-serif-display: var(--font-syne), sans-serif;
-  --font-sans-body: var(--font-sora), sans-serif;
+  --font-serif-display: var(--font-playfair), Georgia, serif;
+  --font-sans-body: var(--font-inter), sans-serif;
   
   --breakpoint-xs: 375px;
 }
@@ -34,7 +54,7 @@ html {
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sora), sans-serif;
+  font-family: var(--font-inter), sans-serif;
   min-height: 100vh;
   margin: 0;
   -webkit-font-smoothing: antialiased;
@@ -67,3 +87,4 @@ body {
     scroll-behavior: auto !important;
   }
 }
+```
