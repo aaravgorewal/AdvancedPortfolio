@@ -140,7 +140,7 @@ export const Projects = () => {
                 <button
                   key={f.id}
                   onClick={() => handleFilterChange(f.id)}
-                  className={`group flex items-center justify-between w-auto lg:w-full lg:max-w-[220px] text-[10px] md:text-[11px] lg:text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 focus-ring outline-none ${
+                  className={`group flex items-center w-auto text-[10px] md:text-[11px] lg:text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 focus-ring outline-none ${
                     isActive ? "text-[#E8913C]" : "text-[#6C7378] hover:text-[#9EA5A8]"
                   }`}
                 >
@@ -150,12 +150,21 @@ export const Projects = () => {
                     }`}></span>
                     {f.label}
                   </span>
-                  <span className={`font-mono transition-opacity duration-300 ml-2 lg:ml-0 ${isActive ? "text-[#E8913C]" : "opacity-40"}`}>
-                    {formatIndex(counts[f.id])}
-                  </span>
                 </button>
               );
             })}
+          </div>
+
+          {/* Catalogue Metadata Block */}
+          <div className="mt-12 lg:mt-24 pt-6 lg:pt-8 border-t border-[#EDE7DC]/10 flex flex-col gap-1.5 font-mono text-[9px] lg:text-[10px] text-[#6C7378] tracking-[0.2em] uppercase">
+            <div className="text-[#9EA5A8] font-bold">{formatIndex(counts.all)} PROJECTS</div>
+            <div>{formatIndex(counts.client)} CLIENT</div>
+            <div>{formatIndex(counts.personal)} PERSONAL</div>
+            <div>{formatIndex(counts.hackathon)} HACKATHON</div>
+            
+            <p className="mt-6 text-[10px] text-[#6C7378]/60 font-sans-body normal-case tracking-wide max-w-[240px] leading-relaxed">
+              A selection of products, web experiences and systems built across different contexts.
+            </p>
           </div>
         </div>
 
@@ -311,23 +320,20 @@ export const Projects = () => {
                             </div>
                           )}
 
-                          <div className="pt-4 border-t border-[#EDE7DC]/10 flex flex-row gap-2">
-                            {card.liveUrl && (
-                              <a href={card.liveUrl} target="_blank" rel="noopener noreferrer" className="flex-1 block w-full text-center py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
-                                VISIT LIVE WEBSITE
-                              </a>
-                            )}
-                            {card.githubUrl && (
-                              <a href={card.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1 block w-full text-center py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
-                                GITHUB
-                              </a>
-                            )}
-                            {!card.liveUrl && !card.githubUrl && (
-                              <button disabled className="w-full text-center py-3 border border-[#EDE7DC]/5 uppercase text-[10px] font-bold tracking-widest text-[#6C7378] cursor-not-allowed">
-                                EXPLORE PROJECT
-                              </button>
-                            )}
-                          </div>
+                          {(card.liveUrl || card.githubUrl) && (
+                            <div className="pt-4 border-t border-[#EDE7DC]/10 flex flex-row gap-2">
+                              {card.liveUrl && (
+                                <a href={card.liveUrl} target="_blank" rel="noopener noreferrer" className="flex-1 block w-full text-center py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
+                                  VISIT LIVE WEBSITE
+                                </a>
+                              )}
+                              {card.githubUrl && (
+                                <a href={card.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1 block w-full text-center py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
+                                  VIEW GITHUB
+                                </a>
+                              )}
+                            </div>
+                          )}
                         </div>
 
                       </div>
