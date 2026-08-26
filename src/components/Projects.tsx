@@ -309,13 +309,19 @@ export const Projects = () => {
                             </div>
                           )}
 
-                          <div className="pt-4 border-t border-[#EDE7DC]/10">
-                            {card.liveUrl ? (
-                              <a href={card.liveUrl} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
-                                VISIT LIVE WEBSITE
+                          <div className="pt-4 border-t border-[#EDE7DC]/10 flex flex-row gap-2">
+                            {card.liveUrl && (
+                              <a href={card.liveUrl} target="_blank" rel="noopener noreferrer" className="flex-1 block w-full text-center py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
+                                LIVE WEBSITE
                               </a>
-                            ) : (
-                              <button disabled className="block w-full text-center py-3 border border-[#EDE7DC]/5 uppercase text-[10px] font-bold tracking-widest text-[#6C7378] cursor-not-allowed">
+                            )}
+                            {card.githubUrl && (
+                              <a href={card.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1 block w-full text-center py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
+                                GITHUB
+                              </a>
+                            )}
+                            {!card.liveUrl && !card.githubUrl && (
+                              <button disabled className="w-full text-center py-3 border border-[#EDE7DC]/5 uppercase text-[10px] font-bold tracking-widest text-[#6C7378] cursor-not-allowed">
                                 EXPLORE PROJECT
                               </button>
                             )}
