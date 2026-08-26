@@ -38,7 +38,11 @@ export const Projects = () => {
   const rotateDrag = useTransform(dragX, [-150, 150], [-8, 8]);
   const scaleDrag = useTransform(dragX, [-150, 0, 150], [1.02, 1, 1.02]);
 
-  const nextProject = useCallback((direction: "left" | "right" = "right") => {
+  // Contextual directional feedback
+  const dragLeftOpacity = useTransform(dragX, [0, -40], [0, 1]);
+  const dragRightOpacity = useTransform(dragX, [0, 40], [0, 1]);
+
+  const nextProject = useCallback((direction: "left" | "right" = "left") => {
     if (filteredProjects.length === 0) return;
     
     const cardToThrow = currentIndex;
@@ -56,27 +60,31 @@ export const Projects = () => {
     }, 600);
   }, [currentIndex, filteredProjects.length]);
 
-  const prevProject = useCallback(() => {
+  const prevProject = useCallback((direction: "left" | "right" = "right") => {
     if (filteredProjects.length === 0) return;
     
-    const prevIndex = (currentIndex - 1 + filteredProjects.length) % filteredProjects.length;
+    const cardToThrow = currentIndex;
+    setThrown((prev) => ({ ...prev, [cardToThrow]: direction }));
     
-    setThrown((prev) => {
-      const updated = { ...prev };
-      delete updated[prevIndex];
-      return updated;
-    });
-
+    const prevIndex = (currentIndex - 1 + filteredProjects.length) % filteredProjects.length;
     setCurrentIndex(prevIndex);
+
+    setTimeout(() => {
+      setThrown((prev) => {
+        const updated = { ...prev };
+        delete updated[cardToThrow];
+        return updated;
+      });
+    }, 600);
   }, [currentIndex, filteredProjects.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (shouldReduceMotion || filteredProjects.length === 0) return;
       if (e.key === "ArrowRight") {
-        nextProject("right");
+        nextProject("left"); // Throw left on Next
       } else if (e.key === "ArrowLeft") {
-        prevProject();
+        prevProject("right"); // Throw right on Prev
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -94,11 +102,13 @@ export const Projects = () => {
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (Math.abs(info.offset.x) > 60) {
       if (info.offset.x > 0) {
-        dragX.set(0); 
-        prevProject();
+        // Drag right -> throw right, previous project
+        prevProject("right");
       } else {
+        // Drag left -> throw left, next project
         nextProject("left");
       }
+      dragX.set(0); 
     } else {
       dragX.set(0);
     }
@@ -205,6 +215,25 @@ export const Projects = () => {
                     cardThrown ? "" : positionClass
                   } ${cardThrown ? "" : opacityClass}`}
                 >
+                  
+                  {/* Directional Drag Feedback */}
+                  {isTop && !cardThrown && (
+                    <>
+                      <motion.div 
+                        style={{ opacity: dragLeftOpacity }} 
+                        className="absolute top-4 right-4 z-50 text-[9px] uppercase tracking-[0.2em] font-bold text-[#E8913C] bg-[#0A0C0E]/80 px-3 py-1.5 border border-[#E8913C]/20 backdrop-blur-md pointer-events-none"
+                      >
+                        NEXT →
+                      </motion.div>
+                      <motion.div 
+                        style={{ opacity: dragRightOpacity }} 
+                        className="absolute top-4 left-4 z-50 text-[9px] uppercase tracking-[0.2em] font-bold text-[#E8913C] bg-[#0A0C0E]/80 px-3 py-1.5 border border-[#E8913C]/20 backdrop-blur-md pointer-events-none"
+                      >
+                        ← PREVIOUS
+                      </motion.div>
+                    </>
+                  )}
+
                   {/* Visual Hero Area */}
                   <div className="w-full h-56 md:h-64 relative bg-[#1A1D21] shrink-0 border-b border-[#EDE7DC]/10 overflow-hidden">
                     {card.image && (
