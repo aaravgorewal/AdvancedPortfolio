@@ -120,37 +120,37 @@ export const Projects = () => {
   ];
 
   return (
-    <Section id="catalogue" className="px-6 md:px-24 py-32 bg-[#101317] border-b border-border-custom">
-      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8">
+    <Section id="catalogue" className="px-6 md:px-24 py-24 md:py-32 bg-[#101317] border-b border-border-custom">
+      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8">
         
         {/* LEFT COLUMN: Editorial Headers & Filters */}
-        <div className="lg:col-span-4 flex flex-col pt-8 lg:sticky lg:top-32 lg:h-fit z-20">
-          <h2 className="font-syne text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-6 leading-[0.9]">
+        <div className="lg:col-span-4 flex flex-col pt-4 lg:pt-8 lg:sticky lg:top-32 lg:h-fit z-20">
+          <h2 className="font-syne text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-4 lg:mb-6 leading-[0.9]">
             Selected<br />Work
           </h2>
-          <p className="text-[#9EA5A8] text-sm md:text-base font-sans-body mb-16 max-w-[280px] leading-relaxed">
+          <p className="text-[#9EA5A8] text-sm md:text-base font-sans-body mb-8 lg:mb-16 max-w-[280px] leading-relaxed">
             A catalogue of things I&apos;ve built for clients, hackathons and myself.
           </p>
           
-          {/* Vertical Filter List */}
-          <div className="flex flex-col gap-5 font-sans-body">
+          {/* Filter List: Horizontal on mobile, Vertical on desktop */}
+          <div className="flex flex-row flex-wrap lg:flex-col gap-x-6 gap-y-4 lg:gap-5 font-sans-body">
             {filterTabs.map((f) => {
               const isActive = filter === f.id;
               return (
                 <button
                   key={f.id}
                   onClick={() => handleFilterChange(f.id)}
-                  className={`group flex items-center justify-between w-full max-w-[220px] text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 focus-ring outline-none ${
+                  className={`group flex items-center justify-between w-auto lg:w-full lg:max-w-[220px] text-[10px] md:text-[11px] lg:text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 focus-ring outline-none ${
                     isActive ? "text-[#E8913C]" : "text-[#6C7378] hover:text-[#9EA5A8]"
                   }`}
                 >
-                  <span className="flex items-center gap-4">
-                    <span className={`h-[1px] transition-all duration-500 ease-out ${
+                  <span className="flex items-center gap-2 lg:gap-4">
+                    <span className={`h-[1px] transition-all duration-500 ease-out hidden lg:block ${
                       isActive ? 'bg-[#E8913C] w-12' : 'bg-transparent w-0 group-hover:bg-[#6C7378] group-hover:w-4'
                     }`}></span>
                     {f.label}
                   </span>
-                  <span className={`font-mono transition-opacity duration-300 ${isActive ? "text-[#E8913C]" : "opacity-40"}`}>
+                  <span className={`font-mono transition-opacity duration-300 ml-2 lg:ml-0 ${isActive ? "text-[#E8913C]" : "opacity-40"}`}>
                     {formatIndex(counts[f.id])}
                   </span>
                 </button>
@@ -160,9 +160,9 @@ export const Projects = () => {
         </div>
 
         {/* RIGHT COLUMN: The Deck */}
-        <div className="lg:col-span-8 flex flex-col items-center lg:items-end w-full min-h-[680px]">
+        <div className="lg:col-span-8 flex flex-col items-center lg:items-end w-full min-h-[580px] md:min-h-[680px]">
           {filteredProjects.length === 0 ? (
-            <div className="flex items-center justify-center w-full max-w-[500px] h-[680px]">
+            <div className="flex items-center justify-center w-full max-w-[500px] h-[580px] md:h-[680px]">
               <p className="text-[#6C7378] text-sm uppercase tracking-widest font-bold">No projects found.</p>
             </div>
           ) : (
@@ -170,7 +170,7 @@ export const Projects = () => {
               {/* Stack Container */}
               <div
                 tabIndex={0}
-                className="deck-container relative w-full max-w-[420px] md:max-w-[500px] h-[680px] focus-ring rounded-none outline-none touch-pan-y lg:mr-8"
+                className="deck-container relative w-full max-w-[420px] md:max-w-[500px] h-[540px] md:h-[680px] focus-ring rounded-none outline-none touch-pan-y lg:mr-8"
                 aria-label={`Aarav Saini Project Sleeves Stack. Use Left and Right arrow keys to swipe.`}
               >
                 {filteredProjects.map((card, idx) => {
@@ -178,20 +178,23 @@ export const Projects = () => {
                   const cardThrown = thrown[idx];
                   const relativeIndex = (idx - currentIndex + filteredProjects.length) % filteredProjects.length;
 
-                  let positionClass = "z-10 translate-x-4 translate-y-4 rotate-2";
-                  let opacityClass = "opacity-100";
+                  let positionClass = "";
+                  let opacityClass = "";
                   
                   if (relativeIndex === 0) {
-                    positionClass = "z-50 translate-x-0 translate-y-0 rotate-0";
+                    positionClass = "z-50 translate-x-0 translate-y-0 rotate-0 scale-100";
+                    opacityClass = "opacity-100";
                   } else if (relativeIndex === 1) {
-                    positionClass = "z-45 translate-x-2 -translate-y-2 -rotate-1";
+                    positionClass = "z-40 translate-x-3 translate-y-3 rotate-2 scale-[0.98]";
+                    opacityClass = "opacity-70";
                   } else if (relativeIndex === 2) {
-                    positionClass = "z-30 translate-x-4 translate-y-2 rotate-2";
+                    positionClass = "z-30 -translate-x-3 -translate-y-3 -rotate-1 scale-[0.96]";
+                    opacityClass = "opacity-40";
                   } else if (relativeIndex === 3) {
-                    positionClass = "z-20 -translate-x-2 translate-y-4 -rotate-1";
-                  } else if (relativeIndex === 4) {
-                    positionClass = "z-10 translate-x-3 -translate-y-3 rotate-2";
+                    positionClass = "z-20 translate-x-2 -translate-y-4 rotate-2 scale-[0.94]";
+                    opacityClass = "opacity-20";
                   } else {
+                    positionClass = "z-10 translate-x-0 translate-y-0 rotate-0 scale-[0.90]";
                     opacityClass = "opacity-0 pointer-events-none";
                   }
 
@@ -220,7 +223,7 @@ export const Projects = () => {
                             }
                           : {}
                       }
-                      className={`card absolute inset-0 bg-[#0A0C0E] border border-[#EDE7DC]/10 shadow-2xl transition-all duration-500 ease-out select-none flex flex-col ${
+                      className={`card absolute inset-0 bg-[#0A0C0E] border border-[#EDE7DC]/10 transition-all duration-500 ease-out select-none flex flex-col ${
                         cardThrown ? "" : positionClass
                       } ${cardThrown ? "" : opacityClass}`}
                     >
@@ -230,21 +233,21 @@ export const Projects = () => {
                         <>
                           <motion.div 
                             style={{ opacity: dragLeftOpacity }} 
-                            className="absolute top-4 right-4 z-50 text-[9px] uppercase tracking-[0.2em] font-bold text-[#E8913C] bg-[#0A0C0E]/80 px-3 py-1.5 border border-[#E8913C]/20 backdrop-blur-md pointer-events-none"
+                            className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap z-50 text-[10px] font-sans-body uppercase tracking-[0.2em] font-bold text-[#E8913C] pointer-events-none"
                           >
-                            NEXT →
+                            ← NEXT
                           </motion.div>
                           <motion.div 
                             style={{ opacity: dragRightOpacity }} 
-                            className="absolute top-4 left-4 z-50 text-[9px] uppercase tracking-[0.2em] font-bold text-[#E8913C] bg-[#0A0C0E]/80 px-3 py-1.5 border border-[#E8913C]/20 backdrop-blur-md pointer-events-none"
+                            className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap z-50 text-[10px] font-sans-body uppercase tracking-[0.2em] font-bold text-[#E8913C] pointer-events-none"
                           >
-                            ← PREVIOUS
+                            PREVIOUS →
                           </motion.div>
                         </>
                       )}
 
-                      {/* Visual Hero Area (55-60%) */}
-                      <div className="w-full h-[55%] md:h-[60%] relative bg-[#0A0C0E] shrink-0 border-b border-[#EDE7DC]/10 overflow-hidden">
+                      {/* Visual Hero Area (50-60%) */}
+                      <div className="w-full h-[50%] md:h-[60%] relative bg-[#0A0C0E] shrink-0 border-b border-[#EDE7DC]/10 overflow-hidden">
                         {card.image ? (
                           <Image
                             src={card.image}
@@ -260,7 +263,7 @@ export const Projects = () => {
                           <div className="absolute inset-0 flex items-center justify-center bg-[#0A0C0E] overflow-hidden">
                              <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#EDE7DC_1px,transparent_1px),linear-gradient(to_bottom,#EDE7DC_1px,transparent_1px)] bg-[size:24px_24px]"></div>
                              
-                             <h2 className="font-syne text-[100px] leading-[0.85] font-extrabold text-[#EDE7DC] opacity-[0.02] tracking-tighter text-center break-all select-none scale-150 rotate-[-5deg]">
+                             <h2 className="font-syne text-[70px] md:text-[100px] leading-[0.85] font-extrabold text-[#EDE7DC] opacity-[0.02] tracking-tighter text-center break-all select-none scale-150 rotate-[-5deg]">
                                {card.title}
                              </h2>
                              
@@ -277,15 +280,15 @@ export const Projects = () => {
                       </div>
                       
                       {/* Focused Editorial Content (40-45%) */}
-                      <div className="p-6 md:p-8 flex-1 flex flex-col font-sans-body justify-between">
+                      <div className="p-6 md:p-8 flex-1 flex flex-col font-sans-body justify-between overflow-hidden">
                         
-                        <div>
-                          <div className="flex justify-between items-start mb-4">
-                            <span className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#E8913C]">
+                        <div className="flex flex-col">
+                          <div className="flex justify-between items-center mb-4">
+                            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#E8913C]">
                               [ {card.type === "client" ? "CLIENT WORK" : card.type} ]
                             </span>
-                            <span className="text-[10px] font-mono text-[#2E6B72] uppercase tracking-widest font-semibold">
-                              {card.id} {card.year ? `/ ${card.year}` : ""}
+                            <span className="text-[10px] font-sans-body text-[#2E6B72] uppercase tracking-[0.2em] font-bold">
+                              {card.id.replace("PROJECT-", "")} {card.year ? `/ ${card.year}` : ""}
                             </span>
                           </div>
 
@@ -293,17 +296,16 @@ export const Projects = () => {
                             {card.title}
                           </h3>
                           {card.description && (
-                            <div className="text-[11px] md:text-xs text-[#9EA5A8] font-medium uppercase tracking-widest line-clamp-2">
+                            <div className="text-[11px] md:text-xs text-[#9EA5A8] font-medium uppercase tracking-widest truncate">
                               {card.description}
                             </div>
                           )}
                         </div>
 
-                        <div className="mt-auto pt-6 flex flex-col gap-5">
+                        <div className="mt-auto flex flex-col">
                           {card.technologies && (
-                            <div className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 bg-[#2E6B72] rounded-none inline-block opacity-80"></span>
-                              <span className="text-[9px] uppercase text-[#6C7378] tracking-[0.2em] font-bold truncate">
+                            <div className="mb-4">
+                              <span className="text-[9px] uppercase text-[#6C7378] tracking-[0.2em] font-bold block truncate">
                                 {card.technologies}
                               </span>
                             </div>
@@ -312,7 +314,7 @@ export const Projects = () => {
                           <div className="pt-4 border-t border-[#EDE7DC]/10 flex flex-row gap-2">
                             {card.liveUrl && (
                               <a href={card.liveUrl} target="_blank" rel="noopener noreferrer" className="flex-1 block w-full text-center py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
-                                LIVE WEBSITE
+                                VISIT LIVE WEBSITE
                               </a>
                             )}
                             {card.githubUrl && (
