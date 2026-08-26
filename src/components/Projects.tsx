@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, Fragment } from "react";
 import { motion, useMotionValue, useTransform, useReducedMotion, PanInfo } from "framer-motion";
 import { Section } from "./ui/SectionGrid";
 import Image from "next/image";
@@ -18,6 +18,13 @@ export const Projects = () => {
     if (filter === "all") return PROJECTS;
     return PROJECTS.filter(p => p.type === filter);
   }, [filter]);
+
+  const counts = useMemo(() => ({
+    all: PROJECTS.length,
+    client: PROJECTS.filter(p => p.type === "client").length,
+    personal: PROJECTS.filter(p => p.type === "personal").length,
+    hackathon: PROJECTS.filter(p => p.type === "hackathon").length,
+  }), []);
 
   const handleFilterChange = (f: FilterType) => {
     if (f !== filter) {
@@ -97,29 +104,42 @@ export const Projects = () => {
     }
   };
 
+  const filterTabs: { id: FilterType; label: string }[] = [
+    { id: "all", label: "ALL" },
+    { id: "client", label: "CLIENT" },
+    { id: "personal", label: "PERSONAL" },
+    { id: "hackathon", label: "HACKATHON" }
+  ];
+
   return (
     <Section id="catalogue" className="px-6 md:px-24 py-32 bg-[#101317] border-b border-border-custom flex flex-col items-center">
       
-      <div className="w-full max-w-2xl mb-12 text-center">
-        <h2 className="font-syne text-3xl md:text-5xl font-bold text-[#EDE7DC] uppercase tracking-tighter mb-4">
+      <div className="w-full max-w-3xl mb-12 text-center">
+        <h2 className="font-syne text-3xl md:text-5xl font-bold text-[#EDE7DC] uppercase tracking-tighter mb-8">
           Selected Work
         </h2>
         
-        {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-2 md:gap-4 mt-8 mb-6">
-          {(["all", "client", "personal", "hackathon"] as FilterType[]).map((f) => (
-            <button
-              key={f}
-              onClick={() => handleFilterChange(f)}
-              className={`px-4 py-2 text-[10px] md:text-xs uppercase tracking-widest font-bold border transition-colors focus-ring ${
-                filter === f
-                  ? "bg-[#EDE7DC] text-[#0A0C0E] border-[#EDE7DC]"
-                  : "bg-transparent text-[#6C7378] border-[#EDE7DC]/10 hover:border-[#EDE7DC]/30 hover:text-[#EDE7DC]"
-              }`}
-            >
-              {f === "all" ? "All Projects" : f}
-            </button>
-          ))}
+        {/* Minimal Editorial Category Filter */}
+        <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 mt-8 mb-6 font-sans-body">
+          {filterTabs.map((f, i) => {
+            const isActive = filter === f.id;
+            return (
+              <Fragment key={f.id}>
+                <button
+                  onClick={() => handleFilterChange(f.id)}
+                  className={`text-[10px] md:text-[11px] uppercase tracking-[0.15em] font-semibold transition-colors focus-ring outline-none ${
+                    isActive ? "text-[#E8913C]" : "text-[#6C7378] hover:text-[#9EA5A8]"
+                  }`}
+                >
+                  {f.label}
+                  <span className="opacity-40 ml-[0.35rem]">/ {counts[f.id]}</span>
+                </button>
+                {i < filterTabs.length - 1 && (
+                  <span className="text-[#EDE7DC]/10 text-[10px] select-none">|</span>
+                )}
+              </Fragment>
+            );
+          })}
         </div>
       </div>
 
