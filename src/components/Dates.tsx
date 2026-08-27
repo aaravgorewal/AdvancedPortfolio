@@ -174,45 +174,53 @@ export const Dates = () => {
                   </div>
 
                   {/* Route Container */}
-                  <div className="relative flex-1 w-full max-w-7xl mx-auto flex flex-col justify-center">
+                  <div className="relative flex-1 w-full flex flex-col justify-center overflow-hidden">
                      
                      {/* Desktop Route Line */}
-                     <div className="hidden md:block absolute left-12 right-12 md:left-32 md:right-32 top-1/2 h-[1px] bg-[#EDE7DC]/10 -translate-y-1/2">
+                     <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-[85%] max-w-[1600px] top-1/2 h-[2px] bg-[#EDE7DC]/10 -translate-y-1/2">
                         <motion.div className="absolute left-0 top-0 bottom-0 bg-[#E8913C] origin-left" style={{ scaleX: smoothProgress }} />
                         
                         {EXPERIENCE.map((item, i) => (
                            <StationDesktop key={item.id} item={item} index={i} activeIndex={activeIndex} />
                         ))}
 
-                        {/* Precision Transit Carriage (Desktop) */}
+                        {/* T-Class Technical Transit Carriage (Desktop) */}
                         <motion.div 
-                           className="absolute top-1/2 flex items-center h-[6px] w-[24px] bg-[#0A0C0E] border border-[#6C7378]/40 -translate-y-1/2 -translate-x-1/2 z-20 shadow-none"
+                           className="absolute top-1/2 flex items-center h-[20px] w-[64px] bg-[#0A0C0E] border border-[#6C7378]/60 -translate-y-1/2 -translate-x-1/2 z-20 shadow-none rounded-[1px]"
                            style={{ left: progressPercent }}
                         >
-                           <div className="absolute -bottom-[2px] left-[4px] w-[2px] h-[2px] bg-[#6C7378]" />
-                           <div className="absolute -bottom-[2px] right-[6px] w-[2px] h-[2px] bg-[#6C7378]" />
-                           <div className="flex-1" />
-                           <div className="w-[3px] h-[4px] bg-[#E8913C] mr-[1px]" />
+                           <div className="absolute -bottom-[2px] left-[10px] w-[3px] h-[3px] bg-[#6C7378]" />
+                           <div className="absolute -bottom-[2px] right-[20px] w-[3px] h-[3px] bg-[#6C7378]" />
+                           <div className="flex-1 flex items-center justify-center pl-1">
+                              <span className="font-mono text-[9px] font-bold text-[#9EA5A8] tracking-widest">
+                                T-0{activeIndex + 1}
+                              </span>
+                           </div>
+                           <div className="w-[6px] h-full bg-[#E8913C] ml-auto" />
                         </motion.div>
                      </div>
 
                      {/* Mobile Route Line */}
-                     <div className="md:hidden absolute top-8 bottom-16 left-8 w-[1px] bg-[#EDE7DC]/10">
+                     <div className="md:hidden absolute top-8 bottom-16 left-12 w-[2px] bg-[#EDE7DC]/10">
                         <motion.div className="absolute top-0 left-0 right-0 bg-[#E8913C] origin-top" style={{ scaleY: smoothProgress }} />
                         
                         {EXPERIENCE.map((item, i) => (
                            <StationMobile key={item.id} item={item} index={i} activeIndex={activeIndex} />
                         ))}
 
-                        {/* Precision Transit Carriage (Mobile) */}
+                        {/* T-Class Technical Transit Carriage (Mobile) */}
                         <motion.div 
-                           className="absolute left-1/2 flex flex-col items-center w-[6px] h-[24px] bg-[#0A0C0E] border border-[#6C7378]/40 -translate-x-1/2 -translate-y-1/2 z-20 shadow-none"
+                           className="absolute left-1/2 flex flex-col items-center w-[20px] h-[64px] bg-[#0A0C0E] border border-[#6C7378]/60 -translate-x-1/2 -translate-y-1/2 z-20 shadow-none rounded-[1px]"
                            style={{ top: progressPercent }}
                         >
-                           <div className="absolute -left-[2px] top-[4px] w-[2px] h-[2px] bg-[#6C7378]" />
-                           <div className="absolute -left-[2px] bottom-[6px] w-[2px] h-[2px] bg-[#6C7378]" />
-                           <div className="flex-1" />
-                           <div className="w-[4px] h-[3px] bg-[#E8913C] mb-[1px]" />
+                           <div className="absolute -left-[2px] top-[10px] w-[3px] h-[3px] bg-[#6C7378]" />
+                           <div className="absolute -left-[2px] bottom-[20px] w-[3px] h-[3px] bg-[#6C7378]" />
+                           <div className="flex-1 flex items-center justify-center pt-2">
+                              <span className="font-mono text-[9px] font-bold text-[#9EA5A8] tracking-widest" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+                                T-0{activeIndex + 1}
+                              </span>
+                           </div>
+                           <div className="w-full h-[6px] bg-[#E8913C] mt-auto" />
                         </motion.div>
                      </div>
 
