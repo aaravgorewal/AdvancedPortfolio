@@ -1,38 +1,43 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring, useReducedMotion, MotionValue } from "framer-motion";
+import React, { useRef, useState } from "react";
+import { motion, useScroll, useTransform, useSpring, useReducedMotion, MotionValue, useMotionValueEvent } from "framer-motion";
 import { Section } from "./ui/SectionGrid";
 
 const CAPABILITIES_DATA = [
-  { id: "01", category: "AI / MACHINE LEARNING", stack: "Python · OpenAI API · Gemini · AI Agents" },
+  { id: "01", category: "AI / MACHINE LEARNING", stack: "Python · OpenAI API · Gemini · Qdrant" },
   { id: "02", category: "FULL-STACK ENGINEERING", stack: "React · Next.js · TypeScript · Tailwind CSS" },
-  { id: "03", category: "BACKEND / DATA", stack: "Node.js · Express.js · MongoDB · PostgreSQL" },
-  { id: "04", category: "PRODUCT DEVELOPMENT", stack: "REST APIs · Dashboards · Responsive Interfaces · SaaS Architecture" },
-  { id: "05", category: "CREATIVE DEVELOPMENT", stack: "Framer Motion · Three.js · 3D / AR" },
-  { id: "06", category: "RAPID PROTOTYPING", stack: "Git · GitHub · Rapid MVP Development" },
+  { id: "03", category: "BACKEND / DATA", stack: "Node.js · Express.js · FastAPI · MongoDB" },
+  { id: "04", category: "PRODUCT DEVELOPMENT", stack: "REST APIs · WebSockets · Systems Architecture" },
+  { id: "05", category: "CREATIVE DEVELOPMENT", stack: "Framer Motion · 3D Integration" },
+  { id: "06", category: "RAPID PROTOTYPING", stack: "Git · GitHub · MVP Development" },
 ];
 
 const CarouselItem = ({ item, index, progress }: { item: { id: string, category: string, stack: string }, index: number, progress: MotionValue<number> }) => {
   const center = index / 5;
   
+  // Subtle movement: max 80px spread, exactly 40px movement per active step
   const y = useTransform(progress, 
     [center - 0.4, center - 0.2, center, center + 0.2, center + 0.4], 
-    [320, 160, 0, -160, -320]
+    [80, 40, 0, -40, -80]
   );
+  
   const scale = useTransform(progress,
     [center - 0.4, center - 0.2, center, center + 0.2, center + 0.4],
-    [0.75, 0.85, 1, 0.85, 0.75]
+    [0.7, 0.85, 1, 0.85, 0.7]
   );
+  
   const opacity = useTransform(progress,
     [center - 0.4, center - 0.2, center, center + 0.2, center + 0.4],
-    [0, 0.3, 1, 0.3, 0]
+    [0, 0.15, 1, 0.15, 0]
   );
   
   const titleColor = useTransform(progress, [center - 0.1, center, center + 0.1], ["#6C7378", "#EDE7DC", "#6C7378"]);
   const indexColor = useTransform(progress, [center - 0.1, center, center + 0.1], ["#2E6B72", "#E8913C", "#2E6B72"]);
+  
+  // Tech stack strictly triggers subtle 20px reveal
   const techOpacity = useTransform(progress, [center - 0.1, center, center + 0.1], [0, 1, 0]);
-  const techY = useTransform(progress, [center - 0.1, center, center + 0.1], [-10, 0, -10]);
+  const techY = useTransform(progress, [center - 0.1, center, center + 0.1], [20, 0, -20]);
 
   return (
     <div className="absolute top-1/2 left-0 w-full" style={{ transform: 'translateY(-50%)' }}>
@@ -43,7 +48,7 @@ const CarouselItem = ({ item, index, progress }: { item: { id: string, category:
         <motion.div style={{ color: indexColor }} className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold mb-2">
           CAP—{item.id}
         </motion.div>
-        <motion.h3 style={{ color: titleColor }} className="font-syne text-2xl md:text-4xl lg:text-5xl font-extrabold uppercase tracking-tighter mb-4">
+        <motion.h3 style={{ color: titleColor }} className="font-syne text-3xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tighter mb-4">
           {item.category}
         </motion.h3>
         <motion.div style={{ opacity: techOpacity, y: techY }} className="font-sans-body text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#9EA5A8] leading-relaxed max-w-xl">
@@ -63,7 +68,13 @@ export const Capabilities = () => {
     offset: ["start start", "end end"]
   });
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 25, restDelta: 0.001 });
+  
+  const [activeIndex, setActiveIndex] = useState(0);
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
+     const idx = Math.min(5, Math.max(0, Math.round(latest * 5)));
+     setActiveIndex(idx);
+  });
 
   if (shouldReduceMotion) {
     return (
@@ -73,9 +84,14 @@ export const Capabilities = () => {
             <span className="font-sans-body text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[#6C7378] mb-4 block">
               04 / TECHNICAL ARSENAL
             </span>
-            <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
-              Technical<br/>Architecture
-            </h2>
+            <div className="flex flex-col md:flex-row md:items-end justify-between">
+              <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
+                Technical<br/>Architecture
+              </h2>
+              <div className="font-mono text-sm md:text-base uppercase tracking-[0.2em] font-bold text-[#E8913C] mt-6 md:mt-0">
+                06 / 06
+              </div>
+            </div>
           </div>
           <div className="flex flex-col gap-12 border-l border-[#E8913C]/20 pl-6 md:pl-10 relative">
             <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-[#E8913C]" />
@@ -84,7 +100,7 @@ export const Capabilities = () => {
                 <div className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold mb-2 text-[#E8913C]">
                   CAP—{item.id}
                 </div>
-                <h3 className="font-syne text-2xl md:text-4xl lg:text-5xl font-extrabold uppercase tracking-tighter mb-4 text-[#EDE7DC]">
+                <h3 className="font-syne text-3xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tighter mb-4 text-[#EDE7DC]">
                   {item.category}
                 </h3>
                 <div className="font-sans-body text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#9EA5A8] leading-relaxed max-w-xl">
@@ -107,9 +123,14 @@ export const Capabilities = () => {
             <span className="font-sans-body text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[#6C7378] mb-4 block">
               04 / TECHNICAL ARSENAL
             </span>
-            <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
-              Technical<br/>Architecture
-            </h2>
+            <div className="flex flex-col md:flex-row md:items-end justify-between">
+              <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
+                Technical<br/>Architecture
+              </h2>
+              <div className="font-mono text-sm md:text-base uppercase tracking-[0.2em] font-bold text-[#E8913C] mt-6 md:mt-0">
+                0{activeIndex + 1} / 06
+              </div>
+            </div>
           </div>
 
           <div className="flex-1 relative w-full flex items-center mb-16 md:mb-24">
@@ -119,7 +140,7 @@ export const Capabilities = () => {
              </div>
 
              {/* Carousel Items Container */}
-             <div className="relative w-full h-full ml-8 md:ml-16 overflow-hidden mask-vertical-edges">
+             <div className="relative w-full h-full ml-8 md:ml-16 overflow-hidden">
                {CAPABILITIES_DATA.map((item, i) => (
                  <CarouselItem key={item.id} item={item} index={i} progress={smoothProgress} />
                ))}
