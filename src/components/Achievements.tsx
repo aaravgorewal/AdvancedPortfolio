@@ -5,6 +5,24 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 
 const AWARDS = [
   {
+    id: "aw_devcreate",
+    rank: "01",
+    place: "1ST PLACE",
+    event: "DEVCREATE BUILDFEST 1.0",
+    year: "2025",
+    type: "Buildfest",
+    org: "Google Developer Groups Jalandhar (GDG Jalandhar)"
+  },
+  {
+    id: "aw_techfest",
+    rank: "02",
+    place: "2ND PLACE",
+    event: "TECHFEST 2025",
+    year: "2025",
+    type: "Techfest",
+    org: "Meerut Institute of Technology"
+  },
+  {
     id: "aw1",
     rank: "02",
     place: "2ND PLACE",
@@ -102,7 +120,7 @@ export const Achievements = () => {
                    whileInView={{ opacity: 1, x: 0 }}
                    viewport={{ once: false }}
                    transition={{ duration: 0.7, delay: 0.2 + (idx * 0.1) }}
-                   className="font-syne text-[35vw] md:text-[18vw] lg:text-[16vw] font-extrabold text-[#E8913C]/10 group-hover:text-[#E8913C]/30 transition-colors duration-500 leading-[0.75] tracking-tighter -ml-2 md:-ml-8 lg:-ml-12 select-none"
+                   className={`font-syne text-[35vw] md:text-[18vw] lg:text-[16vw] font-extrabold transition-colors duration-500 leading-[0.75] tracking-tighter -ml-2 md:-ml-8 lg:-ml-12 select-none ${award.place === '1ST PLACE' ? 'text-[#E8913C]/25 group-hover:text-[#E8913C]/60' : award.place === '2ND PLACE' ? 'text-[#E8913C]/10 group-hover:text-[#E8913C]/30' : 'text-[#E8913C]/5 group-hover:text-[#E8913C]/20'}`}
                  >
                    {award.rank}
                  </motion.span>
