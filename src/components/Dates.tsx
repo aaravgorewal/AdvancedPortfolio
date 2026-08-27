@@ -118,6 +118,107 @@ const StationMobile = ({ item, index, activeIndex }: { item: ExperienceItem, ind
   );
 };
 
+
+const BuilderLogSection = () => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 60%", "end 60%"]
+  });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 25, restDelta: 0.001 });
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
+     const idx = Math.min(HACKATHONS.length - 1, Math.max(0, Math.round(latest * (HACKATHONS.length - 1))));
+     setActiveIndex(idx);
+  });
+
+  return (
+     <div ref={containerRef} className="relative w-full pb-48 mt-12">
+        {/* Micro HUD */}
+        <div className="sticky top-[40vh] left-0 z-30 pointer-events-none mb-12">
+           <div className="flex flex-col items-start ml-6 md:ml-12 lg:ml-24">
+              <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-1">BUILDER LOG</span>
+              <span className="font-mono text-sm text-[#E8913C] tracking-widest font-bold">
+                LOG 0{activeIndex + 1} <span className="text-[#6C7378] font-normal">/ 0{HACKATHONS.length}</span>
+              </span>
+           </div>
+        </div>
+
+        <div className="relative w-full flex flex-col pt-12 md:pt-0">
+           {/* Vertical Scan Line */}
+           <div className="absolute left-8 md:left-[30%] top-0 bottom-0 w-[1px] bg-[#EDE7DC]/10">
+              <motion.div className="absolute top-0 left-0 right-0 bg-[#E8913C] origin-top" style={{ scaleY: smoothProgress, height: '100%' }} />
+           </div>
+
+           <div className="flex flex-col space-y-48 md:space-y-64">
+              {HACKATHONS.map((item, idx) => {
+                 const isActive = idx === activeIndex;
+                 const isPast = idx < activeIndex;
+
+                 return (
+                    <div key={item.id} className="relative flex flex-col md:flex-row items-start w-full md:pl-[30%] px-6 md:px-0">
+                       {/* Node on scanline */}
+                       <div className={`absolute left-8 md:left-[30%] -translate-x-1/2 top-4 w-[16px] h-[2px] transition-colors duration-500 ${isActive ? 'bg-[#E8913C]' : isPast ? 'bg-[#EDE7DC]/40' : 'bg-[#6C7378]/30'}`} />
+
+                       {/* Category marker */}
+                       <motion.div 
+                          initial={false}
+                          animate={{ opacity: isActive ? 1 : 0.4, x: isActive ? 0 : -15 }}
+                          transition={{ duration: 0.5, ease: "easeOut" }}
+                          className="md:absolute md:left-0 md:w-[25%] md:text-right pl-12 md:pl-0 pt-1 md:pt-2"
+                       >
+                          <span className={`font-mono text-[10px] md:text-xs tracking-widest font-bold transition-colors duration-500 ${isActive ? 'text-[#E8913C]' : 'text-[#6C7378]'}`}>
+                            [ {item.tag} ]
+                          </span>
+                       </motion.div>
+
+                       {/* Entry Content */}
+                       <div className="flex-1 pl-12 md:pl-16 pt-8 md:pt-0 flex flex-col w-full max-w-4xl">
+                          <motion.div 
+                             initial={false}
+                             animate={{ opacity: isActive ? 1 : 0.2, y: isActive ? 0 : 20 }}
+                             transition={{ duration: 0.5, ease: "easeOut" }}
+                             className="flex flex-col"
+                          >
+                             <span className={`font-syne text-3xl md:text-5xl lg:text-7xl font-extrabold uppercase tracking-tighter mb-8 md:mb-12 transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#9EA5A8]'}`}>
+                                {item.event}
+                             </span>
+
+                             {/* Horizontal Rule */}
+                             <motion.div 
+                                initial={false}
+                                animate={{ scaleX: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
+                                transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+                                className="w-full h-[1px] bg-[#2E6B72]/40 origin-left mb-8 md:mb-12"
+                             />
+
+                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-16">
+                                <div className="flex flex-col">
+                                   <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-2">ROLE</span>
+                                   <span className={`font-sans-body text-xs md:text-sm font-bold tracking-widest uppercase transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#9EA5A8]'}`}>{item.role}</span>
+                                </div>
+                                <div className="flex flex-col">
+                                   <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-2">CONTRIBUTION</span>
+                                   <span className={`font-sans-body text-xs md:text-sm tracking-wide uppercase transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#9EA5A8]'}`}>{item.contribution}</span>
+                                </div>
+                             </div>
+
+                             <div className="mt-8 md:mt-12 flex flex-col">
+                                <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-2">STATUS</span>
+                                <span className={`font-mono text-[10px] md:text-xs tracking-widest font-bold uppercase transition-colors duration-500 ${isActive ? 'text-[#E8913C]' : 'text-[#6C7378]'}`}>{item.result}</span>
+                             </div>
+                          </motion.div>
+                       </div>
+                    </div>
+                 );
+              })}
+           </div>
+        </div>
+     </div>
+  );
+};
+
 export const Dates = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
@@ -254,55 +355,18 @@ export const Dates = () => {
 
       <div className="px-6 md:px-24 pb-32">
 {/* 2. Build Hack Ship Section */}
-      <div className="border-t border-[#EDE7DC]/13 pt-24 mb-28">
-        <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#2E6B72] mb-4">
-          06 / LOGS
-        </div>
-        <h2 className="font-syne text-4xl md:text-5xl font-bold mb-12 uppercase tracking-tighter text-[#EDE7DC]">
-          Build. Hack. Ship.
-        </h2>
-        
-        <div className="border-t border-[#EDE7DC]/13 divide-y divide-[#EDE7DC]/13 font-sans-body">
-          {HACKATHONS.map((item) => (
-            <div
-              key={item.id}
-              className="group flex flex-col md:flex-row md:items-center justify-between py-8 hover:bg-[#EDE7DC]/[0.01] transition-colors duration-500 px-2"
-            >
-              {/* Tag & Event */}
-              <div className="flex items-center gap-6 mb-4 md:mb-0">
-                <span className="text-[10px] font-bold text-[#E8913C] tracking-widest border border-[#E8913C]/30 px-3 py-1 font-mono uppercase">
-                  {item.tag}
-                </span>
-                <span className="font-syne font-extrabold text-xl uppercase text-[#EDE7DC]">
-                  {item.event}
-                </span>
-              </div>
-              
-              {/* Role & Contribution */}
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-12 mb-4 md:mb-0 text-left">
-                <div>
-                  <span className="text-[9px] uppercase tracking-widest text-[#6C7378] font-bold block mb-0.5">Role</span>
-                  <span className="text-xs uppercase text-[#9EA5A8] tracking-wider font-semibold">{item.role}</span>
-                </div>
-                <div>
-                  <span className="text-[9px] uppercase tracking-widest text-[#6C7378] font-bold block mb-0.5">Contribution</span>
-                  <span className="text-xs uppercase text-[#EDE7DC] tracking-wider font-semibold">{item.contribution}</span>
-                </div>
-              </div>
-
-              {/* Result */}
-              <div className="text-left md:text-right">
-                <span className="text-[9px] uppercase tracking-widest text-[#6C7378] font-bold block mb-0.5 md:text-right">Result</span>
-                <span className="text-[10px] font-mono text-[#2E6B72] uppercase tracking-widest font-bold">
-                  {item.result}
-                </span>
-              </div>
-
+         <div className="border-t border-[#EDE7DC]/13 pt-24 pb-32">
+            <div className="px-6 md:px-12 lg:px-24 mb-16">
+               <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#2E6B72] mb-4">
+                 06 / LOGS
+               </div>
+               <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold uppercase tracking-tighter text-[#EDE7DC] leading-[0.9]">
+                 Build.<br />Hack.<br />Ship.
+               </h2>
             </div>
-          ))}
-        </div>
-      </div>
-
+            <BuilderLogSection />
+         </div>
+      
       {/* 3. Credentials & Metrics Footer Grid */}
       <div className="grid md:grid-cols-2 gap-16 border-t border-[#EDE7DC]/13 pt-24 font-sans-body">
         
