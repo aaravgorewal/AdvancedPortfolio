@@ -39,55 +39,79 @@ const HACKATHONS: HackathonItem[] = [
 ];
 
 const StationDesktop = ({ item, index, activeIndex }: { item: ExperienceItem, index: number, activeIndex: number }) => {
-  const isPast = index <= activeIndex;
-  const isActive = index === activeIndex;
+    const isActive = index === activeIndex;
   const pos = `${(index / 6) * 100}%`;
   
-  const alignClass = index === 0 ? "items-start text-left left-0" : index === 6 ? "items-end text-right right-0" : "items-center text-center left-1/2 -translate-x-1/2";
-  const nodeAlignClass = index === 0 ? "left-0" : index === 6 ? "right-0" : "left-1/2 -translate-x-1/2";
+  const isEven = index % 2 === 0;
+  const alignClass = index === 0 ? "items-start text-left" : index === 6 ? "items-end text-right" : "items-center text-center";
+  const flexAlign = index === 0 ? "left-0" : index === 6 ? "right-0" : "left-1/2 -translate-x-1/2";
+  const nodeAlignClass = index === 0 ? "left-0 origin-left" : index === 6 ? "right-0 origin-right" : "left-1/2 -translate-x-1/2 origin-center";
+
+  const year = item.period.match(/\d{4}/)?.[0] || "";
+  const yOffset = isEven ? 20 : -20;
 
   return (
     <div className="absolute top-1/2 -translate-y-1/2 z-10" style={{ left: pos }}>
-       <div className={`absolute bottom-full mb-8 flex flex-col min-w-[240px] w-max ${alignClass}`}>
-          <motion.div initial={false} animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 16 }} transition={{ duration: 0.5, ease: "easeOut" }} className={`flex flex-col ${alignClass}`}>
-             <span className="font-mono text-[10px] text-[#E8913C] uppercase tracking-widest mb-1">{item.type}</span>
-             <span className="font-syne text-xl lg:text-2xl font-bold text-[#EDE7DC] uppercase tracking-tight leading-tight mb-1">{item.role}</span>
-             <span className="font-sans-body text-[10px] text-[#9EA5A8] uppercase tracking-widest">{item.organization}</span>
+       
+       <div className={`absolute ${isEven ? 'bottom-full mb-10' : 'top-full mt-10'} flex flex-col min-w-[200px] w-max ${flexAlign}`}>
+          <motion.div initial={false} animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : yOffset }} transition={{ duration: 0.5, ease: "easeOut" }} className={`flex flex-col ${alignClass} pointer-events-none`}>
+             <span className="font-mono text-[9px] text-[#E8913C] uppercase tracking-widest mb-1">{item.type}</span>
+             <span className="font-syne text-lg lg:text-xl font-bold text-[#EDE7DC] uppercase tracking-tight leading-tight mb-0.5">{item.role}</span>
+             <span className="font-sans-body text-[10px] text-[#9EA5A8] uppercase tracking-widest mb-1.5">{item.organization}</span>
+             <span className="font-mono text-[9px] text-[#6C7378] uppercase tracking-widest">{item.period}</span>
           </motion.div>
        </div>
 
-       <div className={`absolute top-1/2 -translate-y-1/2 w-[2px] h-[16px] transition-colors duration-500 ${nodeAlignClass} ${isActive ? 'bg-[#E8913C]' : isPast ? 'bg-[#E8913C]/40' : 'bg-[#EDE7DC]/20'}`} />
+       <motion.div 
+          initial={false}
+          animate={{ scaleY: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
+          className={`absolute w-[1px] h-[32px] bg-[#E8913C]/40 ${nodeAlignClass} ${isEven ? 'bottom-1/2 origin-bottom' : 'top-1/2 origin-top'}`}
+       />
 
-       <div className={`absolute top-full mt-8 flex flex-col w-max ${alignClass}`}>
-          <span className={`font-mono text-[10px] font-bold uppercase tracking-widest transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#6C7378]'}`}>
-             {item.period}
+       <div className={`absolute top-1/2 -translate-y-1/2 transition-all duration-500 ${nodeAlignClass} ${isActive ? 'w-[2px] h-[16px] bg-[#E8913C]' : 'w-[1px] h-[8px] bg-[#6C7378]/40'}`} />
+
+       <motion.div initial={false} animate={{ opacity: isActive ? 0 : 1 }} className={`absolute ${isEven ? 'top-full mt-4' : 'bottom-full mb-4'} flex flex-col w-max ${flexAlign}`}>
+          <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#6C7378] transition-colors duration-500">
+             {year}
           </span>
-       </div>
+       </motion.div>
     </div>
   );
 };
 
 const StationMobile = ({ item, index, activeIndex }: { item: ExperienceItem, index: number, activeIndex: number }) => {
-  const isPast = index <= activeIndex;
-  const isActive = index === activeIndex;
+    const isActive = index === activeIndex;
   const pos = `${(index / 6) * 100}%`;
+  const year = item.period.match(/\d{4}/)?.[0] || "";
 
   return (
     <div className="absolute left-0 w-full z-10" style={{ top: pos }}>
-       <div className={`absolute top-0 left-[-1px] -translate-x-1/2 -translate-y-1/2 w-[16px] h-[2px] transition-colors duration-500 ${isActive ? 'bg-[#E8913C]' : isPast ? 'bg-[#E8913C]/40' : 'bg-[#EDE7DC]/20'}`} />
+       
+       <div className={`absolute top-0 left-[-1px] -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ${isActive ? 'w-[16px] h-[2px] bg-[#E8913C]' : 'w-[8px] h-[1px] bg-[#6C7378]/40'}`} />
 
-       <div className="absolute top-0 left-6 -translate-y-1/2 flex flex-col items-start w-[240px]">
-          <span className={`font-mono text-[10px] font-bold uppercase tracking-widest transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#6C7378]'}`}>
-             {item.period}
-          </span>
+       <motion.div 
+          initial={false}
+          animate={{ scaleX: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
+          className="absolute top-0 left-0 w-[20px] h-[1px] bg-[#E8913C]/40 origin-left -translate-y-1/2"
+       />
+
+       <div className="absolute top-0 left-6 -translate-y-1/2 flex flex-col items-start">
+          <motion.span animate={{ opacity: isActive ? 0 : 1 }} className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#6C7378] transition-colors duration-500">
+             {year}
+          </motion.span>
+       </div>
+
+       <div className="absolute top-0 left-10 -translate-y-1/2 flex flex-col items-start w-[240px]">
           <motion.div 
              initial={false} 
-             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 16 }} transition={{ duration: 0.5, ease: "easeOut" }} 
-             className="absolute top-full mt-2 flex flex-col pointer-events-none"
+             animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -20 }} 
+             transition={{ duration: 0.5, ease: "easeOut" }}
+             className="flex flex-col pointer-events-none"
           >
              <span className="font-mono text-[9px] text-[#E8913C] uppercase tracking-widest mb-0.5">{item.type}</span>
              <span className="font-syne text-sm font-bold text-[#EDE7DC] uppercase tracking-tight leading-tight mb-0.5">{item.role}</span>
-             <span className="font-sans-body text-[10px] text-[#9EA5A8] uppercase tracking-widest">{item.organization}</span>
+             <span className="font-sans-body text-[10px] text-[#9EA5A8] uppercase tracking-widest mb-1">{item.organization}</span>
+             <span className="font-mono text-[9px] text-[#6C7378] uppercase tracking-widest">{item.period}</span>
           </motion.div>
        </div>
     </div>
@@ -108,7 +132,7 @@ export const Dates = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   
   useMotionValueEvent(smoothProgress, "change", (latest) => {
-     const idx = Math.min(6, Math.max(0, Math.floor(latest * 6.999)));
+     const idx = Math.min(6, Math.max(0, Math.round(latest * 6)));
      setActiveIndex(idx);
   });
 
@@ -160,17 +184,15 @@ export const Dates = () => {
                            <StationDesktop key={item.id} item={item} index={i} activeIndex={activeIndex} />
                         ))}
 
-                        {/* Precision Transit Carriage */}
+                        {/* Precision Transit Carriage (Desktop) */}
                         <motion.div 
-                           className="absolute top-1/2 flex items-center h-[10px] w-[36px] bg-[#0A0C0E] border border-[#6C7378]/40 -translate-y-1/2 -translate-x-1/2 z-20 overflow-hidden shadow-none"
+                           className="absolute top-1/2 flex items-center h-[6px] w-[24px] bg-[#0A0C0E] border border-[#6C7378]/40 -translate-y-1/2 -translate-x-1/2 z-20 shadow-none"
                            style={{ left: progressPercent }}
                         >
-                           <div className="flex-1 flex justify-center gap-[3px]">
-                              <div className="w-[1px] h-[4px] bg-[#6C7378]/60" />
-                              <div className="w-[1px] h-[4px] bg-[#6C7378]/60" />
-                              <div className="w-[1px] h-[4px] bg-[#6C7378]/60" />
-                           </div>
-                           <div className="w-[4px] h-full bg-[#E8913C]" />
+                           <div className="absolute -bottom-[2px] left-[4px] w-[2px] h-[2px] bg-[#6C7378]" />
+                           <div className="absolute -bottom-[2px] right-[6px] w-[2px] h-[2px] bg-[#6C7378]" />
+                           <div className="flex-1" />
+                           <div className="w-[3px] h-[4px] bg-[#E8913C] mr-[1px]" />
                         </motion.div>
                      </div>
 
@@ -182,17 +204,15 @@ export const Dates = () => {
                            <StationMobile key={item.id} item={item} index={i} activeIndex={activeIndex} />
                         ))}
 
-                        {/* Precision Transit Carriage */}
+                        {/* Precision Transit Carriage (Mobile) */}
                         <motion.div 
-                           className="absolute left-1/2 flex flex-col items-center w-[10px] h-[36px] bg-[#0A0C0E] border border-[#6C7378]/40 -translate-x-1/2 -translate-y-1/2 z-20 overflow-hidden shadow-none"
+                           className="absolute left-1/2 flex flex-col items-center w-[6px] h-[24px] bg-[#0A0C0E] border border-[#6C7378]/40 -translate-x-1/2 -translate-y-1/2 z-20 shadow-none"
                            style={{ top: progressPercent }}
                         >
-                           <div className="flex-1 flex flex-col justify-center gap-[3px]">
-                              <div className="w-[4px] h-[1px] bg-[#6C7378]/60" />
-                              <div className="w-[4px] h-[1px] bg-[#6C7378]/60" />
-                              <div className="w-[4px] h-[1px] bg-[#6C7378]/60" />
-                           </div>
-                           <div className="w-full h-[4px] bg-[#E8913C]" />
+                           <div className="absolute -left-[2px] top-[4px] w-[2px] h-[2px] bg-[#6C7378]" />
+                           <div className="absolute -left-[2px] bottom-[6px] w-[2px] h-[2px] bg-[#6C7378]" />
+                           <div className="flex-1" />
+                           <div className="w-[4px] h-[3px] bg-[#E8913C] mb-[1px]" />
                         </motion.div>
                      </div>
 
@@ -203,7 +223,7 @@ export const Dates = () => {
       </div>
 
       <div className="px-6 md:px-24 pb-32">
-         {/* 2. Build Hack Ship Section */}
+{/* 2. Build Hack Ship Section */}
       <div className="border-t border-[#EDE7DC]/13 pt-24 mb-28">
         <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#2E6B72] mb-4">
           06 / LOGS
