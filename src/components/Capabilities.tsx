@@ -1,97 +1,139 @@
-import React from "react";
-import { Brain, Layers, Globe, Cpu } from "lucide-react";
+"use client";
+
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 import { Section } from "./ui/SectionGrid";
 
-interface CapabilityGroup {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  skills: string[];
-}
-
-const CAPABILITIES: CapabilityGroup[] = [
-  {
-    icon: <Brain className="w-5 h-5 text-accent" />,
-    title: "AI & Machine Learning",
-    description: "Developing intelligent agents, natural language processing pipelines, and predictive models to automate complex workflows.",
-    skills: ["Python", "TensorFlow & PyTorch", "OpenAI / LLM APIs", "NLP & Computer Vision", "Agentic Workflows"],
-  },
-  {
-    icon: <Layers className="w-5 h-5 text-accent" />,
-    title: "Full Stack Development",
-    description: "Building robust, scalable web architectures and secure API backends for seamless, responsive user experiences.",
-    skills: ["React.js & Next.js", "TypeScript", "Node.js & Express", "REST & WebSocket APIs", "MongoDB & Relational Databases"],
-  },
-  {
-    icon: <Globe className="w-5 h-5 text-accent" />,
-    title: "WordPress & Web Systems",
-    description: "Deploying high-performance commercial websites, optimized e-commerce portals, and structured content management.",
-    skills: ["Custom Themes", "WooCommerce", "SEO Optimization", "Performance Auditing", "Database Structuring"],
-  },
-  {
-    icon: <Cpu className="w-5 h-5 text-accent" />,
-    title: "Design & Integrations",
-    description: "Mapping logical interface design, WhatsApp API setups, and bridging digital software with physical microcontroller hardware.",
-    skills: ["Figma UI Design", "WhatsApp API Integration", "Arduino & Relays", "Edge Computing & IoT", "User Journey Flow"],
-  },
+const CAPABILITIES_DATA = [
+  { id: "01", category: "AI / MACHINE LEARNING", stack: "Python · OpenAI API · Gemini · AI Agents" },
+  { id: "02", category: "FULL-STACK ENGINEERING", stack: "React · Next.js · TypeScript · Tailwind CSS" },
+  { id: "03", category: "BACKEND / DATA", stack: "Node.js · Express.js · MongoDB · PostgreSQL" },
+  { id: "04", category: "PRODUCT DEVELOPMENT", stack: "REST APIs · Dashboards · Responsive Interfaces · SaaS Architecture" },
+  { id: "05", category: "CREATIVE DEVELOPMENT", stack: "Framer Motion · Three.js · 3D / AR" },
+  { id: "06", category: "RAPID PROTOTYPING", stack: "Git · GitHub · Rapid MVP Development" },
 ];
 
-export const Capabilities = () => {
-  return (
-    <Section id="capabilities" className="border-b border-border-custom">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 mb-16">
-        
-        {/* Section Header */}
-        <div className="md:col-span-12 flex flex-col items-start text-left">
-          <span className="font-sans-body text-xs font-semibold uppercase tracking-wider text-secondary/60 mb-2">
-            03 / CAPABILITIES
-          </span>
-          <h2 className="font-serif-display text-3xl md:text-5xl uppercase tracking-tight text-foreground">
-            Technical Arsenal
-          </h2>
+const CapabilityRow = ({ item, shouldReduceMotion }: { item: { id: string, category: string, stack: string }, shouldReduceMotion: boolean | null }) => {
+  const rowRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: rowRef,
+    offset: ["center 85%", "center 15%"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 25, restDelta: 0.001 });
+
+  const y = useTransform(smoothProgress, [0, 0.5, 1], [0, -16, 0]);
+  const opacity = useTransform(smoothProgress, [0, 0.5, 1], [0.15, 1, 0.15]);
+  const indexColor = useTransform(smoothProgress, [0, 0.5, 1], ["#6C7378", "#E8913C", "#6C7378"]);
+  const titleColor = useTransform(smoothProgress, [0, 0.5, 1], ["#6C7378", "#EDE7DC", "#6C7378"]);
+  const techColor = useTransform(smoothProgress, [0, 0.5, 1], ["#6C7378", "#9EA5A8", "#6C7378"]);
+  const indicatorScale = useTransform(smoothProgress, [0.35, 0.5, 0.65], [0, 1, 0]);
+  
+  if (shouldReduceMotion) {
+    return (
+      <div className="flex flex-col md:flex-row md:items-center justify-between py-8 md:py-14 border-b border-[#EDE7DC]/10 relative">
+        <div className="absolute left-[-24px] md:left-[-40px] top-[20%] bottom-[20%] w-[2px] bg-[#E8913C]" />
+        <div className="text-[10px] md:text-xs font-mono uppercase tracking-[0.2em] font-bold mb-3 md:mb-0 md:w-1/4 text-[#E8913C]">
+          CAP—{item.id}
+        </div>
+        <h3 className="font-syne text-xl md:text-3xl font-extrabold uppercase tracking-tighter md:w-1/3 mb-3 md:mb-0 text-[#EDE7DC]">
+          {item.category}
+        </h3>
+        <div className="font-sans-body text-[10px] md:text-[11px] uppercase tracking-[0.2em] md:w-5/12 text-[#9EA5A8] font-bold leading-relaxed">
+          {item.stack}
         </div>
       </div>
+    );
+  }
 
-      {/* Capabilities Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-        {CAPABILITIES.map((group) => {
-          return (
-            <div
-              key={group.title}
-              className="group bg-surface border border-border-custom p-6 sm:p-8 flex flex-col justify-between transition-colors duration-300 hover:border-accent outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              tabIndex={0}
-            >
-              <div className="flex flex-col items-start text-left">
-                {/* Icon wrapper */}
-                <div className="w-10 h-10 border border-border-custom flex items-center justify-center mb-6 group-hover:border-accent/50 transition-colors duration-300">
-                  {group.icon}
-                </div>
-                
-                {/* Title */}
-                <h3 className="font-serif-display text-lg font-bold text-foreground mb-3 group-hover:text-accent transition-colors duration-300">
-                  {group.title}
-                </h3>
-                
-                {/* Description */}
-                <p className="font-sans-body text-xs sm:text-sm text-secondary leading-relaxed mb-6">
-                  {group.description}
-                </p>
-              </div>
+  return (
+    <motion.div
+      ref={rowRef}
+      style={{ y, opacity }}
+      className="flex flex-col md:flex-row md:items-center justify-between py-8 md:py-14 border-b border-[#EDE7DC]/10 relative"
+    >
+      <motion.div 
+        style={{ scaleY: indicatorScale }}
+        className="absolute left-[-24px] md:left-[-40px] top-[20%] bottom-[20%] w-[2px] bg-[#E8913C] origin-center z-10"
+      />
+      <motion.div 
+        style={{ color: indexColor }}
+        className="text-[10px] md:text-xs font-mono uppercase tracking-[0.2em] font-bold mb-3 md:mb-0 md:w-1/4"
+      >
+        CAP—{item.id}
+      </motion.div>
+      <motion.h3 
+        style={{ color: titleColor }}
+        className="font-syne text-xl md:text-3xl font-extrabold uppercase tracking-tighter md:w-1/3 mb-3 md:mb-0"
+      >
+        {item.category}
+      </motion.h3>
+      <motion.div 
+        style={{ color: techColor }}
+        className="font-sans-body text-[10px] md:text-[11px] uppercase tracking-[0.2em] md:w-5/12 font-bold leading-relaxed"
+      >
+        {item.stack}
+      </motion.div>
+    </motion.div>
+  );
+};
 
-              {/* Skills tags list */}
-              <div className="border-t border-border-custom/50 pt-6 mt-2 flex flex-wrap gap-2 text-left">
-                {group.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="text-[10px] font-mono border border-border-custom/50 px-2 py-0.5 text-secondary bg-surface/20 select-none"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          );
-        })}
+export const Capabilities = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 60%", "end 60%"]
+  });
+
+  const smoothRail = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+  return (
+    <Section id="capabilities" className="bg-[#0A0C0E] border-b border-[#EDE7DC]/10 py-24 md:py-40 overflow-hidden">
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-24 grid grid-cols-1 gap-8 md:gap-16" ref={containerRef}>
+        
+        {/* Section Header */}
+        <motion.div 
+          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          whileInView={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="flex flex-col items-start text-left mb-10 md:mb-16"
+        >
+          <span className="font-sans-body text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[#6C7378] mb-4">
+            04 / TECHNICAL ARSENAL
+          </span>
+          <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
+            Capabilities
+          </h2>
+        </motion.div>
+
+        {/* Interactive List Container */}
+        <div className="relative flex w-full">
+          
+          {/* Vertical Progress Line */}
+          <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-[#EDE7DC]/10">
+            {!shouldReduceMotion && (
+              <motion.div 
+                className="absolute top-0 left-0 right-0 bottom-0 bg-[#E8913C] origin-top"
+                style={{ scaleY: smoothRail }}
+              />
+            )}
+          </div>
+
+          <div className="w-full pl-6 md:pl-10 flex flex-col relative">
+             {CAPABILITIES_DATA.map((item) => (
+               <CapabilityRow 
+                 key={item.id} 
+                 item={item} 
+                 shouldReduceMotion={shouldReduceMotion} 
+               />
+             ))}
+          </div>
+
+        </div>
       </div>
     </Section>
   );
