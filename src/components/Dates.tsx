@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useState } from "react";
+import { motion, useScroll, useSpring, useReducedMotion, useMotionValueEvent, useTransform } from "framer-motion";
 import { Section } from "./ui/SectionGrid";
 
 interface ExperienceItem {
@@ -13,7 +14,7 @@ interface ExperienceItem {
 
 interface HackathonItem {
   id: string;
-  tag: string; // BUILD / HACK / SHIP / LEAD
+  tag: string;
   event: string;
   role: string;
   contribution: string;
@@ -21,140 +22,188 @@ interface HackathonItem {
 }
 
 const EXPERIENCE: ExperienceItem[] = [
-  {
-    id: "1",
-    period: "May 2026 – Pres",
-    role: "CAMPUS AMBASSADOR",
-    organization: "GOOGLE GEMINI",
-    type: "DEVELOPER PROGRAM",
-  },
-  {
-    id: "2",
-    period: "Jan 2026 – Pres",
-    role: "TECHNICAL TEAM MEMBER",
-    organization: "IEEE DVSIET",
-    type: "TECHNICAL SECTION",
-  },
-  {
-    id: "3",
-    period: "Mar 2026 – Jul 2026",
-    role: "FRONTEND DEVELOPER",
-    organization: "ENTHU.AI",
-    type: "INTERNSHIP",
-  },
-  {
-    id: "4",
-    period: "Dec 2025 – Aug 2026",
-    role: "CAMPUS AMBASSADOR",
-    organization: "GEEKSFORGEEKS",
-    type: "DEVELOPER PROGRAM",
-  },
-  {
-    id: "5",
-    period: "Oct 2024 – Pres",
-    role: "CAMPUS COORDINATOR",
-    organization: "GDG ON CAMPUS",
-    type: "TECHNICAL LEADERSHIP",
-  },
-  {
-    id: "6",
-    period: "Jan 2022 – Pres",
-    role: "FREELANCE WEB DEVELOPER",
-    organization: "SELF-EMPLOYED",
-    type: "CLIENT DEVELOPMENT",
-  },
-  {
-    id: "7",
-    period: "Oct 2025",
-    role: "ORGANIZER (HACKDAY)",
-    organization: "HACKTOBERFEST 2025",
-    type: "TECHNICAL EVENT",
-  },
+  { id: "1", period: "May 2026 – Pres", role: "CAMPUS AMBASSADOR", organization: "GOOGLE GEMINI", type: "DEVELOPER PROGRAM" },
+  { id: "2", period: "Jan 2026 – Pres", role: "TECHNICAL TEAM MEMBER", organization: "IEEE DVSIET", type: "TECHNICAL SECTION" },
+  { id: "3", period: "Mar 2026 – Jul 2026", role: "FRONTEND DEVELOPER", organization: "ENTHU.AI", type: "INTERNSHIP" },
+  { id: "4", period: "Dec 2025 – Aug 2026", role: "CAMPUS AMBASSADOR", organization: "GEEKSFORGEEKS", type: "DEVELOPER PROGRAM" },
+  { id: "5", period: "Oct 2024 – Pres", role: "CAMPUS COORDINATOR", organization: "GDG ON CAMPUS", type: "TECHNICAL LEADERSHIP" },
+  { id: "6", period: "Jan 2022 – Pres", role: "FREELANCE WEB DEVELOPER", organization: "SELF-EMPLOYED", type: "CLIENT DEVELOPMENT" },
+  { id: "7", period: "Oct 2025", role: "ORGANIZER (HACKDAY)", organization: "HACKTOBERFEST 2025", type: "TECHNICAL EVENT" },
 ];
 
 const HACKATHONS: HackathonItem[] = [
-  {
-    id: "1",
-    tag: "BUILD",
-    event: "HACKCBS 8.0",
-    role: "DEVELOPER",
-    contribution: "SAFEBIO VAULT WEB PROTOTYPE",
-    result: "VERIFIED DEV CREDENTIAL",
-  },
-  {
-    id: "2",
-    tag: "HACK",
-    event: "HACKFUSION 2026",
-    role: "FULL-STACK ENG",
-    contribution: "ARDUINO VOICE COMMAND RELAYS",
-    result: "VERIFIED DEV CREDENTIAL",
-  },
-  {
-    id: "3",
-    tag: "SHIP",
-    event: "RIFT ’26",
-    role: "TEAM LEAD",
-    contribution: "EDULEARN STUDY PACING ENGINE",
-    result: "PROJECT PRESENTATION CREDENTIAL",
-  },
-  {
-    id: "4",
-    tag: "LEAD",
-    event: "HACKTOBERFEST 2025",
-    role: "ORGANIZER",
-    contribution: "DVSIET HACKDAY EVENT COORDINATION",
-    result: "LEADERSHIP CREDENTIAL",
-  },
+  { id: "1", tag: "BUILD", event: "HACKCBS 8.0", role: "DEVELOPER", contribution: "SAFEBIO VAULT WEB PROTOTYPE", result: "VERIFIED DEV CREDENTIAL" },
+  { id: "2", tag: "HACK", event: "HACKFUSION 2026", role: "FULL-STACK ENG", contribution: "ARDUINO VOICE COMMAND RELAYS", result: "VERIFIED DEV CREDENTIAL" },
+  { id: "3", tag: "SHIP", event: "RIFT ’26", role: "TEAM LEAD", contribution: "EDULEARN STUDY PACING ENGINE", result: "PROJECT PRESENTATION CREDENTIAL" },
+  { id: "4", tag: "LEAD", event: "HACKTOBERFEST 2025", role: "ORGANIZER", contribution: "DVSIET HACKDAY EVENT COORDINATION", result: "LEADERSHIP CREDENTIAL" },
 ];
 
-export const Dates = () => {
+const StationDesktop = ({ item, index, activeIndex }: { item: ExperienceItem, index: number, activeIndex: number }) => {
+  const isPast = index <= activeIndex;
+  const isActive = index === activeIndex;
+  const pos = `${(index / 6) * 100}%`;
+  
+  const alignClass = index === 0 ? "items-start text-left left-0" : index === 6 ? "items-end text-right right-0" : "items-center text-center left-1/2 -translate-x-1/2";
+  const nodeAlignClass = index === 0 ? "left-0" : index === 6 ? "right-0" : "left-1/2 -translate-x-1/2";
+
   return (
-    <Section id="dates" className="px-6 md:px-24 py-32 bg-[#101317] border-b border-border-custom text-left">
+    <div className="absolute top-1/2 -translate-y-1/2 z-10" style={{ left: pos }}>
+       <div className={`absolute bottom-full mb-8 flex flex-col min-w-[240px] w-max ${alignClass}`}>
+          <motion.div initial={false} animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 16 }} transition={{ duration: 0.5, ease: "easeOut" }} className={`flex flex-col ${alignClass}`}>
+             <span className="font-mono text-[10px] text-[#E8913C] uppercase tracking-widest mb-1">{item.type}</span>
+             <span className="font-syne text-xl lg:text-2xl font-bold text-[#EDE7DC] uppercase tracking-tight leading-tight mb-1">{item.role}</span>
+             <span className="font-sans-body text-[10px] text-[#9EA5A8] uppercase tracking-widest">{item.organization}</span>
+          </motion.div>
+       </div>
+
+       <div className={`absolute top-1/2 -translate-y-1/2 w-[2px] h-[16px] transition-colors duration-500 ${nodeAlignClass} ${isActive ? 'bg-[#E8913C]' : isPast ? 'bg-[#E8913C]/40' : 'bg-[#EDE7DC]/20'}`} />
+
+       <div className={`absolute top-full mt-8 flex flex-col w-max ${alignClass}`}>
+          <span className={`font-mono text-[10px] font-bold uppercase tracking-widest transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#6C7378]'}`}>
+             {item.period}
+          </span>
+       </div>
+    </div>
+  );
+};
+
+const StationMobile = ({ item, index, activeIndex }: { item: ExperienceItem, index: number, activeIndex: number }) => {
+  const isPast = index <= activeIndex;
+  const isActive = index === activeIndex;
+  const pos = `${(index / 6) * 100}%`;
+
+  return (
+    <div className="absolute left-0 w-full z-10" style={{ top: pos }}>
+       <div className={`absolute top-0 left-[-1px] -translate-x-1/2 -translate-y-1/2 w-[16px] h-[2px] transition-colors duration-500 ${isActive ? 'bg-[#E8913C]' : isPast ? 'bg-[#E8913C]/40' : 'bg-[#EDE7DC]/20'}`} />
+
+       <div className="absolute top-0 left-6 -translate-y-1/2 flex flex-col items-start w-[240px]">
+          <span className={`font-mono text-[10px] font-bold uppercase tracking-widest transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#6C7378]'}`}>
+             {item.period}
+          </span>
+          <motion.div 
+             initial={false} 
+             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 16 }} transition={{ duration: 0.5, ease: "easeOut" }} 
+             className="absolute top-full mt-2 flex flex-col pointer-events-none"
+          >
+             <span className="font-mono text-[9px] text-[#E8913C] uppercase tracking-widest mb-0.5">{item.type}</span>
+             <span className="font-syne text-sm font-bold text-[#EDE7DC] uppercase tracking-tight leading-tight mb-0.5">{item.role}</span>
+             <span className="font-sans-body text-[10px] text-[#9EA5A8] uppercase tracking-widest">{item.organization}</span>
+          </motion.div>
+       </div>
+    </div>
+  );
+};
+
+export const Dates = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 25, restDelta: 0.001 });
+  
+  const [activeIndex, setActiveIndex] = useState(0);
+  
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
+     const idx = Math.min(6, Math.max(0, Math.floor(latest * 6.999)));
+     setActiveIndex(idx);
+  });
+
+  const progressPercent = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
+
+  return (
+    <Section id="dates" className="bg-[#101317] border-b border-border-custom text-left p-0 m-0 relative">
       
-      {/* 1. Experience Timeline */}
-      <div className="mb-28">
-        <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#E8913C] mb-4">
-          05 / TIMELINE
-        </div>
-        <h2 className="font-syne text-4xl md:text-5xl font-bold mb-12 uppercase tracking-tighter text-[#EDE7DC]">
-          Experience Timeline
-        </h2>
-        <div className="overflow-x-auto w-full">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="text-[10px] uppercase tracking-[0.15em] text-[#6C7378] border-b border-[#EDE7DC]/13 font-sans-body">
-                <th className="pb-4 font-semibold w-1/4">Period</th>
-                <th className="pb-4 font-semibold w-1/3">Role / Activity</th>
-                <th className="pb-4 font-semibold w-1/4">Organization</th>
-                <th className="pb-4 font-semibold text-right">Type</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#EDE7DC]/5 font-sans-body">
-              {EXPERIENCE.map((item) => (
-                <tr
-                  key={item.id}
-                  className="group hover:bg-[#EDE7DC]/[0.02] transition-colors duration-200"
-                >
-                  <td className="py-6 font-syne font-bold text-lg md:text-xl uppercase text-[#EDE7DC] whitespace-nowrap">
-                    {item.period}
-                  </td>
-                  <td className="py-6 text-[#9EA5A8] uppercase text-xs tracking-widest font-semibold">
-                    {item.role}
-                  </td>
-                  <td className="py-6 text-[#9EA5A8] uppercase text-xs tracking-widest font-semibold">
-                    {item.organization}
-                  </td>
-                  <td className="py-6 text-right text-[#E8913C] font-bold text-[10px] tracking-widest font-semibold">
-                    {item.type}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {/* 1. Experience Timeline (Career Transit) */}
+      <div className="w-full relative min-h-[100dvh]">
+         {shouldReduceMotion ? (
+            <div className="px-6 md:px-24 pt-32 pb-24">
+               <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#E8913C] mb-4">05 / EXPERIENCE LOG</div>
+               <h2 className="font-syne text-4xl font-bold uppercase text-[#EDE7DC] mb-12">Career Transit</h2>
+               <div className="flex flex-col gap-8">
+                  {EXPERIENCE.map((item) => (
+                    <div key={item.id} className="flex flex-col">
+                       <span className="text-[#E8913C] font-mono text-xs">{item.period}</span>
+                       <span className="text-[#EDE7DC] font-syne text-lg uppercase mt-1">{item.role}</span>
+                       <span className="text-[#9EA5A8] font-sans-body text-xs uppercase">{item.organization}</span>
+                    </div>
+                  ))}
+               </div>
+            </div>
+         ) : (
+            <div ref={containerRef} className="h-[400vh] w-full relative">
+               <div className="sticky top-0 h-[100dvh] w-full flex flex-col justify-center overflow-hidden pt-24 pb-12">
+                  
+                  {/* Header */}
+                  <div className="flex-none mb-16 md:mb-24 px-6 md:px-24">
+                     <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#E8913C] mb-4">
+                       05 / EXPERIENCE LOG
+                     </div>
+                     <div className="flex flex-col md:flex-row md:items-end justify-between">
+                        <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold uppercase tracking-tighter text-[#EDE7DC] leading-[0.9]">
+                          Career<br/>Transit
+                        </h2>
+                     </div>
+                  </div>
+
+                  {/* Route Container */}
+                  <div className="relative flex-1 w-full max-w-7xl mx-auto flex flex-col justify-center">
+                     
+                     {/* Desktop Route Line */}
+                     <div className="hidden md:block absolute left-12 right-12 md:left-32 md:right-32 top-1/2 h-[1px] bg-[#EDE7DC]/10 -translate-y-1/2">
+                        <motion.div className="absolute left-0 top-0 bottom-0 bg-[#E8913C] origin-left" style={{ scaleX: smoothProgress }} />
+                        
+                        {EXPERIENCE.map((item, i) => (
+                           <StationDesktop key={item.id} item={item} index={i} activeIndex={activeIndex} />
+                        ))}
+
+                        {/* Precision Transit Carriage */}
+                        <motion.div 
+                           className="absolute top-1/2 flex items-center h-[10px] w-[36px] bg-[#0A0C0E] border border-[#6C7378]/40 -translate-y-1/2 -translate-x-1/2 z-20 overflow-hidden shadow-none"
+                           style={{ left: progressPercent }}
+                        >
+                           <div className="flex-1 flex justify-center gap-[3px]">
+                              <div className="w-[1px] h-[4px] bg-[#6C7378]/60" />
+                              <div className="w-[1px] h-[4px] bg-[#6C7378]/60" />
+                              <div className="w-[1px] h-[4px] bg-[#6C7378]/60" />
+                           </div>
+                           <div className="w-[4px] h-full bg-[#E8913C]" />
+                        </motion.div>
+                     </div>
+
+                     {/* Mobile Route Line */}
+                     <div className="md:hidden absolute top-8 bottom-16 left-8 w-[1px] bg-[#EDE7DC]/10">
+                        <motion.div className="absolute top-0 left-0 right-0 bg-[#E8913C] origin-top" style={{ scaleY: smoothProgress }} />
+                        
+                        {EXPERIENCE.map((item, i) => (
+                           <StationMobile key={item.id} item={item} index={i} activeIndex={activeIndex} />
+                        ))}
+
+                        {/* Precision Transit Carriage */}
+                        <motion.div 
+                           className="absolute left-1/2 flex flex-col items-center w-[10px] h-[36px] bg-[#0A0C0E] border border-[#6C7378]/40 -translate-x-1/2 -translate-y-1/2 z-20 overflow-hidden shadow-none"
+                           style={{ top: progressPercent }}
+                        >
+                           <div className="flex-1 flex flex-col justify-center gap-[3px]">
+                              <div className="w-[4px] h-[1px] bg-[#6C7378]/60" />
+                              <div className="w-[4px] h-[1px] bg-[#6C7378]/60" />
+                              <div className="w-[4px] h-[1px] bg-[#6C7378]/60" />
+                           </div>
+                           <div className="w-full h-[4px] bg-[#E8913C]" />
+                        </motion.div>
+                     </div>
+
+                  </div>
+               </div>
+            </div>
+         )}
       </div>
 
-      {/* 2. Build Hack Ship Section */}
+      <div className="px-6 md:px-24 pb-32">
+         {/* 2. Build Hack Ship Section */}
       <div className="border-t border-[#EDE7DC]/13 pt-24 mb-28">
         <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#2E6B72] mb-4">
           06 / LOGS
@@ -167,7 +216,7 @@ export const Dates = () => {
           {HACKATHONS.map((item) => (
             <div
               key={item.id}
-              className="group flex flex-col md:flex-row md:items-center justify-between py-8 hover:bg-[#EDE7DC]/[0.01] transition-colors duration-300 px-2"
+              className="group flex flex-col md:flex-row md:items-center justify-between py-8 hover:bg-[#EDE7DC]/[0.01] transition-colors duration-500 px-2"
             >
               {/* Tag & Event */}
               <div className="flex items-center gap-6 mb-4 md:mb-0">
@@ -266,6 +315,7 @@ export const Dates = () => {
 
       </div>
 
+      </div>
     </Section>
   );
 };
