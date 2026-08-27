@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { motion, useScroll, useSpring, useReducedMotion, useMotionValueEvent, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, useReducedMotion, useMotionValueEvent, useTransform, AnimatePresence } from "framer-motion";
 import { Section } from "./ui/SectionGrid";
 
 interface ExperienceItem {
@@ -32,10 +32,10 @@ const EXPERIENCE: ExperienceItem[] = [
 ];
 
 const HACKATHONS: HackathonItem[] = [
-  { id: "1", tag: "BUILD", event: "HACKCBS 8.0", role: "DEVELOPER", contribution: "SAFEBIO VAULT WEB PROTOTYPE", result: "VERIFIED DEV CREDENTIAL" },
-  { id: "2", tag: "HACK", event: "HACKFUSION 2026", role: "FULL-STACK ENG", contribution: "ARDUINO VOICE COMMAND RELAYS", result: "VERIFIED DEV CREDENTIAL" },
-  { id: "3", tag: "SHIP", event: "RIFT ’26", role: "TEAM LEAD", contribution: "EDULEARN STUDY PACING ENGINE", result: "PROJECT PRESENTATION CREDENTIAL" },
-  { id: "4", tag: "LEAD", event: "HACKTOBERFEST 2025", role: "ORGANIZER", contribution: "DVSIET HACKDAY EVENT COORDINATION", result: "LEADERSHIP CREDENTIAL" },
+  { id: "1", tag: "BUILD", event: "HACKCBS 8.0", role: "DEVELOPER", contribution: "SAFEBIO VAULT WEB PROTOTYPE", result: "PROTOTYPE BUILT" },
+  { id: "2", tag: "HACK", event: "HACKFUSION 2026", role: "FULL-STACK ENG", contribution: "ARDUINO VOICE COMMAND RELAYS", result: "PROJECT COMPLETED" },
+  { id: "3", tag: "SHIP", event: "RIFT ’26", role: "TEAM LEAD", contribution: "EDULEARN STUDY PACING ENGINE", result: "PRESENTED" },
+  { id: "4", tag: "LEAD", event: "HACKTOBERFEST 2025", role: "ORGANIZER", contribution: "DVSIET HACKDAY EVENT COORDINATION", result: "EVENT CONCLUDED" },
 ];
 
 const StationDesktop = ({ item, index, activeIndex }: { item: ExperienceItem, index: number, activeIndex: number }) => {
@@ -121,93 +121,163 @@ const StationMobile = ({ item, index, activeIndex }: { item: ExperienceItem, ind
 
 const BuilderLogSection = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 60%", "end 60%"]
+    offset: ["start 60%", "end 80%"]
   });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 25, restDelta: 0.001 });
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [expandedId, setExpandedId] = React.useState<string | null>(null);
 
   useMotionValueEvent(smoothProgress, "change", (latest) => {
+     if (shouldReduceMotion) return;
      const idx = Math.min(HACKATHONS.length - 1, Math.max(0, Math.round(latest * (HACKATHONS.length - 1))));
      setActiveIndex(idx);
   });
 
+  const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+     if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setExpandedId(prev => prev === id ? null : id);
+     } else if (e.key === 'Escape') {
+        setExpandedId(null);
+     }
+  };
+
   return (
-     <div ref={containerRef} className="relative w-full pb-48 mt-12">
-        {/* Micro HUD */}
-        <div className="sticky top-[40vh] left-0 z-30 pointer-events-none mb-12">
-           <div className="flex flex-col items-start ml-6 md:ml-12 lg:ml-24">
-              <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-1">BUILDER LOG</span>
-              <span className="font-mono text-sm text-[#E8913C] tracking-widest font-bold">
-                LOG 0{activeIndex + 1} <span className="text-[#6C7378] font-normal">/ 0{HACKATHONS.length}</span>
-              </span>
+     <div ref={containerRef} className="w-full pb-32 pt-24">
+        
+        {/* Header and HUD merged */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between px-6 md:px-12 lg:px-24 mb-24 md:mb-32">
+           <div>
+              <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#2E6B72] mb-4">
+                06 / LOGS
+              </div>
+              <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold uppercase tracking-tighter text-[#EDE7DC] leading-[0.9]">
+                Build.<br />Hack.<br />Ship.
+              </h2>
+           </div>
+           
+           <div className="flex flex-col items-start md:items-end mt-12 md:mt-0 pointer-events-none">
+              <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-3">BUILDER LOG</span>
+              <div className="flex items-center gap-4 md:gap-6">
+                 <div className="w-24 md:w-32 h-[2px] bg-[#EDE7DC]/10 origin-left overflow-hidden">
+                    <motion.div 
+                       className="w-full h-full bg-[#E8913C] origin-left" 
+                       style={{ scaleX: shouldReduceMotion ? 1 : smoothProgress }} 
+                    />
+                 </div>
+                 <span className="font-mono text-xs md:text-sm text-[#E8913C] tracking-widest font-bold">
+                   LOG 0{activeIndex + 1} <span className="text-[#6C7378] font-normal">/ 0{HACKATHONS.length}</span>
+                 </span>
+              </div>
            </div>
         </div>
 
-        <div className="relative w-full flex flex-col pt-12 md:pt-0">
+        <div className="relative w-full flex flex-col">
            {/* Vertical Scan Line */}
            <div className="absolute left-8 md:left-[30%] top-0 bottom-0 w-[1px] bg-[#EDE7DC]/10">
-              <motion.div className="absolute top-0 left-0 right-0 bg-[#E8913C] origin-top" style={{ scaleY: smoothProgress, height: '100%' }} />
+              <motion.div 
+                 className="absolute top-0 left-0 right-0 bg-[#E8913C] origin-top" 
+                 style={{ scaleY: shouldReduceMotion ? 1 : smoothProgress, height: '100%' }} 
+              />
            </div>
 
-           <div className="flex flex-col space-y-48 md:space-y-64">
+           <div className="flex flex-col space-y-24 md:space-y-32">
               {HACKATHONS.map((item, idx) => {
-                 const isActive = idx === activeIndex;
-                 const isPast = idx < activeIndex;
+                 const isActive = shouldReduceMotion ? true : idx === activeIndex;
+                 const isPast = shouldReduceMotion ? true : idx < activeIndex;
+                 const isExpanded = expandedId === item.id;
 
                  return (
-                    <div key={item.id} className="relative flex flex-col md:flex-row items-start w-full md:pl-[30%] px-6 md:px-0">
+                    <div 
+                       key={item.id} 
+                       tabIndex={0}
+                       role="button"
+                       aria-expanded={isExpanded}
+                       onClick={() => setExpandedId(prev => prev === item.id ? null : item.id)}
+                       onKeyDown={(e) => handleKeyDown(e, item.id)}
+                       className="group relative flex flex-col md:flex-row items-start w-full md:pl-[30%] px-6 md:px-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#E8913C] focus-visible:ring-offset-8 focus-visible:ring-offset-[#0A0C0E]"
+                    >
                        {/* Node on scanline */}
-                       <div className={`absolute left-8 md:left-[30%] -translate-x-1/2 top-4 w-[16px] h-[2px] transition-colors duration-500 ${isActive ? 'bg-[#E8913C]' : isPast ? 'bg-[#EDE7DC]/40' : 'bg-[#6C7378]/30'}`} />
+                       <div className={`absolute left-8 md:left-[30%] -translate-x-1/2 top-4 w-[16px] h-[2px] transition-all duration-500 ${isActive ? 'bg-[#E8913C]' : isPast ? 'bg-[#EDE7DC]/40' : 'bg-[#6C7378]/30'} group-hover:bg-[#E8913C] group-focus-visible:bg-[#E8913C]`} />
 
                        {/* Category marker */}
                        <motion.div 
                           initial={false}
-                          animate={{ opacity: isActive ? 1 : 0.4, x: isActive ? 0 : -15 }}
+                          animate={{ 
+                             opacity: isActive ? 1 : 0.4, 
+                             x: shouldReduceMotion ? 0 : (isActive ? 0 : -15) 
+                          }}
                           transition={{ duration: 0.5, ease: "easeOut" }}
-                          className="md:absolute md:left-0 md:w-[25%] md:text-right pl-12 md:pl-0 pt-1 md:pt-2"
+                          className="md:absolute md:left-0 md:w-[25%] md:text-right pl-12 md:pl-0 pt-1 md:pt-2 transition-transform duration-500 group-hover:translate-x-2"
                        >
-                          <span className={`font-mono text-[10px] md:text-xs tracking-widest font-bold transition-colors duration-500 ${isActive ? 'text-[#E8913C]' : 'text-[#6C7378]'}`}>
+                          <span className={`font-mono text-[10px] md:text-xs tracking-widest font-bold transition-colors duration-500 ${isActive ? 'text-[#E8913C]' : 'text-[#6C7378]'} group-hover:text-[#E8913C]`}>
                             [ {item.tag} ]
                           </span>
                        </motion.div>
 
-                       {/* Entry Content */}
-                       <div className="flex-1 pl-12 md:pl-16 pt-8 md:pt-0 flex flex-col w-full max-w-4xl">
+                       {/* Entry Content (Title + Accordion) */}
+                       <div className="flex-1 pl-12 md:pl-16 pt-8 md:pt-0 flex flex-col w-full max-w-4xl transition-transform duration-500 group-hover:translate-x-2">
                           <motion.div 
                              initial={false}
-                             animate={{ opacity: isActive ? 1 : 0.2, y: isActive ? 0 : 20 }}
+                             animate={{ 
+                                opacity: isActive ? 1 : 0.3, 
+                                y: shouldReduceMotion ? 0 : (isActive ? 0 : 20) 
+                             }}
                              transition={{ duration: 0.5, ease: "easeOut" }}
                              className="flex flex-col"
                           >
-                             <span className={`font-syne text-3xl md:text-5xl lg:text-7xl font-extrabold uppercase tracking-tighter mb-8 md:mb-12 transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#9EA5A8]'}`}>
-                                {item.event}
-                             </span>
+                             <div className="flex items-center">
+                                <span className={`font-syne text-3xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tighter transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#9EA5A8]'} group-hover:text-[#EDE7DC]`}>
+                                   {item.event}
+                                </span>
+                                <span className="inline-block transform transition-transform duration-300 translate-x-0 group-hover:translate-x-3 group-focus-visible:translate-x-3 text-[#6C7378] group-hover:text-[#E8913C] ml-4 md:ml-6 text-xl md:text-3xl">
+                                   →
+                                </span>
+                             </div>
 
                              {/* Horizontal Rule */}
                              <motion.div 
                                 initial={false}
-                                animate={{ scaleX: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
+                                animate={{ 
+                                   scaleX: shouldReduceMotion ? 1 : (isActive ? 1 : 0), 
+                                   opacity: isActive ? 1 : 0 
+                                }}
                                 transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
-                                className="w-full h-[1px] bg-[#2E6B72]/40 origin-left mb-8 md:mb-12"
+                                className={`w-full h-[1px] origin-left mt-8 mb-2 transition-colors duration-500 ${isExpanded ? 'bg-[#E8913C]/60' : 'bg-[#2E6B72]/40'} group-hover:bg-[#E8913C]/40`}
                              />
 
-                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-16">
-                                <div className="flex flex-col">
-                                   <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-2">ROLE</span>
-                                   <span className={`font-sans-body text-xs md:text-sm font-bold tracking-widest uppercase transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#9EA5A8]'}`}>{item.role}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                   <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-2">CONTRIBUTION</span>
-                                   <span className={`font-sans-body text-xs md:text-sm tracking-wide uppercase transition-colors duration-500 ${isActive ? 'text-[#EDE7DC]' : 'text-[#9EA5A8]'}`}>{item.contribution}</span>
-                                </div>
-                             </div>
-
-                             <div className="mt-8 md:mt-12 flex flex-col">
-                                <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-2">STATUS</span>
-                                <span className={`font-mono text-[10px] md:text-xs tracking-widest font-bold uppercase transition-colors duration-500 ${isActive ? 'text-[#E8913C]' : 'text-[#6C7378]'}`}>{item.result}</span>
-                             </div>
+                             {/* Accordion Expansion */}
+                             <AnimatePresence>
+                                {isExpanded && (
+                                   <motion.div
+                                      initial={{ height: 0, opacity: 0 }}
+                                      animate={{ height: 'auto', opacity: 1 }}
+                                      exit={{ height: 0, opacity: 0 }}
+                                      transition={{ duration: shouldReduceMotion ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
+                                      className="overflow-hidden"
+                                   >
+                                      <div className="pt-8 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-16">
+                                         <div className="flex flex-col">
+                                            <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-2">ROLE</span>
+                                            <span className="font-sans-body text-xs md:text-sm font-bold tracking-widest uppercase text-[#EDE7DC]">{item.role}</span>
+                                         </div>
+                                         <div className="flex flex-col">
+                                            <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-2">CONTRIBUTION</span>
+                                            <span className="font-sans-body text-xs md:text-sm tracking-wide uppercase text-[#EDE7DC]">{item.contribution}</span>
+                                         </div>
+                                         
+                                         <div className="flex flex-col sm:col-span-2">
+                                            <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-2">STATUS</span>
+                                            <span className="font-mono text-[10px] md:text-xs tracking-widest font-bold uppercase text-[#E8913C]">{item.result}</span>
+                                         </div>
+                                      </div>
+                                   </motion.div>
+                                )}
+                             </AnimatePresence>
                           </motion.div>
                        </div>
                     </div>
@@ -355,15 +425,7 @@ export const Dates = () => {
 
       <div className="px-6 md:px-24 pb-32">
 {/* 2. Build Hack Ship Section */}
-         <div className="border-t border-[#EDE7DC]/13 pt-24 pb-32">
-            <div className="px-6 md:px-12 lg:px-24 mb-16">
-               <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#2E6B72] mb-4">
-                 06 / LOGS
-               </div>
-               <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold uppercase tracking-tighter text-[#EDE7DC] leading-[0.9]">
-                 Build.<br />Hack.<br />Ship.
-               </h2>
-            </div>
+         <div className="border-t border-[#EDE7DC]/13">
             <BuilderLogSection />
          </div>
       
