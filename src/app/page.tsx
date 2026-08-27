@@ -4,6 +4,7 @@ import { Projects } from "@/components/Projects";
 import { Roster } from "@/components/Roster";
 import { Dates } from "@/components/Dates";
 import { Footer } from "@/components/Footer";
+import { Achievements } from "@/components/Achievements";
 
 export default function Home() {
   return (
@@ -23,7 +24,10 @@ export default function Home() {
       {/* 5. Live circuits schedules */}
       <Dates />
 
-      {/* 6. Curated footer fold */}
+      {/* 6. Proof of Work */}
+      <Achievements />
+
+      {/* 7. Curated footer fold */}
       <Footer />
     </div>
   );
