@@ -22,13 +22,13 @@ interface HackathonItem {
 }
 
 const EXPERIENCE: ExperienceItem[] = [
-  { id: "1", period: "May 2026 – Pres", role: "CAMPUS AMBASSADOR", organization: "GOOGLE GEMINI", type: "DEVELOPER PROGRAM" },
+  { id: "6", period: "Jan 2022 – Pres", role: "FREELANCE WEB DEVELOPER", organization: "SELF-EMPLOYED", type: "CLIENT DEVELOPMENT" },
+  { id: "5", period: "Oct 2024 – Pres", role: "CAMPUS COORDINATOR", organization: "GDG ON CAMPUS", type: "TECHNICAL LEADERSHIP" },
+  { id: "7", period: "Oct 2025", role: "ORGANIZER (HACKDAY)", organization: "HACKTOBERFEST 2025", type: "TECHNICAL EVENT" },
+  { id: "4", period: "Dec 2025 – Aug 2026", role: "CAMPUS AMBASSADOR", organization: "GEEKSFORGEEKS", type: "DEVELOPER PROGRAM" },
   { id: "2", period: "Jan 2026 – Pres", role: "TECHNICAL TEAM MEMBER", organization: "IEEE DVSIET", type: "TECHNICAL SECTION" },
   { id: "3", period: "Mar 2026 – Jul 2026", role: "FRONTEND DEVELOPER", organization: "ENTHU.AI", type: "INTERNSHIP" },
-  { id: "4", period: "Dec 2025 – Aug 2026", role: "CAMPUS AMBASSADOR", organization: "GEEKSFORGEEKS", type: "DEVELOPER PROGRAM" },
-  { id: "5", period: "Oct 2024 – Pres", role: "CAMPUS COORDINATOR", organization: "GDG ON CAMPUS", type: "TECHNICAL LEADERSHIP" },
-  { id: "6", period: "Jan 2022 – Pres", role: "FREELANCE WEB DEVELOPER", organization: "SELF-EMPLOYED", type: "CLIENT DEVELOPMENT" },
-  { id: "7", period: "Oct 2025", role: "ORGANIZER (HACKDAY)", organization: "HACKTOBERFEST 2025", type: "TECHNICAL EVENT" },
+  { id: "1", period: "May 2026 – Pres", role: "CAMPUS AMBASSADOR", organization: "GOOGLE GEMINI", type: "DEVELOPER PROGRAM" },
 ];
 
 const HACKATHONS: HackathonItem[] = [
@@ -176,9 +176,28 @@ export const Dates = () => {
                   {/* Route Container */}
                   <div className="relative flex-1 w-full flex flex-col justify-center overflow-hidden">
                      
+                     {/* HUD Top Right */}
+                     <div className="absolute top-8 md:top-12 right-6 md:right-12 lg:right-24 flex flex-col items-end pointer-events-none z-30">
+                        <span className="font-mono text-[9px] text-[#6C7378] tracking-[0.2em] mb-1">EXPERIENCE LOG</span>
+                        <span className="font-mono text-sm text-[#E8913C] tracking-widest font-bold">
+                          STATION 0{activeIndex + 1} <span className="text-[#6C7378] font-normal">/ 07</span>
+                        </span>
+                     </div>
+
+                     {/* HUD Bottom Right (Only visibly emphasized at the end) */}
+                     <div className={`absolute bottom-8 md:bottom-12 right-6 md:right-12 lg:right-24 flex flex-col items-end pointer-events-none z-30 transition-opacity duration-500 ${activeIndex === 6 ? 'opacity-100' : 'opacity-0'}`}>
+                        <span className="font-mono text-[9px] text-[#E8913C] tracking-[0.2em] mb-1">CURRENT POSITION</span>
+                        <span className="font-mono text-[10px] text-[#EDE7DC] tracking-widest uppercase text-right">
+                          {EXPERIENCE[6].organization}
+                        </span>
+                     </div>
+
                      {/* Desktop Route Line */}
                      <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-[85%] max-w-[1600px] top-1/2 h-[2px] bg-[#EDE7DC]/10 -translate-y-1/2">
-                        <motion.div className="absolute left-0 top-0 bottom-0 bg-[#E8913C] origin-left" style={{ scaleX: smoothProgress }} />
+                        <span className="absolute right-[calc(100%+16px)] top-1/2 -translate-y-1/2 font-mono text-[9px] text-[#6C7378] tracking-[0.2em]">PAST</span>
+                        <span className="absolute left-[calc(100%+16px)] top-1/2 -translate-y-1/2 font-mono text-[9px] text-[#E8913C] tracking-[0.2em] font-bold">PRESENT</span>
+                        
+                        <motion.div className="absolute left-0 top-0 bottom-0 bg-[#E8913C] origin-left" style={{ scaleX: smoothProgress, width: '100%' }} />
                         
                         {EXPERIENCE.map((item, i) => (
                            <StationDesktop key={item.id} item={item} index={i} activeIndex={activeIndex} />
@@ -201,8 +220,11 @@ export const Dates = () => {
                      </div>
 
                      {/* Mobile Route Line */}
-                     <div className="md:hidden absolute top-8 bottom-16 left-12 w-[2px] bg-[#EDE7DC]/10">
-                        <motion.div className="absolute top-0 left-0 right-0 bg-[#E8913C] origin-top" style={{ scaleY: smoothProgress }} />
+                     <div className="md:hidden absolute top-24 bottom-24 left-12 w-[2px] bg-[#EDE7DC]/10">
+                        <div className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 font-mono text-[9px] text-[#6C7378] tracking-[0.2em]">PAST</div>
+                        <div className="absolute top-full mt-4 left-1/2 -translate-x-1/2 font-mono text-[9px] text-[#E8913C] tracking-[0.2em] font-bold">PRESENT</div>
+                        
+                        <motion.div className="absolute top-0 left-0 right-0 bg-[#E8913C] origin-top" style={{ scaleY: smoothProgress, height: '100%' }} />
                         
                         {EXPERIENCE.map((item, i) => (
                            <StationMobile key={item.id} item={item} index={i} activeIndex={activeIndex} />
