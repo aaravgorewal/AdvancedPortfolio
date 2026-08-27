@@ -60,9 +60,11 @@ export const Roster = () => {
             <span className="font-sans-body text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-[#6C7378] mb-4 block">
               04 / TECHNICAL ARSENAL
             </span>
-            <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
-              Technical<br/>Architecture
-            </h2>
+            <div className="flex flex-col md:flex-row md:items-end justify-between">
+              <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
+                Technical<br/>Architecture
+              </h2>
+            </div>
           </div>
           <div className="flex flex-col gap-16 border-l border-[#E8913C]/20 pl-6 md:pl-10 relative">
             <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-[#E8913C]" />
@@ -71,11 +73,14 @@ export const Roster = () => {
                 <div className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold mb-2 text-[#E8913C]">
                   0{item.id}
                 </div>
-                <h3 className="font-syne text-3xl md:text-5xl font-extrabold uppercase tracking-tighter mb-4 text-[#EDE7DC]">
+                <h3 className="font-syne text-2xl md:text-4xl lg:text-5xl font-extrabold uppercase tracking-tighter mb-4 text-[#EDE7DC]">
                   {item.category}
                 </h3>
-                <div className="font-sans-body text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#9EA5A8] leading-relaxed max-w-xl">
-                  {item.stack}
+                <div className="flex flex-col gap-1 mt-2">
+                   <span className="font-sans-body text-[10px] uppercase tracking-[0.2em] font-bold text-[#6C7378]">STACK</span>
+                   <span className="font-sans-body text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#9EA5A8] leading-relaxed max-w-xl">
+                     {item.stack}
+                   </span>
                 </div>
               </div>
             ))}
@@ -104,107 +109,113 @@ export const Roster = () => {
               <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
                 Technical<br/>Architecture
               </h2>
+              {/* Counter integrated into the header layout */}
+              <div className="font-mono text-sm md:text-base uppercase tracking-widest font-bold text-[#E8913C] mt-6 md:mt-0">
+                 0{state.index + 1} / 06
+              </div>
             </div>
           </div>
 
           {/* Core Interactive Layout */}
-          <div className="flex-1 relative w-full flex flex-col justify-center mb-16 md:mb-24 pl-8 md:pl-16">
+          <div className="flex-1 relative w-full flex flex-col justify-start">
              
-             {/* Progress Rail & Marker */}
-             <div className="absolute left-0 top-8 bottom-8 w-[1px] bg-[#EDE7DC]/10">
-                <motion.div className="w-full bg-[#E8913C] origin-top h-full" style={{ scaleY: smoothProgress }} />
-                {/* Active focal marker statically pinned to the center of the rail */}
-                <div className="absolute left-[-1px] top-1/2 w-[3px] h-[32px] bg-[#E8913C] -translate-y-1/2 z-10" />
-             </div>
+             {/* Shifted upward by 60-100px via mt-8 md:mt-12 and justify-start */}
+             <div className="relative w-full h-[380px] md:h-[450px] mt-8 md:mt-12 pl-4 md:pl-10">
+                 {/* Progress Rail & Marker */}
+                 {/* Aligned precisely to the container so top-1/2 aligns perfectly with the center slot */}
+                 <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-[#EDE7DC]/10">
+                    <motion.div className="w-full bg-[#E8913C] origin-top h-full" style={{ scaleY: smoothProgress }} />
+                    <div className="absolute left-[-1px] top-1/2 w-[3px] h-[32px] bg-[#E8913C] -translate-y-1/2 z-10" />
+                 </div>
 
-             {/* Focus Window Array */}
-             <div className="flex flex-col justify-center h-[300px] md:h-[400px] w-full max-w-3xl relative">
-                
-                {/* Absolute Top-Right Counter */}
-                <div className="absolute -top-4 right-0 font-mono text-sm uppercase tracking-widest font-bold text-[#E8913C]">
-                   0{state.index + 1} / 06
-                </div>
+                 {/* Focus Window Array */}
+                 <div className="flex flex-col justify-center h-full w-full max-w-3xl pl-8 md:pl-16 relative">
+                    
+                    {/* PREVIOUS CAPABILITY SLOT */}
+                    <div className="relative h-[40px] md:h-[60px] w-full flex items-end">
+                       <AnimatePresence custom={state.direction}>
+                          {prevItem && (
+                             <motion.div
+                                key={prevItem.id}
+                                custom={state.direction}
+                                variants={transitionVariants}
+                                initial="enter"
+                                animate="center"
+                                exit="exit"
+                                transition={{ duration: 0.4, ease: "easeInOut" }}
+                                className="absolute inset-0 flex items-end opacity-40"
+                             >
+                                <div className="flex items-center gap-4 text-[#6C7378] mb-2">
+                                   <span className="font-mono text-[10px] text-[#2E6B72]">0{prevItem.id}</span>
+                                   <span className="font-syne text-xs md:text-sm uppercase font-bold tracking-widest truncate">
+                                      {prevItem.category}
+                                   </span>
+                                </div>
+                             </motion.div>
+                          )}
+                       </AnimatePresence>
+                    </div>
 
-                {/* PREVIOUS CAPABILITY SLOT */}
-                <div className="relative h-[40px] md:h-[60px] w-full flex items-end">
-                   <AnimatePresence custom={state.direction}>
-                      {prevItem && (
-                         <motion.div
-                            key={prevItem.id}
-                            custom={state.direction}
-                            variants={transitionVariants}
-                            initial="enter"
-                            animate="center"
-                            exit="exit"
-                            transition={{ duration: 0.4, ease: "easeInOut" }}
-                            className="absolute inset-0 flex items-end opacity-40"
-                         >
-                            <div className="flex items-center gap-4 text-[#6C7378] mb-2">
-                               <span className="font-mono text-[10px] text-[#2E6B72]">0{prevItem.id}</span>
-                               <span className="font-syne text-xs md:text-sm uppercase font-bold tracking-widest truncate">
-                                  {prevItem.category}
-                               </span>
-                            </div>
-                         </motion.div>
-                      )}
-                   </AnimatePresence>
-                </div>
+                    <div className="w-4 h-4 flex items-center justify-start text-[#6C7378]/30 text-[8px] my-1 ml-[46px]">↓</div>
 
-                <div className="w-4 h-4 flex items-center justify-start text-[#6C7378]/30 text-[8px] my-1 ml-[46px]">↓</div>
+                    {/* ACTIVE DOMINANT SLOT */}
+                    <div className="relative h-[160px] md:h-[200px] w-full">
+                       <AnimatePresence custom={state.direction}>
+                          <motion.div
+                             key={activeItem.id}
+                             custom={state.direction}
+                             variants={transitionVariants}
+                             initial="enter"
+                             animate="center"
+                             exit="exit"
+                             transition={{ duration: 0.4, ease: "easeInOut" }}
+                             className="absolute inset-0 flex flex-col justify-center"
+                          >
+                             <div className="font-mono text-sm md:text-base font-bold text-[#E8913C] mb-2">
+                                0{activeItem.id}
+                             </div>
+                             {/* Reduced scale by ~15-20% to prevent header competition */}
+                             <h3 className="font-syne text-2xl md:text-4xl lg:text-5xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-4 leading-tight">
+                                {activeItem.category}
+                             </h3>
+                             <div className="flex flex-col gap-1">
+                                <span className="font-sans-body text-[10px] uppercase tracking-widest font-bold text-[#6C7378]">STACK</span>
+                                <span className="font-sans-body text-xs md:text-sm tracking-[0.2em] font-bold text-[#9EA5A8] leading-relaxed">
+                                   {activeItem.stack}
+                                </span>
+                             </div>
+                          </motion.div>
+                       </AnimatePresence>
+                    </div>
 
-                {/* ACTIVE DOMINANT SLOT */}
-                <div className="relative h-[140px] md:h-[180px] w-full">
-                   <AnimatePresence custom={state.direction}>
-                      <motion.div
-                         key={activeItem.id}
-                         custom={state.direction}
-                         variants={transitionVariants}
-                         initial="enter"
-                         animate="center"
-                         exit="exit"
-                         transition={{ duration: 0.4, ease: "easeInOut" }}
-                         className="absolute inset-0 flex flex-col justify-center"
-                      >
-                         <div className="font-mono text-sm md:text-base font-bold text-[#E8913C] mb-2">
-                            0{activeItem.id}
-                         </div>
-                         <h3 className="font-syne text-3xl md:text-5xl lg:text-6xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-4 leading-tight">
-                            {activeItem.category}
-                         </h3>
-                         <div className="font-sans-body text-xs md:text-sm tracking-[0.2em] font-bold text-[#9EA5A8] leading-relaxed">
-                            {activeItem.stack}
-                         </div>
-                      </motion.div>
-                   </AnimatePresence>
-                </div>
+                    <div className="w-4 h-4 flex items-center justify-start text-[#6C7378]/30 text-[8px] my-1 ml-[46px]">↓</div>
 
-                <div className="w-4 h-4 flex items-center justify-start text-[#6C7378]/30 text-[8px] my-1 ml-[46px]">↓</div>
+                    {/* NEXT CAPABILITY SLOT */}
+                    <div className="relative h-[40px] md:h-[60px] w-full flex items-start">
+                       <AnimatePresence custom={state.direction}>
+                          {nextItem && (
+                             <motion.div
+                                key={nextItem.id}
+                                custom={state.direction}
+                                variants={transitionVariants}
+                                initial="enter"
+                                animate="center"
+                                exit="exit"
+                                transition={{ duration: 0.4, ease: "easeInOut" }}
+                                className="absolute inset-0 flex items-start opacity-40"
+                             >
+                                <div className="flex items-center gap-4 text-[#6C7378] mt-2">
+                                   <span className="font-mono text-[10px] text-[#2E6B72]">0{nextItem.id}</span>
+                                   <span className="font-syne text-xs md:text-sm uppercase font-bold tracking-widest truncate">
+                                      {nextItem.category}
+                                   </span>
+                                </div>
+                             </motion.div>
+                          )}
+                       </AnimatePresence>
+                    </div>
 
-                {/* NEXT CAPABILITY SLOT */}
-                <div className="relative h-[40px] md:h-[60px] w-full flex items-start">
-                   <AnimatePresence custom={state.direction}>
-                      {nextItem && (
-                         <motion.div
-                            key={nextItem.id}
-                            custom={state.direction}
-                            variants={transitionVariants}
-                            initial="enter"
-                            animate="center"
-                            exit="exit"
-                            transition={{ duration: 0.4, ease: "easeInOut" }}
-                            className="absolute inset-0 flex items-start opacity-40"
-                         >
-                            <div className="flex items-center gap-4 text-[#6C7378] mt-2">
-                               <span className="font-mono text-[10px] text-[#2E6B72]">0{nextItem.id}</span>
-                               <span className="font-syne text-xs md:text-sm uppercase font-bold tracking-widest truncate">
-                                  {nextItem.category}
-                               </span>
-                            </div>
-                         </motion.div>
-                      )}
-                   </AnimatePresence>
-                </div>
-
+                 </div>
              </div>
           </div>
         </div>
