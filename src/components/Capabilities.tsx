@@ -16,39 +16,44 @@ const CAPABILITIES_DATA = [
 const CarouselItem = ({ item, index, progress }: { item: { id: string, category: string, stack: string }, index: number, progress: MotionValue<number> }) => {
   const center = index / 5;
   
-  // Subtle movement: max 80px spread, exactly 40px movement per active step
+  // Tight 60px spread for a deeply clustered technical HUD feel
   const y = useTransform(progress, 
     [center - 0.4, center - 0.2, center, center + 0.2, center + 0.4], 
-    [80, 40, 0, -40, -80]
+    [120, 60, 0, -60, -120]
   );
   
   const scale = useTransform(progress,
     [center - 0.4, center - 0.2, center, center + 0.2, center + 0.4],
-    [0.7, 0.85, 1, 0.85, 0.7]
+    [0.75, 0.85, 1, 0.85, 0.75]
   );
   
+  // Increased base opacity to 0.4 so the inactive Teal color remains legible against black
   const opacity = useTransform(progress,
     [center - 0.4, center - 0.2, center, center + 0.2, center + 0.4],
-    [0, 0.15, 1, 0.15, 0]
+    [0, 0.4, 1, 0.4, 0]
   );
+  
+  // Active item elevates to the front of the DOM cluster
+  const zIndex = useTransform(progress, [center - 0.1, center, center + 0.1], [0, 10, 0]);
   
   const titleColor = useTransform(progress, [center - 0.1, center, center + 0.1], ["#6C7378", "#EDE7DC", "#6C7378"]);
   const indexColor = useTransform(progress, [center - 0.1, center, center + 0.1], ["#2E6B72", "#E8913C", "#2E6B72"]);
   
-  // Tech stack strictly triggers subtle 20px reveal
   const techOpacity = useTransform(progress, [center - 0.1, center, center + 0.1], [0, 1, 0]);
+  // Exactly 20px of independent entry motion for the tech stack
   const techY = useTransform(progress, [center - 0.1, center, center + 0.1], [20, 0, -20]);
 
   return (
     <div className="absolute top-1/2 left-0 w-full" style={{ transform: 'translateY(-50%)' }}>
       <motion.div 
-        style={{ y, opacity, scale, transformOrigin: "left center" }}
-        className="flex flex-col items-start"
+        style={{ y, opacity, scale, zIndex, transformOrigin: "left center" }}
+        className="flex flex-col items-start relative"
       >
         <motion.div style={{ color: indexColor }} className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold mb-2">
           CAP—{item.id}
         </motion.div>
-        <motion.h3 style={{ color: titleColor }} className="font-syne text-3xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tighter mb-4">
+        {/* Adjusted mobile typography to text-2xl to minimize aggressive line wrapping */}
+        <motion.h3 style={{ color: titleColor }} className="font-syne text-2xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tighter mb-4">
           {item.category}
         </motion.h3>
         <motion.div style={{ opacity: techOpacity, y: techY }} className="font-sans-body text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#9EA5A8] leading-relaxed max-w-xl">
@@ -100,7 +105,7 @@ export const Capabilities = () => {
                 <div className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold mb-2 text-[#E8913C]">
                   CAP—{item.id}
                 </div>
-                <h3 className="font-syne text-3xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tighter mb-4 text-[#EDE7DC]">
+                <h3 className="font-syne text-2xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tighter mb-4 text-[#EDE7DC]">
                   {item.category}
                 </h3>
                 <div className="font-sans-body text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#9EA5A8] leading-relaxed max-w-xl">
