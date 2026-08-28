@@ -1,381 +1,250 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo, Fragment } from "react";
-import { motion, useMotionValue, useTransform, useReducedMotion, PanInfo } from "framer-motion";
-import { Section } from "./ui/SectionGrid";
+import React, { useRef, useState } from "react";
+import { motion, useScroll, useTransform, useReducedMotion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { PROJECTS } from "../data/projects";
+import { ArrowUpRight } from "lucide-react";
 
-type FilterType = "all" | "client" | "personal" | "hackathon";
+// --- DATA ---
+const FEATURED_PROJECTS = [
+  {
+    title: "TRAVELVERSE AI",
+    category: "AI PRODUCT / FULL-STACK",
+    description: "An intelligent travel planning engine leveraging generative AI to curate personalized itineraries and logistics.",
+    year: "2024",
+    tech: "Next.js / OpenAI / Tailwind",
+    image: "/TravelVerse Ai.png",
+  },
+  {
+    title: "MINDSET X",
+    category: "AI / PRODUCT / FULL-STACK",
+    description: "AI-driven mental wellness companion delivering personalized psychological insights and adaptive coaching.",
+    year: "2025",
+    tech: "React / Python / FastApi",
+    image: "/MindSetX.png",
+  },
+  {
+    title: "EDUSMART",
+    category: "AI / EDTECH / FULL-STACK",
+    description: "Intelligent learning management ecosystem that adapts to student learning curves via machine learning algorithms.",
+    year: "2023",
+    tech: "TypeScript / Node.js / Postgres",
+    image: "/EduSmart.png",
+  }
+];
 
-export const Projects = () => {
-  const [filter, setFilter] = useState<FilterType>("all");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [thrown, setThrown] = useState<{ [key: number]: "left" | "right" | null }>({});
+const CLIENT_PROJECTS = [
+  { title: "FRESH BAKERS", type: "Bakery / E-Commerce", image: "/freshbakers.png", year: "2023" },
+  { title: "CAFE MELLOW", type: "Hospitality / Brand", image: "/cafemellow.png", year: "2023" },
+  { title: "MR. PROPADVISOR", type: "Real Estate / Platform", image: "/mrpropadvisor.png", year: "2024" },
+  { title: "HYPHEN HOTELS", type: "Hospitality / Booking", image: "/hypenhotel.png", year: "2024" },
+  { title: "CYGNETT HOTELS", type: "Hospitality / Enterprise", image: "/cygnetthotels.png", year: "2024" },
+  { title: "OFFCULT", type: "Fashion / E-Commerce", image: "/offcultclothing.png", year: "2025" },
+];
+
+// --- COMPONENTS ---
+
+const FeaturedProject = ({ project, index }: { project: { title: string; category: string; description: string; year: string; tech: string; image: string }; index: number }) => {
+  const ref = useRef(null);
   const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "center center"] });
 
-  const filteredProjects = useMemo(() => {
-    if (filter === "all") return PROJECTS;
-    return PROJECTS.filter(p => p.type === filter);
-  }, [filter]);
+  const yImage = useTransform(scrollYProgress, [0, 1], ["15%", "0%"]);
+  const clipImage = useTransform(scrollYProgress, [0, 1], ["inset(15% 0% 15% 0%)", "inset(0% 0% 0% 0%)"]);
+  const opacityText = useTransform(scrollYProgress, [0.3, 1], [0, 1]);
+  const yText = useTransform(scrollYProgress, [0.3, 1], ["30px", "0px"]);
 
-  const counts = useMemo(() => ({
-    all: PROJECTS.length,
-    client: PROJECTS.filter(p => p.type === "client").length,
-    personal: PROJECTS.filter(p => p.type === "personal").length,
-    hackathon: PROJECTS.filter(p => p.type === "hackathon").length,
-  }), []);
-
-  const handleFilterChange = (f: FilterType) => {
-    if (f !== filter) {
-      setFilter(f);
-      setCurrentIndex(0);
-      setThrown({});
-    }
-  };
-
-  const dragX = useMotionValue(0);
-  const rotateDrag = useTransform(dragX, [-150, 150], [-8, 8]);
-  const scaleDrag = useTransform(dragX, [-150, 0, 150], [1.02, 1, 1.02]);
-
-  // Contextual directional feedback
-  const dragLeftOpacity = useTransform(dragX, [0, -40], [0, 1]);
-  const dragRightOpacity = useTransform(dragX, [0, 40], [0, 1]);
-
-  const nextProject = useCallback((direction: "left" | "right" = "left") => {
-    if (filteredProjects.length === 0) return;
-    
-    const cardToThrow = currentIndex;
-    setThrown((prev) => ({ ...prev, [cardToThrow]: direction }));
-    
-    const nextIndex = (currentIndex + 1) % filteredProjects.length;
-    setCurrentIndex(nextIndex);
-
-    setTimeout(() => {
-      setThrown((prev) => {
-        const updated = { ...prev };
-        delete updated[cardToThrow];
-        return updated;
-      });
-    }, 600);
-  }, [currentIndex, filteredProjects.length]);
-
-  const prevProject = useCallback((direction: "left" | "right" = "right") => {
-    if (filteredProjects.length === 0) return;
-    
-    const cardToThrow = currentIndex;
-    setThrown((prev) => ({ ...prev, [cardToThrow]: direction }));
-    
-    const prevIndex = (currentIndex - 1 + filteredProjects.length) % filteredProjects.length;
-    setCurrentIndex(prevIndex);
-
-    setTimeout(() => {
-      setThrown((prev) => {
-        const updated = { ...prev };
-        delete updated[cardToThrow];
-        return updated;
-      });
-    }, 600);
-  }, [currentIndex, filteredProjects.length]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (shouldReduceMotion || filteredProjects.length === 0) return;
-      if (e.key === "ArrowRight") {
-        nextProject("left");
-      } else if (e.key === "ArrowLeft") {
-        prevProject("right");
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [shouldReduceMotion, nextProject, prevProject, filteredProjects.length]);
-
-  const progressPercent = filteredProjects.length > 0 
-    ? ((currentIndex + 1) / filteredProjects.length) * 100 
-    : 0;
-
-  const formatIndex = (idx: number) => {
-    return idx < 10 ? `0${idx}` : `${idx}`;
-  };
-
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (Math.abs(info.offset.x) > 60) {
-      if (info.offset.x > 0) {
-        prevProject("right");
-      } else {
-        nextProject("left");
-      }
-      dragX.set(0); 
-    } else {
-      dragX.set(0);
-    }
-  };
-
-  const filterTabs: { id: FilterType; label: string }[] = [
-    { id: "all", label: "ALL" },
-    { id: "client", label: "CLIENT" },
-    { id: "personal", label: "PERSONAL" },
-    { id: "hackathon", label: "HACKATHON" }
-  ];
+  const isEven = index % 2 === 0;
 
   return (
-    <Section id="catalogue" className="px-6 md:px-24 py-24 md:py-32 bg-[#101317] border-b border-border-custom">
-      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8">
+    <div ref={ref} className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-10 lg:gap-20 items-center w-full mb-32 lg:mb-48 group`}>
+      
+      {/* Image Block (60%) */}
+      <div className="w-full lg:w-[60%] overflow-hidden relative aspect-[4/3] bg-[#0A0C0E]">
+        <motion.div 
+          style={{ 
+            y: shouldReduceMotion ? 0 : yImage,
+            clipPath: shouldReduceMotion ? "none" : clipImage,
+          }}
+          className="w-full h-full relative"
+        >
+          <motion.div
+            whileHover={{ scale: shouldReduceMotion ? 1 : 1.03 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full relative"
+          >
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 60vw"
+            />
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Typography Block (40%) */}
+      <motion.div 
+        style={{ 
+          opacity: shouldReduceMotion ? 1 : opacityText, 
+          y: shouldReduceMotion ? 0 : yText 
+        }}
+        className="w-full lg:w-[40%] flex flex-col justify-center"
+      >
+        <div className="flex items-center gap-4 mb-6">
+          <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#E8913C] font-sans-body">
+            {project.category}
+          </span>
+          <span className="text-[10px] text-[#2E6B72] font-bold tracking-widest font-sans-body">
+            / {project.year}
+          </span>
+        </div>
+
+        <h3 className="font-syne text-4xl lg:text-6xl font-extrabold uppercase text-[#EDE7DC] tracking-tighter leading-[0.9] mb-6">
+          {project.title}
+        </h3>
+
+        <p className="font-sans-body text-[#9EA5A8] text-sm leading-relaxed max-w-sm mb-10">
+          {project.description}
+        </p>
+
+        <div className="flex flex-col gap-6 border-t border-[#EDE7DC]/10 pt-6">
+           <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-[#6C7378] font-sans-body">
+             {project.tech}
+           </span>
+           <div className="flex items-center gap-2 group/btn cursor-pointer text-[#EDE7DC] w-fit">
+             <span className="text-[10px] font-bold uppercase tracking-[0.2em] font-sans-body group-hover/btn:text-[#E8913C] transition-colors">
+               View Project
+             </span>
+             <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 group-hover/btn:text-[#E8913C] transition-transform duration-300" />
+           </div>
+        </div>
+      </motion.div>
+
+    </div>
+  );
+};
+
+const ClientArchive = () => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <div className="w-full flex flex-col lg:flex-row gap-12 lg:gap-24 items-start relative mt-16 lg:mt-32 border-t border-[#EDE7DC]/13 pt-24 lg:pt-32">
+      
+      {/* Interactive List Column (60%) */}
+      <div className="w-full lg:w-[60%] flex flex-col z-10">
+        <h4 className="font-sans-body text-xs uppercase tracking-[0.2em] font-bold text-[#E8913C] mb-12">
+          Selected Client Work
+        </h4>
         
-        {/* LEFT COLUMN: Editorial Headers & Filters */}
-        <div className="lg:col-span-4 flex flex-col pt-4 lg:pt-8 lg:sticky lg:top-32 lg:h-fit z-20">
-          <h2 className="font-syne text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-4 lg:mb-6 leading-[0.9]">
-            Selected<br />Work
-          </h2>
-          <p className="text-[#9EA5A8] text-sm md:text-base font-sans-body mb-8 lg:mb-16 max-w-[280px] leading-relaxed">
-            A catalogue of things I&apos;ve built for clients, hackathons and myself.
-          </p>
-          
-          {/* Filter List: Horizontal on mobile, Vertical on desktop */}
-          <div className="flex flex-row flex-wrap lg:flex-col gap-x-6 gap-y-4 lg:gap-5 font-sans-body">
-            {filterTabs.map((f) => {
-              const isActive = filter === f.id;
-              return (
-                <button
-                  key={f.id}
-                  onClick={() => handleFilterChange(f.id)}
-                  className={`group flex items-center w-auto text-[10px] md:text-[11px] lg:text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 focus-ring outline-none ${
-                    isActive ? "text-[#E8913C]" : "text-[#6C7378] hover:text-[#9EA5A8]"
-                  }`}
-                >
-                  <span className="flex items-center gap-2 lg:gap-4">
-                    <span className={`h-[1px] transition-all duration-500 ease-out hidden lg:block ${
-                      isActive ? 'bg-[#E8913C] w-12' : 'bg-transparent w-0 group-hover:bg-[#6C7378] group-hover:w-4'
-                    }`}></span>
-                    {f.label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+        <div className="flex flex-col w-full border-t border-[#EDE7DC]/10">
+          {CLIENT_PROJECTS.map((client, i) => (
+            <div 
+              key={client.title}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className="group flex flex-col lg:flex-row lg:items-center justify-between py-8 lg:py-6 border-b border-[#EDE7DC]/10 hover:border-[#E8913C]/40 transition-colors duration-300 cursor-pointer relative"
+            >
+              {/* Amber Interaction Line (Desktop) */}
+              <div className="hidden lg:block absolute bottom-[-1px] left-0 h-[1px] w-0 bg-[#E8913C] group-hover:w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
 
-          {/* Catalogue Metadata Block */}
-          <div className="mt-12 lg:mt-24 pt-6 lg:pt-8 border-t border-[#EDE7DC]/10 flex flex-col gap-1.5 font-mono text-[9px] lg:text-[10px] text-[#6C7378] tracking-[0.2em] uppercase">
-            <div className="text-[#9EA5A8] font-bold">{formatIndex(counts.all)} PROJECTS</div>
-            <div>{formatIndex(counts.client)} CLIENT</div>
-            <div>{formatIndex(counts.personal)} PERSONAL</div>
-            <div>{formatIndex(counts.hackathon)} HACKATHON</div>
-            
-            <p className="mt-6 text-[10px] text-[#6C7378]/60 font-sans-body normal-case tracking-wide max-w-[240px] leading-relaxed">
-              A selection of products, web experiences and systems built across different contexts.
-            </p>
-          </div>
-        </div>
+              {/* Mobile Image (Only visible on Mobile) */}
+              <div className="w-full aspect-[4/3] mb-6 relative overflow-hidden lg:hidden block">
+                <Image src={client.image} alt={client.title} fill className="object-cover" sizes="100vw" />
+              </div>
 
-        {/* RIGHT COLUMN: The Deck */}
-        <div className="lg:col-span-8 flex flex-col items-center lg:items-end w-full min-h-[580px] md:min-h-[680px]">
-          {filteredProjects.length === 0 ? (
-            <div className="flex items-center justify-center w-full max-w-[500px] h-[580px] md:h-[680px]">
-              <p className="text-[#6C7378] text-sm uppercase tracking-widest font-bold">No projects found.</p>
+              {/* Title & Index */}
+              <div className="flex items-center gap-6 md:gap-12 mb-4 lg:mb-0">
+                <span className="text-[10px] font-mono font-bold text-[#6C7378] group-hover:text-[#EDE7DC] transition-colors">
+                  {(i + 1).toString().padStart(2, '0')}
+                </span>
+                <span className="font-syne text-2xl md:text-3xl font-extrabold uppercase text-[#9EA5A8] group-hover:text-[#EDE7DC] transition-colors lg:group-hover:translate-x-3 duration-300">
+                  {client.title}
+                </span>
+              </div>
+              
+              {/* Metadata & Arrow */}
+              <div className="flex items-center gap-6 justify-between lg:justify-end w-full lg:w-auto lg:pl-4">
+                <span className="text-[10px] font-sans-body uppercase tracking-[0.2em] font-bold text-[#6C7378] group-hover:text-[#EDE7DC] transition-colors">
+                  {client.type}
+                </span>
+                <ArrowUpRight className="w-5 h-5 text-[#6C7378] group-hover:text-[#E8913C] lg:group-hover:translate-x-1 lg:group-hover:-translate-y-1 transition-all duration-300" />
+              </div>
+              
             </div>
-          ) : (
-            <>
-              {/* Stack Container */}
-              <div
-                tabIndex={0}
-                className="deck-container relative w-full max-w-[420px] md:max-w-[500px] h-[540px] md:h-[680px] focus-ring rounded-none outline-none touch-pan-y lg:mr-8"
-                aria-label={`Aarav Saini Project Sleeves Stack. Use Left and Right arrow keys to swipe.`}
-              >
-                {filteredProjects.map((card, idx) => {
-                  const isTop = idx === currentIndex;
-                  const cardThrown = thrown[idx];
-                  const relativeIndex = (idx - currentIndex + filteredProjects.length) % filteredProjects.length;
-
-                  let positionClass = "";
-                  let opacityClass = "";
-                  
-                  if (relativeIndex === 0) {
-                    positionClass = "z-50 translate-x-0 translate-y-0 rotate-0 scale-100";
-                    opacityClass = "opacity-100";
-                  } else if (relativeIndex === 1) {
-                    positionClass = "z-40 translate-x-3 translate-y-3 rotate-2 scale-[0.98]";
-                    opacityClass = "opacity-70";
-                  } else if (relativeIndex === 2) {
-                    positionClass = "z-30 -translate-x-3 -translate-y-3 -rotate-1 scale-[0.96]";
-                    opacityClass = "opacity-40";
-                  } else if (relativeIndex === 3) {
-                    positionClass = "z-20 translate-x-2 -translate-y-4 rotate-2 scale-[0.94]";
-                    opacityClass = "opacity-20";
-                  } else {
-                    positionClass = "z-10 translate-x-0 translate-y-0 rotate-0 scale-[0.90]";
-                    opacityClass = "opacity-0 pointer-events-none";
-                  }
-
-                  let transformStyle = {};
-                  if (cardThrown === "left") {
-                    transformStyle = { transform: "translate(-150%, -10%) rotate(-30deg)", opacity: 0, pointerEvents: "none" };
-                  } else if (cardThrown === "right") {
-                    transformStyle = { transform: "translate(150%, -10%) rotate(30deg)", opacity: 0, pointerEvents: "none" };
-                  }
-
-                  return (
-                    <motion.div
-                      key={card.id}
-                      drag={isTop && !shouldReduceMotion ? "x" : false}
-                      dragConstraints={{ left: 0, right: 0 }}
-                      dragElastic={0.4}
-                      onDragEnd={isTop ? handleDragEnd : undefined}
-                      style={
-                        cardThrown
-                          ? transformStyle
-                          : isTop
-                          ? {
-                              x: dragX,
-                              rotate: rotateDrag,
-                              scale: scaleDrag,
-                            }
-                          : {}
-                      }
-                      className={`card absolute inset-0 bg-[#0A0C0E] border border-[#EDE7DC]/10 transition-all duration-500 ease-out select-none flex flex-col ${
-                        cardThrown ? "" : positionClass
-                      } ${cardThrown ? "" : opacityClass}`}
-                    >
-                      
-                      {/* Directional Drag Feedback */}
-                      {isTop && !cardThrown && (
-                        <>
-                          <motion.div 
-                            style={{ opacity: dragLeftOpacity }} 
-                            className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap z-50 text-[10px] font-sans-body uppercase tracking-[0.2em] font-bold text-[#E8913C] pointer-events-none"
-                          >
-                            ← NEXT
-                          </motion.div>
-                          <motion.div 
-                            style={{ opacity: dragRightOpacity }} 
-                            className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap z-50 text-[10px] font-sans-body uppercase tracking-[0.2em] font-bold text-[#E8913C] pointer-events-none"
-                          >
-                            PREVIOUS →
-                          </motion.div>
-                        </>
-                      )}
-
-                      {/* Visual Hero Area (50-60%) */}
-                      <div className="w-full h-[50%] md:h-[60%] relative bg-[#0A0C0E] shrink-0 border-b border-[#EDE7DC]/10 overflow-hidden">
-                        {card.image ? (
-                          <Image
-                            src={card.image}
-                            alt={card.title}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 500px"
-                            className="object-cover grayscale hover:grayscale-0 transition-all duration-500 pointer-events-none"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                            }}
-                          />
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-center bg-[#0A0C0E] overflow-hidden">
-                             <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#EDE7DC_1px,transparent_1px),linear-gradient(to_bottom,#EDE7DC_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-                             
-                             <h2 className="font-syne text-[70px] md:text-[100px] leading-[0.85] font-extrabold text-[#EDE7DC] opacity-[0.02] tracking-tighter text-center break-all select-none scale-150 rotate-[-5deg]">
-                               {card.title}
-                             </h2>
-                             
-                             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                               <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#E8913C] mb-2 drop-shadow-md">
-                                 SYSTEM ASSET
-                               </span>
-                               <span className="font-mono text-[#6C7378] text-[10px] tracking-widest bg-[#0A0C0E]/50 px-2 py-1 border border-[#EDE7DC]/10">
-                                 {card.id}
-                               </span>
-                             </div>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Focused Editorial Content (40-45%) */}
-                      <div className="p-6 md:p-8 flex-1 flex flex-col font-sans-body justify-between overflow-hidden">
-                        
-                        <div className="flex flex-col">
-                          <div className="flex justify-between items-center mb-4">
-                            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#E8913C]">
-                              [ {card.type === "client" ? "CLIENT WORK" : card.type} ]
-                            </span>
-                            <span className="text-[10px] font-sans-body text-[#2E6B72] uppercase tracking-[0.2em] font-bold">
-                              {card.id.replace("PROJECT-", "")} {card.year ? `/ ${card.year}` : ""}
-                            </span>
-                          </div>
-
-                          <h3 className="font-syne text-2xl md:text-3xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-tight mb-2">
-                            {card.title}
-                          </h3>
-                          {card.description && (
-                            <div className="text-[11px] md:text-xs text-[#9EA5A8] font-medium uppercase tracking-widest truncate">
-                              {card.description}
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="mt-auto flex flex-col">
-                          {card.technologies && (
-                            <div className="mb-4">
-                              <span className="text-[9px] uppercase text-[#6C7378] tracking-[0.2em] font-bold block truncate">
-                                {card.technologies}
-                              </span>
-                            </div>
-                          )}
-
-                          {(card.liveUrl || card.githubUrl) && (
-                            <div className="pt-4 border-t border-[#EDE7DC]/10 flex flex-row gap-2">
-                              {card.liveUrl && (
-                                <a href={card.liveUrl} target="_blank" rel="noopener noreferrer" className="flex-1 block w-full text-center py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
-                                  VISIT LIVE WEBSITE
-                                </a>
-                              )}
-                              {card.githubUrl && (
-                                <a href={card.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1 block w-full text-center py-3 border border-[#EDE7DC]/20 uppercase text-[10px] font-bold tracking-widest text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-colors focus-ring">
-                                  VIEW GITHUB
-                                </a>
-                              )}
-                            </div>
-                          )}
-                        </div>
-
-                      </div>
-
-                    </motion.div>
-                  );
-                })}
-              </div>
-
-              {/* HUD Footer (Under Deck) */}
-              <div className="mt-12 flex flex-col w-full max-w-[420px] md:max-w-[500px] lg:mr-8">
-                {/* Progress Info & Bar */}
-                <div className="flex flex-col w-full mb-8">
-                  <div className="flex justify-between items-end mb-4">
-                    <span className="text-[10px] font-mono font-bold tracking-[0.2em]">
-                      <span className="text-[#EDE7DC]">{formatIndex(currentIndex + 1)}</span>
-                      <span className="text-[#6C7378] ml-1">/ {formatIndex(filteredProjects.length)}</span>
-                    </span>
-                    <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-[#6C7378] opacity-50">
-                      INDEX
-                    </span>
-                  </div>
-                  <div className="w-full h-[1px] bg-[#EDE7DC]/10 relative">
-                    <div 
-                      style={{ width: `${progressPercent}%` }} 
-                      className="absolute top-0 left-0 h-full bg-[#E8913C] transition-all duration-300"
-                    />
-                  </div>
-                </div>
-                
-                {/* Interaction hints */}
-                <div className="flex justify-between items-center w-full text-[9px] font-bold uppercase tracking-[0.2em] text-[#6C7378]">
-                   <span className="cursor-pointer hover:text-[#EDE7DC] transition-colors" onClick={() => prevProject("right")}>← PREV</span>
-                   <span className="opacity-30 tracking-[0.3em]">SWIPE / THROW</span>
-                   <span className="cursor-pointer hover:text-[#EDE7DC] transition-colors" onClick={() => nextProject("left")}>NEXT →</span>
-                </div>
-              </div>
-            </>
-          )}
+          ))}
         </div>
+      </div>
+
+      {/* Sticky Hover Preview Panel (Desktop Only 40%) */}
+      <div className="hidden lg:block w-[40%] sticky top-40 h-[600px] pointer-events-none overflow-hidden bg-[#0A0C0E] border border-[#EDE7DC]/10">
+        <AnimatePresence mode="wait">
+          {hoveredIndex !== null ? (
+            <motion.div
+              key={hoveredIndex}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <Image
+                src={CLIENT_PROJECTS[hoveredIndex].image}
+                alt={CLIENT_PROJECTS[hoveredIndex].title}
+                fill
+                className="object-cover"
+                sizes="40vw"
+                priority={hoveredIndex < 2}
+              />
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 w-full h-full flex items-center justify-center text-[#6C7378] text-[9px] uppercase tracking-[0.3em] font-bold font-sans-body"
+            >
+              Hover to preview
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+    </div>
+  );
+};
+
+export const Projects = () => {
+  return (
+    <section id="catalogue" className="relative w-full bg-[#0A0C0E] pt-32 pb-32 border-t border-[#EDE7DC]/13">
+      <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-24 w-full">
+        
+        {/* Editorial Header */}
+        <div className="flex flex-col items-start mb-24 md:mb-40">
+          <span className="font-sans-body text-xs font-bold uppercase tracking-[0.2em] text-[#E8913C] mb-8">
+            03 / Selected Work
+          </span>
+          <h2 className="font-syne text-[clamp(45px,8vw,110px)] font-extrabold uppercase leading-[0.85] text-[#EDE7DC] tracking-tighter mb-8 max-w-4xl">
+            Things I<br />Actually Built.
+          </h2>
+          <p className="font-sans-body text-sm md:text-base text-[#9EA5A8] max-w-xl leading-relaxed">
+            Selected products, client experiences, and systems built across AI, software, and digital experiences.
+          </p>
+        </div>
+
+        {/* Part 1: Featured Products */}
+        <div className="flex flex-col w-full">
+          {FEATURED_PROJECTS.map((project, idx) => (
+             <FeaturedProject key={project.title} project={project} index={idx} />
+          ))}
+        </div>
+
+        {/* Part 2: Client Archive */}
+        <ClientArchive />
 
       </div>
-    </Section>
+    </section>
   );
 };
