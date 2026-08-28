@@ -53,7 +53,7 @@ const FeaturedProject = ({ project, index }: { project: { title: string; categor
   const clipImage = useTransform(scrollYProgress, [0, 1], ["inset(10% 0% 10% 0%)", "inset(0% 0% 0% 0%)"]);
 
   return (
-    <div ref={ref} className="flex flex-col w-full mb-32 lg:mb-40 group border-t border-[#EDE7DC]/10 pt-12 lg:pt-16">
+    <div ref={ref} className={`flex flex-col w-full mb-32 lg:mb-48 group ${index !== 0 ? "border-t border-[#EDE7DC]/10 pt-12 lg:pt-16" : "pt-8"}`}>
       
       {/* TOP ROW: Title & Category */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between w-full mb-8 lg:mb-12 gap-6">
@@ -237,17 +237,89 @@ export const Projects = () => {
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-24 w-full">
         
         {/* Editorial Header */}
-        <div className="flex flex-col items-start mb-16 md:mb-24">
-          <span className="font-sans-body text-xs font-bold uppercase tracking-[0.2em] text-[#E8913C] mb-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } }
+          }}
+          className="flex flex-col mb-24 lg:mb-40 w-full"
+        >
+          <motion.span 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            className="font-sans-body text-xs font-bold uppercase tracking-[0.2em] text-[#E8913C] mb-12"
+          >
             03 / Selected Work
-          </span>
-          <h2 className="font-syne text-[clamp(45px,8vw,110px)] font-extrabold uppercase leading-[0.85] text-[#EDE7DC] tracking-tighter mb-8 max-w-4xl">
-            Things I<br />Actually Built.
-          </h2>
-          <p className="font-sans-body text-sm md:text-base text-[#9EA5A8] max-w-xl leading-relaxed">
-            Selected products, systems, and digital experiences engineered across the AI and commercial sectors.
-          </p>
-        </div>
+          </motion.span>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-end">
+            
+            {/* Left Column: Heading */}
+            <div className="col-span-1 lg:col-span-8 flex flex-col">
+              <h2 className="font-syne text-[clamp(45px,8vw,110px)] font-extrabold uppercase leading-[0.85] text-[#EDE7DC] tracking-tighter">
+                <div className="overflow-hidden py-1">
+                  <motion.div 
+                    variants={{
+                      hidden: { opacity: 0, y: "100%" },
+                      visible: { opacity: 1, y: "0%", transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+                    }}
+                  >
+                    Things I
+                  </motion.div>
+                </div>
+                <div className="overflow-hidden py-1">
+                  <motion.div 
+                    variants={{
+                      hidden: { opacity: 0, y: "100%" },
+                      visible: { opacity: 1, y: "0%", transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+                    }}
+                  >
+                    Actually Built.
+                  </motion.div>
+                </div>
+              </h2>
+            </div>
+            
+            {/* Right Column: Description & Metadata */}
+            <div className="col-span-1 lg:col-span-4 flex flex-col gap-8 lg:pb-4">
+              <motion.p 
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
+                }}
+                className="font-sans-body text-sm text-[#9EA5A8] leading-relaxed max-w-sm"
+              >
+                Selected products, client experiences, and systems built across AI, software, and digital experiences.
+              </motion.p>
+              
+              <motion.div 
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
+                }}
+                className="flex flex-col gap-3 font-mono text-[9px] uppercase tracking-[0.2em] font-bold text-[#6C7378]"
+              >
+                <div className="flex items-center gap-4"><span className="text-[#EDE7DC]">09</span> PROJECTS</div>
+                <div className="flex items-center gap-4"><span className="text-[#E8913C]">03</span> PRODUCT SYSTEMS</div>
+                <div className="flex items-center gap-4"><span className="text-[#2E6B72]">06</span> CLIENT EXPERIENCES</div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Animated Divider before first project */}
+          <motion.div 
+            variants={{
+              hidden: { scaleX: 0, opacity: 0 },
+              visible: { scaleX: 1, opacity: 1, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            style={{ transformOrigin: "left" }}
+            className="w-full h-[1px] bg-[#EDE7DC]/10 mt-16 lg:mt-32"
+          />
+        </motion.div>
 
         {/* Part 1: Featured Products */}
         <div className="flex flex-col w-full">
