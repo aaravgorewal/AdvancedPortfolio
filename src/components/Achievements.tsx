@@ -60,7 +60,7 @@ export const Achievements = () => {
   const headerOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
   return (
-    <section ref={containerRef} className="w-full bg-[#0A0C0E] border-t border-[#EDE7DC]/13 pt-32 pb-32 overflow-hidden">
+    <section ref={containerRef} className="w-full bg-[#0A0C0E] border-t border-[#EDE7DC]/13 pt-32 pb-16 overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-24 w-full">
         
         {/* Header */}
