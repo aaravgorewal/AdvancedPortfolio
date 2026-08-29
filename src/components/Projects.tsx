@@ -76,7 +76,7 @@ const FeaturedProject = ({ project, index }: { project: { title: string; categor
       </motion.div>
 
       <motion.div variants={shouldReduceMotion ? {} : fadeUpVariants} className="mb-6">
-        <h3 className={`font-syne font-extrabold uppercase text-[#EDE7DC] tracking-tighter leading-[0.85] transition-transform duration-[400ms] group-hover:translate-x-[2px] group-hover:tracking-tight group-focus-within:translate-x-[2px] group-focus-within:tracking-tight ${is01 ? 'text-[clamp(45px,6vw,80px)]' : is02 ? 'text-[clamp(36px,5vw,64px)]' : 'text-[clamp(45px,7vw,90px)]'}`}>
+        <h3 className={`font-syne font-extrabold uppercase text-[#EDE7DC] tracking-tighter leading-[0.85] transition-transform duration-[400ms] group-hover:translate-x-[2px] group-hover:tracking-tight group-focus-within:translate-x-[2px] group-focus-within:tracking-tight ${is01 ? 'text-[clamp(50px,7vw,100px)]' : is02 ? 'text-[clamp(40px,5vw,72px)]' : 'text-[clamp(45px,6vw,84px)]'}`}>
           {project.title}
         </h3>
       </motion.div>
@@ -122,7 +122,7 @@ const FeaturedProject = ({ project, index }: { project: { title: string; categor
 
   return (
     <motion.article initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-15%" }} variants={containerVariants} className="w-full mb-32 lg:mb-48 border-t border-[#EDE7DC]/10 pt-16 lg:pt-24 group relative">
-      <div className="absolute top-[-1px] left-0 h-[1px] w-0 bg-[#E8913C] group-hover:w-[40px] group-focus-within:w-[40px] transition-all duration-[400ms] ease-out" />
+       {/* Removed generic amber interaction divider from structural sections */}
       
       {/* Mobile Layout */}
       <div className="flex flex-col lg:hidden w-full px-5">
@@ -186,7 +186,7 @@ const ClientArchive = () => {
 
   const containerVariants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.15, delayChildren: 0.1 } }
+    visible: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } }
   };
   
   const fadeUpVariants = {
@@ -351,7 +351,7 @@ const ClientArchive = () => {
                       x: { type: "spring", stiffness: 45, damping: 20 },
                       y: { type: "spring", stiffness: 45, damping: 20 }
                     }}
-                    className="w-full aspect-[4/5] relative rounded-[4px] overflow-hidden bg-[#0A0C0E] border border-[#EDE7DC]/10 shadow-[0_16px_40px_rgba(0,0,0,0.6)]"
+                    className="w-full aspect-[16/10] relative rounded-[4px] overflow-hidden bg-[#0A0C0E] border border-[#EDE7DC]/10 shadow-[0_16px_40px_rgba(0,0,0,0.6)]"
                   >
                     <Image
                       src={CLIENT_PROJECTS[hoveredIndex].image}
