@@ -275,7 +275,7 @@ const ClientArchive = () => {
                 </div>
 
                 {/* Mobile Row Layout */}
-                <div className="flex lg:hidden w-full items-start justify-between px-5 py-2">
+                <div className="flex lg:hidden w-full items-start justify-between py-2">
                   <span className="text-[10px] font-mono text-[#6C7378] mt-1 w-6">{(i + 1).toString().padStart(2, '0')}</span>
                   <div className="flex flex-col flex-1 px-4 gap-1.5">
                     <span className={`font-syne text-[22px] sm:text-[26px] font-extrabold uppercase leading-none transition-colors duration-300 ${isExpanded ? 'text-[#EDE7DC]' : 'text-[#6C7378]'}`}>{client.title}</span>
@@ -293,7 +293,7 @@ const ClientArchive = () => {
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
-                      className="lg:hidden overflow-hidden flex flex-col px-5"
+                      className="lg:hidden overflow-hidden flex flex-col"
                     >
                       <div className="pt-6 pb-4 flex flex-col gap-6">
                         <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.2em] text-[#6C7378]">
@@ -320,47 +320,55 @@ const ClientArchive = () => {
         {/* Desktop Sticky Floating Preview */}
         <div className="hidden lg:flex lg:w-[45%] sticky top-40 h-[600px] pointer-events-none justify-end pr-8" aria-hidden="true">
           <div className="relative w-full max-w-[420px] h-full flex flex-col pt-8">
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               {hoveredIndex !== null && (
-                <motion.div key={hoveredIndex} className="w-full flex flex-col relative">
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex justify-between items-center mb-6 text-[9px] uppercase tracking-[0.2em] font-bold text-[#6C7378] font-sans-body pl-2 pr-2"
-                  >
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ 
+                    opacity: { duration: 0.12, ease: "easeOut" },
+                    scale: { duration: 0.15, ease: "easeOut" }
+                  }}
+                  className="w-full flex flex-col relative"
+                >
+                  <div className="flex justify-between items-center mb-6 text-[9px] uppercase tracking-[0.2em] font-bold text-[#6C7378] font-sans-body pl-2 pr-2">
                     <span className="flex items-center gap-3"><span className="w-1.5 h-1.5 rounded-full bg-[#E8913C] animate-pulse" />LIVE PROJECT</span>
-                    <span className="font-mono">{(hoveredIndex + 1).toString().padStart(2, '0')} / {(CLIENT_PROJECTS.length).toString().padStart(2, '0')}</span>
-                  </motion.div>
+                    <span className="font-mono">
+                      {(hoveredIndex + 1).toString().padStart(2, '0')} / {(CLIENT_PROJECTS.length).toString().padStart(2, '0')}
+                    </span>
+                  </div>
 
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.96, clipPath: 'circle(0% at 100% 100%)' }}
                     animate={{ 
-                      opacity: 1, 
-                      scale: 1, 
-                      clipPath: 'circle(150% at 100% 100%)', 
                       x: shouldReduceMotion ? 0 : mousePos.x, 
                       y: shouldReduceMotion ? 0 : mousePos.y 
                     }}
-                    exit={{ opacity: 0, scale: 0.98, clipPath: 'circle(0% at 100% 100%)' }}
                     transition={{ 
-                      opacity: { duration: 0.3 },
-                      scale: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
-                      clipPath: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
-                      x: { type: "spring", stiffness: 45, damping: 20 },
-                      y: { type: "spring", stiffness: 45, damping: 20 }
+                      x: { type: "spring", stiffness: 120, damping: 20 },
+                      y: { type: "spring", stiffness: 120, damping: 20 }
                     }}
                     className="w-full aspect-[16/10] relative rounded-[4px] overflow-hidden bg-[#0A0C0E] border border-[#EDE7DC]/10 shadow-[0_16px_40px_rgba(0,0,0,0.6)]"
                   >
-                    <Image
-                      src={CLIENT_PROJECTS[hoveredIndex].image}
-                      alt=""
-                      fill
-                      className="object-cover object-top"
-                      sizes="(max-width: 1024px) 100vw, 40vw"
-                      priority={hoveredIndex < 3}
-                    />
+                    <AnimatePresence>
+                      <motion.div
+                        key={hoveredIndex}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeOut" }}
+                        className="absolute inset-0 w-full h-full"
+                      >
+                        <Image
+                          src={CLIENT_PROJECTS[hoveredIndex].image}
+                          alt=""
+                          fill
+                          className="object-cover object-top"
+                          sizes="(max-width: 1024px) 100vw, 40vw"
+                          priority={true}
+                        />
+                      </motion.div>
+                    </AnimatePresence>
                   </motion.div>
                 </motion.div>
               )}
@@ -372,7 +380,6 @@ const ClientArchive = () => {
     </motion.section>
   );
 };
-
 
 export const Projects = () => {
   return (
