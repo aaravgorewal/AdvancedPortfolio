@@ -111,7 +111,7 @@ export const Hero = () => {
     >
       {/* Sticky stage (fills viewport) */}
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden select-none z-10">
-        
+
         {/* LAYER 1: Full-Screen Cinematic Studio Atmosphere (z-index 0) */}
         <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
           <motion.div style={{ scale: scalePortrait }} className="relative w-full h-full">
@@ -124,7 +124,7 @@ export const Hero = () => {
               className="object-cover grayscale brightness-50 opacity-90"
             />
           </motion.div>
-          
+
           {/* LAYER 1.5: Subtle Duotone wash overlay (z-index 2) */}
           <motion.div
             style={{ opacity: opacityDuotone }}
@@ -157,17 +157,13 @@ export const Hero = () => {
             <div>
               <span className="text-[#E8913C] mr-2">●</span>AI/ML × SOFTWARE × PRODUCT
             </div>
-            <div>
-              AI/ML ENGINEER · FULL-STACK DEVELOPER · BUILDER
-            </div>
+
           </motion.div>
           <motion.div
             style={{ opacity: opacityMeta }}
             className="flex justify-between items-end text-[10px] uppercase tracking-widest font-semibold opacity-60 text-[#EDE7DC] font-sans-body"
           >
-            <div>
-              AARAV—001 // SYSTEM_INIT
-            </div>
+
             <div className="flex items-center gap-2">
               <span>Scroll to Enter</span>
               <ArrowDown className="w-3 h-3 animate-bounce" />
