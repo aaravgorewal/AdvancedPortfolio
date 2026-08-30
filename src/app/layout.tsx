@@ -35,6 +35,16 @@ export const metadata: Metadata = {
     title: "AARAV SAINI",
     description: "AI/ML student and full-stack developer building modern, scalable, and user-focused digital products.",
   },
+
+  icons: {
+    icon: [
+      { url: '/favicon.ico?v=4', sizes: '32x32' },
+      { url: '/icon.png?v=4', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: [
+      { url: '/apple-icon.png?v=4', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
