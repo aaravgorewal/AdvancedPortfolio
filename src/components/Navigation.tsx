@@ -7,7 +7,6 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-
 const NAV_ITEMS = [
   { label: "Catalogue", href: "#catalogue" },
   { label: "Identity", href: "#about" },
-  { label: "Experience", href: "#experience" },
   { label: "Dates", href: "#dates" },
 ];
 
@@ -104,14 +103,16 @@ export const Navigation = () => {
           className="w-full max-w-[1200px] mx-auto flex items-center justify-between lg:px-24"
         >
           {/* Logo */}
-          <a
-            href="#"
-            onClick={scrollToTop}
-            className="group font-syne text-[15px] font-bold tracking-tight uppercase text-[#EDE7DC] flex items-center focus-ring transition-all duration-300 hover:brightness-125 hover:tracking-normal hover:-translate-y-[1px]"
-            aria-label="Aarav Saini Home"
-          >
-            AARAV<span className="text-[#E8913C] transition-colors duration-300">.</span>
-          </a>
+          <div className="flex-1 flex justify-start">
+            <a
+              href="#"
+              onClick={scrollToTop}
+              className="group font-syne text-[15px] font-bold tracking-tight uppercase text-[#EDE7DC] flex items-center focus-ring transition-all duration-300 hover:brightness-125 hover:tracking-normal hover:-translate-y-[1px]"
+              aria-label="Aarav Saini Home"
+            >
+              AARAV<span className="text-[#E8913C] transition-colors duration-300">.</span>
+            </a>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-10" aria-label="Desktop Navigation">
@@ -148,7 +149,7 @@ export const Navigation = () => {
           </nav>
 
           {/* CTA Button */}
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex flex-1 justify-end items-center">
             <a 
               href="#footer"
               className="px-6 py-2.5 border border-[#EDE7DC]/20 rounded-none text-[10px] uppercase tracking-[0.15em] font-bold font-sans-body text-[#EDE7DC] transition-all duration-300 hover:bg-[#EDE7DC] hover:text-[#0A0C0E] hover:border-[#EDE7DC] focus-ring flex items-center group/btn"
@@ -161,14 +162,16 @@ export const Navigation = () => {
           </div>
 
           {/* Mobile Menu Trigger */}
-          <button
+          <div className="flex-1 flex justify-end md:hidden">
+            <button
             onClick={toggleMenu}
             className="md:hidden p-2 text-[#EDE7DC] focus-ring z-50 relative"
             aria-expanded={isOpen}
             aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
           >
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+            </button>
+          </div>
         </motion.div>
       </motion.header>
 

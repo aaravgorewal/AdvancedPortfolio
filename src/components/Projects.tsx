@@ -53,111 +53,121 @@ const CLIENT_PROJECTS = [
 const FeaturedProject = ({ project, index }: { project: { title: string; category: string; role: string; description: string; year: string; tech: string; image: string }; index: number }) => {
   const shouldReduceMotion = useReducedMotion();
   
-  const is01 = index === 0;
-  const is02 = index === 1;
-  const is03 = index === 2;
+  const isFirst = index === 0;
+  const isTextLeft = index % 2 === 0;
 
+  // Stacking contexts: Main container -> project -> text -> image
   const containerVariants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
+    visible: { transition: { staggerChildren: 0.1 } }
   };
 
-  const fadeUpVariants = {
-    hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } }
+  const textVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const } }
+  };
+
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.97 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } }
   };
 
   const textBlock = (
-    <div className={`flex flex-col justify-center ${is03 ? 'items-center text-center mt-12 lg:mt-16' : 'h-full'}`}>
-      <motion.div variants={shouldReduceMotion ? {} : fadeUpVariants} className="mb-6">
-        <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#E8913C] font-sans-body">
+    <div className="flex flex-col justify-center h-full relative z-30 min-w-0 max-w-full">
+      <motion.div variants={shouldReduceMotion ? {} : textVariants} className="mb-4 lg:mb-6">
+        <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold text-[#E8913C] font-sans-body">
           0{(index + 1)} / {project.category.split('/')[0].trim()}
         </span>
       </motion.div>
 
-      <motion.div variants={shouldReduceMotion ? {} : fadeUpVariants} className="mb-6">
-        <h3 className={`font-syne font-extrabold uppercase text-[#EDE7DC] tracking-tighter leading-[0.85] transition-transform duration-[400ms] group-hover:translate-x-[2px] group-hover:tracking-tight group-focus-within:translate-x-[2px] group-focus-within:tracking-tight ${is01 ? 'text-[clamp(50px,7vw,100px)]' : is02 ? 'text-[clamp(40px,5vw,72px)]' : 'text-[clamp(45px,6vw,84px)]'}`}>
-          {project.title}
+      <motion.div variants={shouldReduceMotion ? {} : textVariants} className="mb-6 lg:mb-8 min-w-0 max-w-full">
+        {/* Title visibility fix: break-words, proper clamp, constrained width */}
+        <h3 className="font-syne font-extrabold uppercase text-[#EDE7DC] tracking-tighter leading-[0.9] lg:leading-[0.85] text-[clamp(2.5rem,6vw,5.5rem)] xl:text-[clamp(3.5rem,6.5vw,7rem)] transition-colors duration-[400ms] group-hover:text-white group-focus-within:text-white break-words ">
+          {project.title.split(' ').map((word, i) => (
+            <React.Fragment key={i}>
+              {word}{i !== project.title.split(' ').length - 1 && <br className="hidden lg:block" />}
+              {i !== project.title.split(' ').length - 1 && <span className="lg:hidden"> </span>}
+            </React.Fragment>
+          ))}
         </h3>
       </motion.div>
 
-      <motion.p variants={shouldReduceMotion ? {} : fadeUpVariants} className={`font-sans-body text-[#9EA5A8] text-sm leading-relaxed mb-8 ${is03 ? 'max-w-xl' : 'max-w-sm'}`}>
+      <motion.p variants={shouldReduceMotion ? {} : textVariants} className="font-sans-body text-[#9EA5A8] text-sm lg:text-base leading-relaxed mb-8 lg:mb-10 max-w-md">
         {project.description}
       </motion.p>
 
-      {/* 4. Deep Metadata */}
-      <motion.div variants={shouldReduceMotion ? {} : fadeUpVariants} className={`flex flex-col gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-[#6C7378] mb-12 ${is03 ? 'items-center text-center' : ''}`}>
+      {/* Metadata */}
+      <motion.div variants={shouldReduceMotion ? {} : textVariants} className="flex flex-col gap-2 font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-[#6C7378] mb-10 lg:mb-14 relative pl-4 border-l border-[#EDE7DC]/10 group-hover:border-[#E8913C]/50 transition-colors duration-500">
         <span>{project.category}</span>
         <span>{project.role}</span>
         <span>{project.year}</span>
         <span className="mt-2 text-[#9EA5A8]">{project.tech}</span>
       </motion.div>
 
-      <motion.div variants={shouldReduceMotion ? {} : fadeUpVariants}>
-        <a href="#" aria-label={`View ${project.title} project`} className="flex items-center gap-3 group/btn cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8913C] focus-visible:ring-offset-4 focus-visible:ring-offset-[#0A0C0E] rounded-sm">
+      <motion.div variants={shouldReduceMotion ? {} : textVariants}>
+        <a href="#" aria-label={`View ${project.title} project`} className="flex items-center gap-3 group/btn cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8913C] focus-visible:ring-offset-4 focus-visible:ring-offset-[#0A0C0E] rounded-sm w-fit relative">
           <span className="w-1.5 h-1.5 rounded-full bg-[#E8913C] opacity-0 group-hover/btn:opacity-100 scale-0 group-hover/btn:scale-100 group-focus-visible/btn:opacity-100 group-focus-visible/btn:scale-100 transition-all duration-[400ms]" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] font-sans-body text-[#6C7378] group-hover/btn:text-[#EDE7DC] group-focus-visible/btn:text-[#EDE7DC] transition-colors duration-[400ms]">
+          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] font-sans-body text-[#6C7378] group-hover/btn:text-[#EDE7DC] group-focus-visible/btn:text-[#EDE7DC] transition-colors duration-[400ms]">
             View Project
           </span>
-          <ArrowUpRight className="w-4 h-4 text-[#6C7378] group-hover/btn:text-[#EDE7DC] group-focus-visible/btn:text-[#EDE7DC] transition-transform duration-[400ms] group-hover/btn:translate-x-[8px] group-focus-visible/btn:translate-x-[8px]" />
+          <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#6C7378] group-hover/btn:text-[#EDE7DC] group-focus-visible/btn:text-[#EDE7DC] transition-transform duration-[400ms] group-hover/btn:translate-x-[6px] group-focus-visible/btn:translate-x-[6px]" />
         </a>
       </motion.div>
     </div>
   );
 
   const imageBlock = (
-    <motion.div variants={shouldReduceMotion ? {} : fadeUpVariants} className={`w-full bg-[#0A0C0E] relative overflow-hidden rounded-[4px] border border-[#EDE7DC]/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] ${is03 ? 'aspect-[16/9] lg:aspect-[21/9]' : 'aspect-[16/10] lg:aspect-[4/3]'}`}>
-      <motion.div whileHover={shouldReduceMotion ? {} : { scale: 1.02 }} transition={{ duration: 0.6, ease: "easeOut" as const }} className="w-full h-full relative cursor-crosshair">
-        <Image
-          src={project.image}
-          alt={`${project.title} project interface preview`}
-          fill
-          className="object-cover object-top lg:object-center"
-          sizes="(max-width: 1024px) 100vw, 80vw"
-          priority={is01}
-        />
-      </motion.div>
+    <motion.div variants={shouldReduceMotion ? {} : imageVariants} className="w-full relative z-20 flex justify-center lg:justify-end">
+      {/* Project Image Presentation */}
+      <div className="w-full relative bg-[#0A0C0E]/50 overflow-hidden rounded-[4px] border border-[#EDE7DC]/10 shadow-[0_8px_30px_rgba(0,0,0,0.4)] aspect-[4/3] lg:aspect-[16/10] xl:aspect-[3/2] group-hover:border-[#EDE7DC]/20 transition-colors duration-500">
+        <div className="w-full h-full relative cursor-pointer transform transition-transform duration-[500ms] ease-out group-hover:scale-[1.015]">
+          <Image
+            src={project.image}
+            alt={`${project.title} project interface preview`}
+            fill
+            className="object-contain p-2 lg:p-4"
+            sizes="(max-width: 1024px) 100vw, 60vw"
+            priority={isFirst}
+          />
+        </div>
+      </div>
     </motion.div>
   );
 
   return (
-    <motion.article initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-15%" }} variants={containerVariants} className="w-full mb-32 lg:mb-48 border-t border-[#EDE7DC]/10 pt-16 lg:pt-24 group relative">
-       {/* Removed generic amber interaction divider from structural sections */}
-      
-      {/* Mobile Layout */}
-      <div className="flex flex-col lg:hidden w-full px-5">
-        <motion.div variants={shouldReduceMotion ? {} : fadeUpVariants} className="mb-4">
-          <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#E8913C] font-sans-body">0{(index + 1)} / {project.category.split('/')[0].trim()}</span>
-        </motion.div>
-        <motion.h3 variants={shouldReduceMotion ? {} : fadeUpVariants} className="font-syne text-[32px] sm:text-[40px] font-extrabold uppercase text-[#EDE7DC] tracking-tighter leading-[0.9] mb-8">{project.title}</motion.h3>
-        <motion.div variants={shouldReduceMotion ? {} : fadeUpVariants} className="w-full relative rounded-[4px] border border-[#EDE7DC]/10 shadow-[0_4px_20px_rgba(0,0,0,0.5)] overflow-hidden aspect-[4/3] mb-8">
-          <Image src={project.image} alt={`${project.title} project interface preview`} fill className="object-cover object-top" sizes="100vw" />
-        </motion.div>
-        <motion.p variants={shouldReduceMotion ? {} : fadeUpVariants} className="font-sans-body text-[#9EA5A8] text-sm leading-relaxed mb-8">{project.description}</motion.p>
-        <motion.div variants={shouldReduceMotion ? {} : fadeUpVariants} className="flex flex-col gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-[#6C7378] mb-10">
-          <span>{project.category}</span>
-          <span>{project.role}</span>
-          <span>{project.year}</span>
-          <span className="mt-2 text-[#9EA5A8]">{project.tech}</span>
-        </motion.div>
-        <motion.div variants={shouldReduceMotion ? {} : fadeUpVariants}>
-          <a href="#" aria-label={`View ${project.title} project`} className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8913C] rounded-sm">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] font-sans-body text-[#EDE7DC]">View Project</span>
-            <ArrowUpRight className="w-4 h-4 text-[#EDE7DC]" />
-          </a>
-        </motion.div>
+    <motion.article 
+      initial="hidden" 
+      whileInView="visible" 
+      viewport={{ once: true, margin: "-15%" }} 
+      variants={containerVariants} 
+      className={`w-full group relative mb-24 lg:mb-32 ${isFirst ? 'pt-8 lg:pt-10' : 'border-t border-[#EDE7DC]/10 pt-16 lg:pt-24'}`}
+    >
+      {/* Mobile Layout (Stacked Vertically) */}
+      <div className="flex flex-col lg:hidden w-full px-5 min-w-0">
+        {textBlock}
+        <div className="mt-12 w-full min-w-0">
+          {imageBlock}
+        </div>
       </div>
 
-      {/* Desktop Layouts */}
-      <div className="hidden lg:block w-full">
-        {is01 && (<div className="grid grid-cols-12 gap-12 items-center"><div className="col-span-4 pr-4">{textBlock}</div><div className="col-span-8">{imageBlock}</div></div>)}
-        {is02 && (<div className="grid grid-cols-12 gap-16 items-center"><div className="col-span-7">{imageBlock}</div><div className="col-span-5 pl-4">{textBlock}</div></div>)}
-        {is03 && (<div className="flex flex-col items-center w-full"><div className="w-full mb-4">{imageBlock}</div><div className="w-full max-w-4xl">{textBlock}</div></div>)}
+      {/* Desktop Layouts (Alternating Strict Split) */}
+      {/* grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr) prevents blowout */}
+      <div className="hidden lg:block w-full min-w-0">
+        {isTextLeft ? (
+          <div className="grid grid-cols-[minmax(0,4fr)_minmax(0,6fr)] xl:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] gap-16 xl:gap-24 items-center">
+            <div className="w-full min-w-0 pr-4 xl:pr-8">{textBlock}</div>
+            <div className="w-full min-w-0">{imageBlock}</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-[minmax(0,6fr)_minmax(0,4fr)] xl:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] gap-16 xl:gap-24 items-center">
+            <div className="w-full min-w-0">{imageBlock}</div>
+            <div className="w-full min-w-0 pl-4 xl:pl-8">{textBlock}</div>
+          </div>
+        )}
       </div>
     </motion.article>
   );
 };
-
 const ClientArchive = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -530,7 +540,7 @@ export const Projects = () => {
               visible: { scaleX: 1, opacity: 1, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as const  } }
             }}
             style={{ transformOrigin: "left" }}
-            className="w-full h-[1px] bg-[#EDE7DC]/10 mt-16 lg:mt-32"
+            className="w-full h-[1px] bg-[#EDE7DC]/10 mt-12 lg:mt-16"
           />
         </motion.div>
 
