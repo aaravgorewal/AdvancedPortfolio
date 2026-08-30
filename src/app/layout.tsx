@@ -18,10 +18,10 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "Aarav Saini — Portfolio",
+  title: "AARAV SAINI",
   description: "AI/ML student and full-stack developer building modern, scalable, and user-focused digital products.",
   openGraph: {
-    title: "Aarav Saini — Portfolio",
+    title: "AARAV SAINI",
     description: "AI/ML student and full-stack developer building modern, scalable, and user-focused digital products.",
     url: "https://aaravsaini.dev",
     siteName: "Aarav Saini Portfolio",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Aarav Saini — Portfolio",
+    title: "AARAV SAINI",
     description: "AI/ML student and full-stack developer building modern, scalable, and user-focused digital products.",
   },
   robots: {
