@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Syne, Sora } from "next/font/google";
 import { Navigation } from "@/components/Navigation";
 import "./globals.css";
+import { BackToTop } from "@/components/BackToTop";
+
 
 const syne = Syne({
   variable: "--font-syne",
@@ -51,6 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main id="main-content" className="flex-1 flex flex-col">
           {children}
         </main>
+        <BackToTop />
       </body>
     </html>
   );
