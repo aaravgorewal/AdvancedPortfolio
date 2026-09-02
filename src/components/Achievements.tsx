@@ -5,6 +5,15 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 
 const AWARDS = [
   {
+    id: "aw_drophack26",
+    rank: "01",
+    place: "1ST PLACE",
+    event: "DROPHACK'26",
+    year: "2026",
+    type: "Hackathon",
+    org: "Paytm Office Noida"
+  },
+  {
     id: "aw_devcreate",
     rank: "01",
     place: "1ST PLACE",
