@@ -58,7 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${syne.variable} ${sora.variable} h-full antialiased dark`}
       style={{ colorScheme: "dark" }}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground font-sans-body">
+      <body className="min-h-full flex flex-col bg-background text-foreground font-sans-body overflow-x-hidden">
         <Navigation />
         <main id="main-content" className="flex-1 flex flex-col">
           {children}

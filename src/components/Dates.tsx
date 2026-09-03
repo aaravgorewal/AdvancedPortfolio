@@ -317,7 +317,7 @@ export const Dates = () => {
             {shouldReduceMotion ? (
                <div className="px-6 md:px-24 pt-32 pb-24">
                   <div className="text-[10px] uppercase tracking-[0.15em] font-bold text-[#E8913C] mb-4">05 / EXPERIENCE LOG</div>
-                  <h2 className="font-syne text-4xl font-bold uppercase text-[#EDE7DC] mb-12">Career Transit</h2>
+                  <h2 className="font-syne text-3xl md:text-4xl font-bold uppercase text-[#EDE7DC] mb-12">Career Transit</h2>
                   <div className="flex flex-col gap-8">
                      {EXPERIENCE.map((item) => (
                         <div key={item.id} className="flex flex-col">

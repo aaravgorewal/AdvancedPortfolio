@@ -101,7 +101,7 @@ export const Footer = () => {
                opacity: shouldReduceMotion ? 1 : contentOpacity 
             }}
           >
-            <h2 className="font-syne text-5xl md:text-7xl font-extrabold uppercase leading-[0.95] mb-8 text-[#EDE7DC] tracking-tighter">
+            <h2 className="font-syne text-4xl sm:text-5xl md:text-7xl font-extrabold uppercase leading-[0.95] mb-8 text-[#EDE7DC] tracking-tighter">
               Let&apos;s build<br />something.
             </h2>
             <p className="text-[#9EA5A8] text-sm md:text-base leading-relaxed font-sans-body max-w-lg">
@@ -187,7 +187,7 @@ export const Footer = () => {
       {/* Large Cropped Wordmark as visual signature */}
       <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden select-none pointer-events-none flex justify-center z-10">
         <motion.h1 
-          className="font-syne font-extrabold uppercase leading-[0.75] whitespace-nowrap text-[#EDE7DC] m-0 p-0 text-[20vw] md:text-[22vw]"
+          className="font-syne font-extrabold uppercase leading-[0.75] whitespace-nowrap text-[#EDE7DC] m-0 p-0 text-[16vw] sm:text-[20vw] md:text-[22vw]"
           style={{
              y: shouldReduceMotion ? "-20px" : signatureY,
              x: shouldReduceMotion ? "6%" : signatureX,

@@ -175,7 +175,7 @@ export const Hero = () => {
         <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
           <motion.h1
             style={{ scale: scaleWordmark, letterSpacing: letterSpacingWordmark }}
-            className="font-syne text-[clamp(64px,12vw,180px)] font-extrabold flex leading-none tracking-tighter-custom uppercase text-[#EDE7DC]"
+            className="font-syne text-[clamp(40px,12vw,180px)] font-extrabold flex leading-none tracking-tighter-custom uppercase text-[#EDE7DC]"
           >
             <motion.span
               style={{ x: xLeftWord }}

@@ -129,7 +129,7 @@ export const Achievements = () => {
                    whileInView={{ opacity: 1, x: 0 }}
                    viewport={{ once: false }}
                    transition={{ duration: 0.7, delay: 0.2 + (idx * 0.1) }}
-                   className={`font-syne text-[35vw] md:text-[18vw] lg:text-[16vw] font-extrabold transition-colors duration-500 leading-[0.75] tracking-tighter -ml-2 md:-ml-8 lg:-ml-12 select-none ${award.place === '1ST PLACE' ? 'text-[#E8913C]/25 group-hover:text-[#E8913C]/60' : award.place === '2ND PLACE' ? 'text-[#E8913C]/10 group-hover:text-[#E8913C]/30' : 'text-[#E8913C]/5 group-hover:text-[#E8913C]/20'}`}
+                   className={`font-syne text-[25vw] md:text-[18vw] lg:text-[16vw] font-extrabold transition-colors duration-500 leading-[0.75] tracking-tighter -ml-2 md:-ml-8 lg:-ml-12 select-none ${award.place === '1ST PLACE' ? 'text-[#E8913C]/25 group-hover:text-[#E8913C]/60' : award.place === '2ND PLACE' ? 'text-[#E8913C]/10 group-hover:text-[#E8913C]/30' : 'text-[#E8913C]/5 group-hover:text-[#E8913C]/20'}`}
                  >
                    {award.rank}
                  </motion.span>
@@ -151,7 +151,7 @@ export const Achievements = () => {
                   <span className="font-mono text-[10px] md:text-xs text-[#E8913C] tracking-widest font-bold uppercase mb-4">
                     {award.place}
                   </span>
-                  <h3 className="font-syne text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-4 group-hover:text-white transition-colors duration-500">
+                  <h3 className="font-syne text-3xl md:text-5xl lg:text-6xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-4 group-hover:text-white transition-colors duration-500">
                     {award.event}
                   </h3>
                   <div className="flex flex-col gap-1.5">
