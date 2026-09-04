@@ -472,7 +472,7 @@ export const Dates = () => {
                      </div>
                      <div>
                         <span className="font-syne text-4xl md:text-5xl font-extrabold text-[#E8913C] block mb-2 leading-none">
-                           06
+                           08
                         </span>
                         <span className="text-[9px] uppercase tracking-widest text-[#6C7378] font-bold">
                            Wins
