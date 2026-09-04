@@ -22,7 +22,7 @@ export const About = () => {
         className="absolute right-[-2%] bottom-[-5%] select-none pointer-events-none z-0 flex items-center justify-center"
         style={{ y: shouldReduceMotion ? 0 : bgY }}
       >
-        <span className="font-syne text-[40vw] md:text-[55vw] lg:text-[45vw] font-extrabold leading-[0.75] text-[#EDE7DC] opacity-[0.02] tracking-tighter m-0 p-0">
+        <span className="font-syne text-[25vw] md:text-[55vw] lg:text-[45vw] font-extrabold leading-[0.75] text-[#EDE7DC] opacity-[0.02] tracking-tighter m-0 p-0">
           02
         </span>
       </motion.div>
@@ -47,7 +47,7 @@ export const About = () => {
           {/* ========================================= */}
           <div className="lg:w-[58%] flex flex-col justify-start mb-20 lg:mb-0">
             
-            <h2 className="font-syne text-3xl sm:text-4xl lg:text-[56px] leading-[1.1] font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-8 max-w-[650px] flex flex-col items-start">
+            <h2 className="font-syne text-2xl sm:text-4xl lg:text-[56px] leading-[1.1] font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-8 max-w-[650px] flex flex-col items-start">
               <motion.span 
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

@@ -259,7 +259,7 @@ const ClientArchive = () => {
         <motion.span variants={shouldReduceMotion ? {} : fadeUpVariants} className="font-sans-body text-xs font-bold uppercase tracking-[0.2em] text-[#E8913C] mb-12">04 / Client Work</motion.span>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-end">
           <div className="col-span-1 lg:col-span-8 flex flex-col">
-            <h2 className="font-syne text-[clamp(45px,8vw,110px)] font-extrabold uppercase leading-[0.85] text-[#EDE7DC] tracking-tighter">
+            <h2 className="font-syne text-[clamp(32px,8vw,110px)] font-extrabold uppercase leading-[0.85] text-[#EDE7DC] tracking-tighter">
               <div className="overflow-hidden py-1"><motion.div variants={shouldReduceMotion ? {} : titleRevealVariants}>Selected</motion.div></div>
               <div className="overflow-hidden py-1"><motion.div variants={shouldReduceMotion ? {} : titleRevealVariants}>Client Work.</motion.div></div>
             </h2>
@@ -483,7 +483,7 @@ export const Projects = () => {
             
             {/* Left Column: Heading */}
             <div className="col-span-1 lg:col-span-8 flex flex-col">
-              <h2 className="font-syne text-[clamp(45px,8vw,110px)] font-extrabold uppercase leading-[0.85] text-[#EDE7DC] tracking-tighter">
+              <h2 className="font-syne text-[clamp(32px,8vw,110px)] font-extrabold uppercase leading-[0.85] text-[#EDE7DC] tracking-tighter">
                 <div className="overflow-hidden py-1">
                   <motion.div 
                     variants={{

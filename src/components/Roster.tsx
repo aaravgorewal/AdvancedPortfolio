@@ -61,7 +61,7 @@ export const Roster = () => {
               04 / TECHNICAL ARSENAL
             </span>
             <div className="flex flex-col md:flex-row md:items-end justify-between">
-              <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
+              <h2 className="font-syne text-3xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
                 Technical<br/>Architecture
               </h2>
             </div>
@@ -106,7 +106,7 @@ export const Roster = () => {
               04 / TECHNICAL ARSENAL
             </span>
             <div className="flex flex-col md:flex-row md:items-end justify-between">
-              <h2 className="font-syne text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
+              <h2 className="font-syne text-3xl md:text-5xl lg:text-7xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter leading-[0.9]">
                 Technical<br/>Architecture
               </h2>
               {/* Counter integrated into the header layout */}
@@ -175,7 +175,7 @@ export const Roster = () => {
                                 0{activeItem.id}
                              </div>
                              {/* Reduced scale by ~15-20% to prevent header competition */}
-                             <h3 className="font-syne text-2xl md:text-4xl lg:text-5xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-4 leading-tight">
+                             <h3 className="font-syne text-xl md:text-4xl lg:text-5xl font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-4 leading-tight">
                                 {activeItem.category}
                              </h3>
                              <div className="flex flex-col gap-1">
