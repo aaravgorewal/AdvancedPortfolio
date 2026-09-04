@@ -151,7 +151,9 @@ export const Navigation = () => {
           {/* CTA Button */}
           <div className="hidden md:flex flex-1 justify-end items-center">
             <a 
-              href="#footer"
+              href="https://www.linkedin.com/in/aaravgorewal/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-6 py-2.5 border border-[#EDE7DC]/20 rounded-none text-[10px] uppercase tracking-[0.15em] font-bold font-sans-body text-[#EDE7DC] transition-all duration-300 hover:bg-[#EDE7DC] hover:text-[#0A0C0E] hover:border-[#EDE7DC] focus-ring flex items-center group/btn"
             >
               Contact
@@ -215,7 +217,9 @@ export const Navigation = () => {
                   className="pt-8"
                 >
                   <a 
-                    href="#footer"
+                    href="https://www.linkedin.com/in/aaravgorewal/"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={() => setIsOpen(false)}
                     className="inline-block px-10 py-4 border border-[#EDE7DC]/30 text-sm uppercase tracking-[0.2em] font-bold font-sans-body text-[#EDE7DC] hover:bg-[#EDE7DC] hover:text-[#0A0C0E] transition-all"
                   >
