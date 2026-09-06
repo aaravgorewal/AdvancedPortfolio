@@ -141,7 +141,7 @@ To generate an optimized, static production build:
 npm run build
 ```
 
-You can then test the production build locally using `npm run start`.
+You can then test the production build locally using `npm run start`..
 
 ---
 
