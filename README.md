@@ -63,7 +63,7 @@ I build AI-powered products, full-stack systems, and digital experiences. My cor
 - **Category:** DIGITAL EXPERIENCE
 - **Role:** Frontend Developer
 
-*(Note: Real working project links are available directly through the portfolio interface where applicable.)*
+
 
 ---
 
