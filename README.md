@@ -136,7 +136,6 @@ The application will be available locally at `http://localhost:3000`.
 ## Production Build
 
 To generate an optimized, static production build:
-
 ```bash
 npm run build
 ```
