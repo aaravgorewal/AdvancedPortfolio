@@ -4,7 +4,6 @@ Aarav Saini's personal engineering portfolio showcasing AI-powered products, ful
 
 **Live Website:** [https://www.heyaarav.dev](https://www.heyaarav.dev)
 
----
 
 ## About
 
