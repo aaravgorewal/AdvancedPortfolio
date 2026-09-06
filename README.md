@@ -167,7 +167,7 @@ You can then test the production build locally using `npm run start`..
 # Author
 
 **Aarav Saini**  
-AI/ML Engineer · Full-Stack Developer · Builder
+AI/ML Engineer · Full-Stack Developer 
 
 - **Portfolio:** [https://www.heyaarav.dev](https://www.heyaarav.dev)
 - **LinkedIn:** [https://www.linkedin.com/in/aaravgorewal/](https://www.linkedin.com/in/aaravgorewal/)
