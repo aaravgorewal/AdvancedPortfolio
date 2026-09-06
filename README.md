@@ -64,8 +64,6 @@ I build AI-powered products, full-stack systems, and digital experiences. My cor
 
 
 
----
-
 ## Tech Stack
 
 This repository is built with a modern, performance-focused stack:
