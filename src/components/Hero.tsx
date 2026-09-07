@@ -9,7 +9,7 @@ export const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
-  // Scroll monitoring for desktop & mobile scroll-driven transforms (250vh height parent)
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
