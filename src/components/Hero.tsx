@@ -27,7 +27,7 @@ export const Hero = () => {
     [shouldReduceMotion ? "110%" : "0%", "110%"]
   );
 
-  // 2. Wordmark scaling and display tracking (0% to 100% scroll progress)
+
   const scaleWordmark = useTransform(
     scrollYProgress,
     [0, 1.0],
@@ -39,7 +39,7 @@ export const Hero = () => {
     [shouldReduceMotion ? "-0.03em" : "-0.02em", "-0.03em"]
   );
 
-  // 3. Wordmark splitting (0% to 100% scroll progress) - Translate spans outward by 40%
+
   const xLeftWord = useTransform(
     scrollYProgress,
     [0, 1.0],
