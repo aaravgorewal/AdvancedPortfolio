@@ -123,7 +123,7 @@ export const About = () => {
 
 
           {/* RIGHT COLUMN (Approx 35%) */}
-          {/* ========================================= */}
+
           <div className="lg:w-[35%] flex flex-col justify-start lg:border-l lg:border-[#EDE7DC]/10 lg:pl-12 xl:pl-16">
 
             {/* Block 1: FOCUS */}
