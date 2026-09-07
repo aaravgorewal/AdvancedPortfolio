@@ -62,7 +62,7 @@ export const Footer = () => {
   const shouldReduceMotion = useReducedMotion();
 
 
-  // is when its bottom hits the bottom of the viewport ("end end").
+
   // Mapping from when its top enters ("start end") to when its bottom hits ("end end").
   const { scrollYProgress } = useScroll({
     target: footerRef,
