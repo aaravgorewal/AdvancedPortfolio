@@ -15,7 +15,7 @@ export const Hero = () => {
     offset: ["start start", "end end"],
   });
 
-  // 1. Panels opening (0% to 100% scroll progress) - Translate 50.5% panels completely off-screen by 110%
+
   const xLeftPanel = useTransform(
     scrollYProgress,
     [0, 1.0],
