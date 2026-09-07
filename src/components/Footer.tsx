@@ -61,7 +61,7 @@ export const Footer = () => {
   const footerRef = useRef<HTMLElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
-  // The footer is the last element on the page, so the maximum possible scroll 
+
   // is when its bottom hits the bottom of the viewport ("end end").
   // Mapping from when its top enters ("start end") to when its bottom hits ("end end").
   const { scrollYProgress } = useScroll({
@@ -88,17 +88,17 @@ export const Footer = () => {
 
   return (
     <footer ref={footerRef} className="relative pt-24 lg:pt-32 bg-[#0A0C0E] overflow-hidden border-t border-[#EDE7DC]/13 w-full min-h-[75vh] md:min-h-[85vh] flex flex-col justify-between z-0">
-      
+
       {/* Top Footer Content */}
       <div className="relative z-20 max-w-[1200px] mx-auto px-6 md:px-24 w-full text-left">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-16 lg:gap-12">
-          
+
           {/* Main callout heading and availability statement */}
-          <motion.div 
+          <motion.div
             className="max-w-2xl"
-            style={{ 
-               y: shouldReduceMotion ? 0 : contentY, 
-               opacity: shouldReduceMotion ? 1 : contentOpacity 
+            style={{
+              y: shouldReduceMotion ? 0 : contentY,
+              opacity: shouldReduceMotion ? 1 : contentOpacity
             }}
           >
             <h2 className="font-syne text-4xl sm:text-5xl md:text-7xl font-extrabold uppercase leading-[0.95] mb-8 text-[#EDE7DC] tracking-tighter">
@@ -111,12 +111,12 @@ export const Footer = () => {
 
           {/* Connect actions & Social Network */}
           <div className="flex flex-col gap-12 w-full lg:w-auto lg:min-w-[320px]">
-            
+
             {/* 1. Primary CTA */}
             <motion.div
-              style={{ 
-                 y: shouldReduceMotion ? 0 : actionsY, 
-                 opacity: shouldReduceMotion ? 1 : actionsOpacity 
+              style={{
+                y: shouldReduceMotion ? 0 : actionsY,
+                opacity: shouldReduceMotion ? 1 : actionsOpacity
               }}
             >
               <a
@@ -129,17 +129,17 @@ export const Footer = () => {
             </motion.div>
 
             {/* 2. Secondary Social Connections */}
-            <motion.div 
+            <motion.div
               className="flex flex-col gap-4"
-              style={{ 
-                 y: shouldReduceMotion ? 0 : socialY, 
-                 opacity: shouldReduceMotion ? 1 : socialOpacity 
+              style={{
+                y: shouldReduceMotion ? 0 : socialY,
+                opacity: shouldReduceMotion ? 1 : socialOpacity
               }}
             >
               <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-[#9EA5A8] font-sans-body mb-2">
                 Connect / Network
               </span>
-              
+
               <div className="flex flex-col w-full">
                 {SOCIAL_LINKS.map((item) => (
                   <a
@@ -174,10 +174,10 @@ export const Footer = () => {
 
         </div>
       </div>
-      
+
       {/* Middle Spacer to connect content down to the sub-footer */}
       <div className="flex-1 min-h-[15vh] md:min-h-[20vh]"></div>
-      
+
       {/* Sub-footer strip */}
       <div className="border-t border-[#EDE7DC]/13 py-8 px-6 md:px-24 flex flex-col md:flex-row gap-4 justify-between items-center max-w-[1200px] mx-auto w-full text-[9px] uppercase opacity-40 font-bold tracking-[0.2em] font-sans-body text-[#EDE7DC] relative z-20">
         <span>Privacy / Terms / Legal</span>
@@ -186,21 +186,21 @@ export const Footer = () => {
 
       {/* Large Cropped Wordmark as visual signature */}
       <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden select-none pointer-events-none flex justify-center z-10">
-        <motion.h1 
+        <motion.h1
           className="font-syne font-extrabold uppercase leading-[0.75] whitespace-nowrap text-[#EDE7DC] m-0 p-0 text-[16vw] sm:text-[20vw] md:text-[22vw]"
           style={{
-             y: shouldReduceMotion ? "-20px" : signatureY,
-             x: shouldReduceMotion ? "6%" : signatureX,
-             scale: shouldReduceMotion ? 1.15 : signatureScale,
-             opacity: shouldReduceMotion ? 0.20 : signatureOpacity,
-             letterSpacing: shouldReduceMotion ? "-0.06em" : signatureLetterSpacing,
-             transformOrigin: "bottom center"
+            y: shouldReduceMotion ? "-20px" : signatureY,
+            x: shouldReduceMotion ? "6%" : signatureX,
+            scale: shouldReduceMotion ? 1.15 : signatureScale,
+            opacity: shouldReduceMotion ? 0.20 : signatureOpacity,
+            letterSpacing: shouldReduceMotion ? "-0.06em" : signatureLetterSpacing,
+            transformOrigin: "bottom center"
           }}
         >
           AARAV.
         </motion.h1>
       </div>
-      
+
     </footer>
   );
 };
