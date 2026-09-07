@@ -16,9 +16,9 @@ export const About = () => {
 
   return (
     <section ref={containerRef} id="about" className="relative min-h-[90vh] flex items-center overflow-hidden border-b border-[#EDE7DC]/13 py-32 md:py-40 bg-[#0A0C0E]">
-      
+
       {/* Background 02 */}
-      <motion.div 
+      <motion.div
         className="absolute right-[-2%] bottom-[-5%] select-none pointer-events-none z-0 flex items-center justify-center"
         style={{ y: shouldReduceMotion ? 0 : bgY }}
       >
@@ -28,9 +28,9 @@ export const About = () => {
       </motion.div>
 
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-24 w-full relative z-10 text-left">
-        
+
         {/* Section index indicator */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, margin: "-10%" }}
@@ -39,16 +39,16 @@ export const About = () => {
         >
           ABOUT / 02
         </motion.div>
-        
+
         <div className="flex flex-col lg:flex-row justify-between w-full">
-          
-          {/* ========================================= */}
+
+
           {/* LEFT COLUMN (Approx 60%) */}
           {/* ========================================= */}
           <div className="lg:w-[58%] flex flex-col justify-start mb-20 lg:mb-0">
-            
+
             <h2 className="font-syne text-2xl sm:text-4xl lg:text-[56px] leading-[1.1] font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-8 max-w-[650px] flex flex-col items-start">
-              <motion.span 
+              <motion.span
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, margin: "-10%" }}
@@ -57,7 +57,7 @@ export const About = () => {
               >
                 I BUILD
               </motion.span>
-              <motion.span 
+              <motion.span
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, margin: "-10%" }}
@@ -66,7 +66,7 @@ export const About = () => {
               >
                 AI-POWERED PRODUCTS,
               </motion.span>
-              <motion.span 
+              <motion.span
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, margin: "-10%" }}
@@ -75,7 +75,7 @@ export const About = () => {
               >
                 FULL-STACK SYSTEMS,
               </motion.span>
-              <motion.span 
+              <motion.span
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, margin: "-10%" }}
@@ -85,8 +85,8 @@ export const About = () => {
                 AND DIGITAL EXPERIENCES.
               </motion.span>
             </h2>
-            
-            <motion.p 
+
+            <motion.p
               initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, margin: "-10%" }}
@@ -97,7 +97,7 @@ export const About = () => {
             </motion.p>
 
             {/* Availability Strip */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, margin: "-10%" }}
@@ -109,7 +109,7 @@ export const About = () => {
               </span>
               <div className="flex flex-wrap gap-6">
                 {["INTERNSHIPS", "FREELANCE", "COLLABORATIONS"].map((item, i) => (
-                  <span 
+                  <span
                     key={i}
                     className="font-sans-body text-[10px] font-bold tracking-[0.1em] text-[#9EA5A8] uppercase hover:text-[#EDE7DC] transition-colors duration-300 cursor-pointer"
                   >
@@ -118,16 +118,16 @@ export const About = () => {
                 ))}
               </div>
             </motion.div>
-            
+
           </div>
-          
+
           {/* ========================================= */}
           {/* RIGHT COLUMN (Approx 35%) */}
           {/* ========================================= */}
           <div className="lg:w-[35%] flex flex-col justify-start lg:border-l lg:border-[#EDE7DC]/10 lg:pl-12 xl:pl-16">
-            
+
             {/* Block 1: FOCUS */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, margin: "-10%" }}
@@ -139,7 +139,7 @@ export const About = () => {
               </h3>
               <div className="flex flex-col gap-4">
                 {["AI / ML", "Full-Stack Engineering", "Product Development"].map((item, idx) => (
-                  <span 
+                  <span
                     key={idx}
                     className="group/item font-syne text-lg font-bold text-[#EDE7DC] uppercase tracking-wide flex items-center hover:text-white hover:translate-x-[3px] transition-all duration-300 relative cursor-default"
                   >
@@ -151,7 +151,7 @@ export const About = () => {
             </motion.div>
 
             {/* Block 2: BUILDING */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, margin: "-10%" }}
@@ -163,7 +163,7 @@ export const About = () => {
               </h3>
               <div className="flex flex-col gap-4">
                 {["AI Systems", "Web Products", "Interactive Digital Experiences"].map((item, idx) => (
-                  <span 
+                  <span
                     key={idx}
                     className="group/item font-syne text-lg font-bold text-[#EDE7DC] uppercase tracking-wide flex items-center hover:text-white hover:translate-x-[3px] transition-all duration-300 relative cursor-default"
                   >
@@ -173,9 +173,9 @@ export const About = () => {
                 ))}
               </div>
             </motion.div>
-            
+
             {/* Block 3: ACADEMIC FOUNDATION */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, margin: "-10%" }}
