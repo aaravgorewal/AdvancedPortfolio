@@ -44,7 +44,7 @@ export const About = () => {
 
 
           {/* LEFT COLUMN (Approx 60%) */}
-          {/* ========================================= */}
+
           <div className="lg:w-[58%] flex flex-col justify-start mb-20 lg:mb-0">
 
             <h2 className="font-syne text-2xl sm:text-4xl lg:text-[56px] leading-[1.1] font-extrabold text-[#EDE7DC] uppercase tracking-tighter mb-8 max-w-[650px] flex flex-col items-start">
