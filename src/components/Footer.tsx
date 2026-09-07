@@ -63,7 +63,7 @@ export const Footer = () => {
 
 
 
-  // Mapping from when its top enters ("start end") to when its bottom hits ("end end").
+
   const { scrollYProgress } = useScroll({
     target: footerRef,
     offset: ["start end", "end end"]
