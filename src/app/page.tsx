@@ -18,7 +18,6 @@ export default function Home() {
 
       <Projects />
 
-
       <Roster />
 
       <Dates />
