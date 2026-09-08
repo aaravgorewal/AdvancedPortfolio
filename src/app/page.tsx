@@ -21,7 +21,7 @@ export default function Home() {
 
       <Roster />
 
-      {/* 5. Live circuits schedules */}
+
       <Dates />
 
       {/* 6. Proof of Work */}
