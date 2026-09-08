@@ -15,7 +15,7 @@ export default function Home() {
 
       <About />
 
-      {/* 3. Catalogue deck */}
+
       <Projects />
 
       {/* 4. Core artists roster list */}
