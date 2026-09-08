@@ -27,7 +27,7 @@ export default function Home() {
 
       <Achievements />
 
-      {/* 7. Curated footer fold */}
+
       <Footer />
     </div>
   );
