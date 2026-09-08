@@ -18,7 +18,7 @@ export default function Home() {
 
       <Projects />
 
-      {/* 4. Core artists roster list */}
+
       <Roster />
 
       {/* 5. Live circuits schedules */}
