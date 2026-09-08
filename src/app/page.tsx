@@ -24,7 +24,6 @@ export default function Home() {
 
       <Dates />
 
-
       <Achievements />
 
       <Footer />
