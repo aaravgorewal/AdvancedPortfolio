@@ -24,7 +24,7 @@ export default function Home() {
 
       <Dates />
 
-      {/* 6. Proof of Work */}
+
       <Achievements />
 
       {/* 7. Curated footer fold */}
