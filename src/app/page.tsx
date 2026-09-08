@@ -12,7 +12,7 @@ export default function Home() {
 
       <Hero />
 
-      {/* 2. Philosophy statement fold */}
+
       <About />
 
       {/* 3. Catalogue deck */}
