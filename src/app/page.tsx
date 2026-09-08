@@ -9,7 +9,7 @@ import { Achievements } from "@/components/Achievements";
 export default function Home() {
   return (
     <div className="flex flex-col w-full">
-      {/* 1. Hero Portal stage */}
+
       <Hero />
 
       {/* 2. Philosophy statement fold */}
